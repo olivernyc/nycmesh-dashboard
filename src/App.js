@@ -21,7 +21,7 @@ function App() {
   return (
     <Router>
       <div
-        className="helvetica w-100 flex justify-between"
+        className="helvetica w-100 flex flex-row-ns flex-column justify-between"
         style={{ height: "100vh" }}
       >
         <Route component={Nav} />
@@ -73,6 +73,7 @@ function App() {
           render={({ match }) => (
             <ResourceDetail resourceName="nodes" resourceId={match.params.id} />
           )}
+          titleExtractor={resource => resource.name || `Node ${resource.id}`}
         />
 
         <Route
@@ -82,7 +83,13 @@ function App() {
             <ResourceList
               resourceName="buildings"
               columns={[
-                { name: "address" },
+                {
+                  name: "address",
+                  width: 350,
+                  cellRenderer: ({ cellData }) => (
+                    <span className="fw5 near-black truncate">{cellData}</span>
+                  )
+                },
                 {
                   name: "nodes",
                   cellRenderer: ({ cellData }) =>
@@ -121,6 +128,7 @@ function App() {
             <ResourceDetail
               resourceName="buildings"
               resourceId={match.params.id}
+              titleExtractor={resource => resource.address}
             />
           )}
         />
@@ -136,7 +144,7 @@ function App() {
                   name: "address",
                   width: 350,
                   cellRenderer: ({ cellData }) => (
-                    <span className="fw5 near-black">{cellData}</span>
+                    <span className="fw5 near-black truncate">{cellData}</span>
                   )
                 },
                 { name: "member" },

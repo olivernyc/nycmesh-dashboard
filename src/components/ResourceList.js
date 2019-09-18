@@ -49,6 +49,7 @@ export default function ResourceList(props) {
 							height={height}
 							rowHeight={36}
 							headerHeight={36}
+							fixed={width < 900}
 							data={data}
 							columns={columns.map((column, index) => ({
 								key: column.name,

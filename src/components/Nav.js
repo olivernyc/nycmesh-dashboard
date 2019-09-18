@@ -8,8 +8,8 @@ export default function Nav(props) {
 	const pathComponents = props.location.pathname.split("/");
 	const currentResource = pathComponents.length ? pathComponents[1] : "/";
 	return (
-		<div className="mw5 w-100 bg-near-white pa3 br b--light-gray">
-			<div className="mb3">
+		<div className="w5-ns bg-near-white pa3 br b--light-gray">
+			<div>
 				<Link to="/" className="link flex items-center black">
 					<div className="flex justify-center items-center w2 mr2">
 						<div className={`h1 w1 br-pill bg-gold`} />
@@ -17,7 +17,7 @@ export default function Nav(props) {
 					<span className="fw5">NYC Mesh</span>
 				</Link>
 			</div>
-			<ul className="ma0 list pa0 f6">
+			<ul className="mb0 mt3 list pa0 f6 db-ns dn">
 				{tabs.map(tab => (
 					<li key={tab} className="pv1 mv1">
 						<Link

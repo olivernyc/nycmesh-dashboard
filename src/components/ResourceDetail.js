@@ -4,7 +4,7 @@ import { useAuth0 } from "../react-auth0-wrapper";
 export default function ResourceList(props) {
 	const [resource, setResource] = useState({});
 
-	const { resourceName, resourceId } = props;
+	const { resourceName, resourceId, titleExtractor } = props;
 	const { isAuthenticated, getTokenSilently } = useAuth0();
 
 	useEffect(() => {
@@ -37,8 +37,12 @@ export default function ResourceList(props) {
 		<div className="w-100 ph4">
 			<div className="flex items-center justify-between ">
 				<h1 className="mv0 f5 fw5 ttc pv3">
-					{resourceName.slice(0, resourceName.length - 1)}{" "}
-					{resourceId}
+					{titleExtractor
+						? titleExtractor(resource)
+						: `${resourceName.slice(
+								0,
+								resourceName.length - 1
+						  )} ${resourceId}`}
 				</h1>
 			</div>
 			{renderResource(resource)}
@@ -51,10 +55,18 @@ function renderResource(resource) {
 	return (
 		<div className="">
 			{resourceKeys
-				.filter(key => resource[key]) // Filter keys with null values
 				.filter(key => key !== "id" && !key.includes("_id"))
 				.map(key => {
 					const value = resource[key];
+					if (!value)
+						return (
+							<div className="flex items-center mv2">
+								<div className="w4">
+									<span className="mid-gray">{key}</span>
+								</div>
+								<span className="light-silver">No {key}</span>
+							</div>
+						);
 					switch (typeof value) {
 						case "string":
 							return (
@@ -77,16 +89,19 @@ function renderResource(resource) {
 								</div>
 							);
 						case "object":
-							console.log("object", key, value);
 							return (
 								<div className="pv3">
 									<h2 className="f5 fw5 mt0 mb3 ttc">
 										{key}
 									</h2>
-									<div>
-										{Array.isArray(value)
-											? JSON.stringify(value)
-											: renderResource(value)}
+									<div className="f6">
+										{Array.isArray(value) ? (
+											<pre>
+												{JSON.stringify(value, null, 2)}
+											</pre>
+										) : (
+											renderResource(value)
+										)}
 									</div>
 								</div>
 							);
@@ -96,9 +111,7 @@ function renderResource(resource) {
 									<div className="w4">
 										<span className="mid-gray">{key}</span>
 									</div>
-									<span className="dark-gray">
-										{JSON.stringify(value)}
-									</span>
+									<span className="dark-gray">{value}</span>
 								</div>
 							);
 					}
