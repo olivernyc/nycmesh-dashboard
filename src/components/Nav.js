@@ -7,9 +7,16 @@ export default function Nav(props) {
 	console.log(props);
 	const pathComponents = props.location.pathname.split("/");
 	const currentResource = pathComponents.length ? pathComponents[1] : "/";
-	console.log(pathComponents, currentResource);
 	return (
-		<div className="w5 mr3">
+		<div className="mw5 w-100 bg-near-white pa3 br b--light-gray">
+			<div className="mb3">
+				<Link to="/" className="link flex items-center black">
+					<div className="flex justify-center items-center w2 mr2">
+						<div className={`h1 w1 br-pill bg-gold`} />
+					</div>
+					<span className="fw5">NYC Mesh</span>
+				</Link>
+			</div>
 			<ul className="ma0 list pa0 f6">
 				{tabs.map(tab => (
 					<li key={tab} className="pv1 mv1">
@@ -21,7 +28,7 @@ export default function Nav(props) {
 									: "near-black"
 							}`}
 						>
-							<div className="flex justify-center w2 mr2">
+							<div className="flex justify-center items-center w2 mr2">
 								<div
 									className={`h1 w1 br-pill ${
 										tab.toLowerCase() === currentResource
@@ -30,8 +37,7 @@ export default function Nav(props) {
 									}`}
 								/>
 							</div>
-							{tab}
-							<span></span>
+							<span>{tab}</span>
 						</Link>
 					</li>
 				))}

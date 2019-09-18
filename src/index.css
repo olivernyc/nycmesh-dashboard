@@ -1,16 +1,7 @@
-html {
-	background-color: #eee;
-}
-
 body {
 	text-rendering: optimizeLegibility;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
-}
-
-.shadow {
-	box-shadow: rgba(66, 66, 66, 0.1) 0px 2px 5px 0px,
-		rgba(0, 0, 0, 0.0666) 0px 1px 1px 0px;
 }
 
 .purple {
@@ -19,4 +10,25 @@ body {
 
 .bg-purple {
 	background-color: rgb(88, 86, 214);
+}
+
+.pv05 {
+	padding-top: 0.125rem;
+	padding-bottom: 0.125rem;
+}
+
+.h05 {
+	height: 0.5rem;
+}
+
+.w05 {
+	width: 0.5rem;
+}
+
+.BaseTable {
+	box-shadow: none !important;
+}
+
+.BaseTable__table {
+	outline: none !important;
 }

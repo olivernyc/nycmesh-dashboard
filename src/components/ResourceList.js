@@ -1,22 +1,21 @@
 import React, { useState, useEffect } from "react";
-import BaseTable, { Column, AutoResizer } from "react-base-table";
+import BaseTable, { AutoResizer } from "react-base-table";
 import "react-base-table/styles.css";
-import { Button, Dropdown } from "@primer/components";
+import { Link } from "react-router-dom";
 
 import { useAuth0 } from "../react-auth0-wrapper";
 
 export default function ResourceList(props) {
+	const { resourceName, columns } = props;
 	const [data, setData] = useState([]);
-
-	const { name, columns } = props;
 	const { isAuthenticated, getTokenSilently } = useAuth0();
 
 	useEffect(() => {
 		async function fetchData() {
-			const data = await fetchResource(name);
+			const data = await fetchResource(resourceName);
 			setData(data);
 			async function fetchResource(resource) {
-				const path = `/v1/${resource}`;
+				const path = `${process.env.REACT_APP_API_ROOT}/${resource}`;
 				const token = await getTokenSilently();
 				const options = {
 					headers: {
@@ -28,70 +27,55 @@ export default function ResourceList(props) {
 					if (res.status !== 200) throw Error(res.error);
 					return await res.json();
 				} catch (error) {
-					alert(`Failed to fetch ${name}`);
+					alert(`Failed to fetch ${resourceName}`);
 					return [];
 				}
 			}
 		}
 		if (!isAuthenticated) return;
 		fetchData();
-	}, [isAuthenticated, getTokenSilently, name]);
-
-	const keys = columns || (data.length ? Object.keys(data[0]) : []);
+	}, [isAuthenticated, getTokenSilently, resourceName]);
 
 	return (
-		<div
-			className="mv2 bg-white br2 overflow-hidden shadow"
-			style={{
-				width: "calc(100vw - 19rem)"
-			}}
-		>
-			<div className="flex items-center justify-between pa3">
-				<Dropdown title="Filter">
-					<Dropdown.Menu direction="se">
-						<Dropdown.Item>Item 1</Dropdown.Item>
-						<Dropdown.Item>Item 2</Dropdown.Item>
-						<Dropdown.Item>Item 3</Dropdown.Item>
-					</Dropdown.Menu>
-				</Dropdown>
-				<Button>New</Button>
+		<div className="w-100">
+			<div className="flex items-center justify-between ph4">
+				<h1 className="mv0 f5 fw5 ttc pv3">{resourceName}</h1>
 			</div>
-			<div style={{ height: 20 * 38 - 4 }}>
+			<div style={{ height: "calc(100vh - 50px)" }}>
 				<AutoResizer>
 					{({ width, height }) => (
 						<BaseTable
-							data={data.slice(0, 20)}
 							width={width}
-							maxHeight={1000}
+							height={height}
 							rowHeight={36}
 							headerHeight={36}
-						>
-							{keys.map((key, index) => (
-								<Column
-									key={index}
-									title={key.replace("_", " ")}
-									dataKey={key}
-									width={100}
-									className="f6 fw4 mid-gray pointer"
-									headerClassName="ttu f7 fw5 dark-gray"
-									flexGrow={0.5}
-								/>
-							))}
-						</BaseTable>
+							data={data}
+							columns={columns.map((column, index) => ({
+								key: column.name,
+								dataKey: column.name,
+								title: column.name.replace("_", " "),
+								width: column.width || 200,
+								flexGrow: column.width ? 0 : 1,
+								className: "f6 fw4 dark-gray pointer",
+								headerClassName: "ttu f7 fw5 near-black",
+								cellRenderer: column.cellRenderer
+							}))}
+							headerRenderer={({ rowData, cells }) => (
+								<div className="ph3 flex w-100 h-100 bg-white">
+									{cells}
+								</div>
+							)}
+							rowRenderer={({ rowData, cells }) => (
+								<Link
+									to={`/${resourceName}/${rowData.id}`}
+									className="w-100 h-100 flex link ph3"
+								>
+									{cells}
+								</Link>
+							)}
+						></BaseTable>
 					)}
 				</AutoResizer>
-			</div>
-			<div className="flex items-center justify-between pa3">
-				<span className="f6 dark-gray">
-					<span className="fw5">{data.length.toLocaleString()}</span>{" "}
-					results
-				</span>
-				<div className="flex items-center">
-					<div className="mr2">
-						<Button disabled={true}>Previous</Button>
-					</div>
-					<Button>Next</Button>
-				</div>
 			</div>
 		</div>
 	);
