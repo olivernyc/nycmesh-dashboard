@@ -71,9 +71,17 @@ function App() {
           exact
           path="/nodes/:id"
           render={({ match }) => (
-            <ResourceDetail resourceName="nodes" resourceId={match.params.id} />
+            <ResourceDetail
+              resourceName="nodes"
+              resourceId={match.params.id}
+              titleExtractor={resource =>
+                resource.name || `Node ${resource.id}`
+              }
+              renderers={{
+                created: value => <DateCell cellData={value} />
+              }}
+            />
           )}
-          titleExtractor={resource => resource.name || `Node ${resource.id}`}
         />
 
         <Route
@@ -148,7 +156,7 @@ function App() {
                   )
                 },
                 { name: "member" },
-                { name: "roof_access" },
+                { name: "roof_access", width: 120 },
                 {
                   name: "panoramas",
                   cellRenderer: ({ cellData }) => (
@@ -180,6 +188,19 @@ function App() {
             <ResourceDetail
               resourceName="requests"
               resourceId={match.params.id}
+              renderers={{
+                date: value => <DateCell cellData={value} />,
+                email: value => (
+                  <a className="link blue" href={`mailto:${value}`}>
+                    {value}
+                  </a>
+                ),
+                phone: value => (
+                  <a className="link blue" href={`tel:${value}`}>
+                    {value}
+                  </a>
+                )
+              }}
             />
           )}
         />
@@ -193,7 +214,33 @@ function App() {
               columns={[
                 { name: "name", width: 200 },
                 { name: "email", width: 250 },
-                { name: "phone" }
+                { name: "phone" },
+                {
+                  name: "nodes",
+                  cellRenderer: ({ cellData }) =>
+                    cellData ? (
+                      <div className="flex">
+                        {cellData
+                          .filter(node => node) // Handle null values from API bug
+                          .map(node => (
+                            <div className=" bg-near-white br2 ph1 pv05 flex items-center mr1">
+                              <div
+                                className="h05 w05 br-pill mr1"
+                                style={{
+                                  backgroundColor:
+                                    node.status === "active"
+                                      ? "rgb(48,209,88)"
+                                      : "rgb(142,142,147)"
+                                }}
+                              />
+                              <span className="fw5">
+                                {node.name || node.id}
+                              </span>
+                            </div>
+                          ))}
+                      </div>
+                    ) : null
+                }
               ]}
             />
           )}
@@ -205,6 +252,7 @@ function App() {
             <ResourceDetail
               resourceName="members"
               resourceId={match.params.id}
+              titleExtractor={resource => resource.email}
             />
           )}
         />

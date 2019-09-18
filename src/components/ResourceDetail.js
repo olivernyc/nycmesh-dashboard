@@ -4,7 +4,7 @@ import { useAuth0 } from "../react-auth0-wrapper";
 export default function ResourceList(props) {
 	const [resource, setResource] = useState({});
 
-	const { resourceName, resourceId, titleExtractor } = props;
+	const { resourceName, resourceId, titleExtractor, renderers } = props;
 	const { isAuthenticated, getTokenSilently } = useAuth0();
 
 	useEffect(() => {
@@ -45,32 +45,48 @@ export default function ResourceList(props) {
 						  )} ${resourceId}`}
 				</h1>
 			</div>
-			{renderResource(resource)}
+			{renderResource(resource, renderers)}
 		</div>
 	);
 }
 
-function renderResource(resource) {
+function renderResource(resource, renderers = {}) {
 	const resourceKeys = Object.keys(resource);
 	return (
-		<div className="">
+		<div className="f6">
 			{resourceKeys
 				.filter(key => key !== "id" && !key.includes("_id"))
 				.map(key => {
 					const value = resource[key];
 					if (!value)
 						return (
-							<div className="flex items-center mv2">
+							<div key={key} className="flex items-center mv2">
 								<div className="w4">
 									<span className="mid-gray">{key}</span>
 								</div>
 								<span className="light-silver">No {key}</span>
 							</div>
 						);
+
+					if (renderers[key])
+						return (
+							<div key={key} className="flex items-center mv2">
+								<div className="w4">
+									<span className="mid-gray">{key}</span>
+								</div>
+								<span className="dark-gray">
+									{renderers[key](value)}
+								</span>
+							</div>
+						);
+
 					switch (typeof value) {
 						case "string":
 							return (
-								<div className="flex items-center mv2">
+								<div
+									key={key}
+									className="flex items-center mv2"
+								>
 									<div className="w4">
 										<span className="mid-gray">{key}</span>
 									</div>
@@ -79,7 +95,10 @@ function renderResource(resource) {
 							);
 						case "boolean":
 							return (
-								<div className="flex items-center mv2">
+								<div
+									key={key}
+									className="flex items-center mv2"
+								>
 									<div className="w4">
 										<span className="mid-gray">{key}</span>
 									</div>
@@ -89,25 +108,33 @@ function renderResource(resource) {
 								</div>
 							);
 						case "object":
-							return (
-								<div className="pv3">
+							return Array.isArray(value) &&
+								!value.filter(v => v).length ? null : (
+								<div key={key} className="pv3">
 									<h2 className="f5 fw5 mt0 mb3 ttc">
 										{key}
 									</h2>
-									<div className="f6">
+									<div>
 										{Array.isArray(value) ? (
 											<pre>
-												{JSON.stringify(value, null, 2)}
+												{JSON.stringify(
+													value.filter(v => v),
+													null,
+													2
+												)}
 											</pre>
 										) : (
-											renderResource(value)
+											renderResource(value, renderers)
 										)}
 									</div>
 								</div>
 							);
 						default:
 							return (
-								<div className="flex items-center mv2">
+								<div
+									key={key}
+									className="flex items-center mv2"
+								>
 									<div className="w4">
 										<span className="mid-gray">{key}</span>
 									</div>
