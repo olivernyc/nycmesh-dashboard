@@ -38,7 +38,7 @@ export default function ResourceList(props) {
 
 	return (
 		<div className="w-100">
-			<div className="flex items-center justify-between ph4">
+			<div className="flex items-center justify-between ph4-ns ph3">
 				<h1 className="mv0 f5 fw5 ttc pv3">{resourceName}</h1>
 			</div>
 			<div style={{ height: "calc(100vh - 50px)" }}>
@@ -62,14 +62,14 @@ export default function ResourceList(props) {
 								cellRenderer: column.cellRenderer
 							}))}
 							headerRenderer={({ rowData, cells }) => (
-								<div className="ph3 flex w-100 h-100 bg-white">
+								<div className="ph3-ns flex w-100 h-100 bg-white">
 									{cells}
 								</div>
 							)}
 							rowRenderer={({ rowData, cells }) => (
 								<Link
 									to={`/${resourceName}/${rowData.id}`}
-									className="w-100 h-100 flex link ph3"
+									className="w-100 h-100 flex link ph3-ns"
 								>
 									{cells}
 								</Link>

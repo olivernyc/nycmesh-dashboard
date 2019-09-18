@@ -34,7 +34,7 @@ export default function ResourceList(props) {
 	}, [isAuthenticated, getTokenSilently, resourceName, resourceId]);
 
 	return (
-		<div className="w-100 ph4">
+		<div className="w-100 ph4-ns ph3">
 			<div className="flex items-center justify-between ">
 				<h1 className="mv0 f5 fw5 ttc pv3">
 					{titleExtractor

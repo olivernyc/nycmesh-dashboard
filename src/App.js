@@ -21,7 +21,7 @@ function App() {
   return (
     <Router>
       <div
-        className="helvetica w-100 flex flex-row-ns flex-column justify-between"
+        className="helvetica w-100 flex flex-row-ns flex-column justify-between-ns"
         style={{ height: "100vh" }}
       >
         <Route component={Nav} />
