@@ -1,7 +1,9 @@
 import React from "react";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import { useAuth0 } from "./react-auth0-wrapper";
 import Nav from "./components/Nav";
+import Feed from "./components/Feed";
+import MapView from "./components/MapView";
 import DateCell from "./components/DateCell";
 import ResourceList from "./components/ResourceList";
 import ResourceDetail from "./components/ResourceDetail";
@@ -21,10 +23,14 @@ function App() {
   return (
     <Router>
       <div
-        className="helvetica w-100 flex flex-row-ns flex-column justify-between-ns"
+        className="sans-serif w-100 flex flex-row-ns flex-column justify-between-ns"
         style={{ height: "100vh" }}
       >
         <Route component={Nav} />
+
+        <Route path="/feed" component={Feed} />
+        <Route path="/map" component={MapView} />
+
         <Route
           exact
           path="/nodes"
@@ -78,8 +84,14 @@ function App() {
                 resource.name || `Node ${resource.id}`
               }
               renderers={{
-                created: value => <DateCell cellData={value} />
+                created: value => <DateCell cellData={value} />,
+                building: value => (
+                  <Link className="link blue" to={`/buildings/${value.id}`}>
+                    {value.address}
+                  </Link>
+                )
               }}
+              blacklist={["lat", "lng", "alt", "name"]}
             />
           )}
         />
@@ -137,6 +149,7 @@ function App() {
               resourceName="buildings"
               resourceId={match.params.id}
               titleExtractor={resource => resource.address}
+              blacklist={["lat", "lng", "bin_address"]}
             />
           )}
         />
@@ -199,6 +212,23 @@ function App() {
                   <a className="link blue" href={`tel:${value}`}>
                     {value}
                   </a>
+                ),
+                building: value => (
+                  <Link className="link blue" to={`/buildings/${value.id}`}>
+                    {value.address}
+                  </Link>
+                ),
+                panoramas: value => (
+                  <div className="flex flex-wrap man1">
+                    {value.map(panoramaURL => (
+                      <div className="h4 w-50 pa1">
+                        <div
+                          className="h-100 w-100 cover bg-center"
+                          style={{ background: `url('${panoramaURL}')` }}
+                        />
+                      </div>
+                    ))}
+                  </div>
                 )
               }}
             />
@@ -212,8 +242,14 @@ function App() {
             <ResourceList
               resourceName="members"
               columns={[
+                {
+                  name: "email",
+                  width: 250,
+                  cellRenderer: ({ cellData }) => (
+                    <span className="fw5 near-black">{cellData}</span>
+                  )
+                },
                 { name: "name", width: 200 },
-                { name: "email", width: 250 },
                 { name: "phone" },
                 {
                   name: "nodes",
@@ -253,6 +289,18 @@ function App() {
               resourceName="members"
               resourceId={match.params.id}
               titleExtractor={resource => resource.name}
+              renderers={{
+                email: value => (
+                  <a className="link blue" href={`mailto:${value}`}>
+                    {value}
+                  </a>
+                ),
+                phone: value => (
+                  <a className="link blue" href={`tel:${value}`}>
+                    {value}
+                  </a>
+                )
+              }}
             />
           )}
         />

@@ -1,12 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useAuth0 } from "../react-auth0-wrapper";
+import Octicon, { Settings } from "@primer/octicons-react";
 import NodeName from "./NodeName";
+import Button from "./Button";
 
 export default function ResourceList(props) {
 	const [resource, setResource] = useState({});
 
-	const { resourceName, resourceId, titleExtractor, renderers } = props;
+	const {
+		resourceName,
+		resourceId,
+		titleExtractor,
+		renderers,
+		blacklist
+	} = props;
 	const { isAuthenticated, getTokenSilently } = useAuth0();
 
 	useEffect(() => {
@@ -39,15 +47,21 @@ export default function ResourceList(props) {
 		<div className="w-100 ph4-ns ph3">
 			<div className="flex items-center justify-between ">
 				<h1 className="mv0 f5 fw5 ttc pv3">
-					{titleExtractor
+					{titleExtractor && resource.id
 						? titleExtractor(resource)
 						: `${resourceName.slice(
 								0,
 								resourceName.length - 1
 						  )} ${resourceId}`}
 				</h1>
+				<div>
+					<Button
+						title="Filters"
+						icon={<Octicon icon={Settings} />}
+					/>
+				</div>
 			</div>
-			{renderResource(resource, renderers)}
+			{renderResource(resource, renderers, blacklist)}
 			{// Temp hack
 			resourceName === "nodes" ? (
 				<a
@@ -61,12 +75,13 @@ export default function ResourceList(props) {
 	);
 }
 
-function renderResource(resource, renderers = {}) {
+function renderResource(resource, renderers = {}, blacklist = []) {
 	const resourceKeys = Object.keys(resource);
 	return (
 		<div className="f6">
 			{resourceKeys
-				.filter(key => key !== "id" && !key.includes("_id"))
+				.filter(key => !key.includes("_id"))
+				.filter(key => !blacklist.includes(key))
 				.map(key => {
 					const value = resource[key];
 					if (!value)
@@ -79,7 +94,7 @@ function renderResource(resource, renderers = {}) {
 							</div>
 						);
 
-					if (renderers[key])
+					if (renderers[key] && !Array.isArray(value))
 						return (
 							<div key={key} className="flex items-center mv2">
 								<div className="w4">
@@ -119,14 +134,20 @@ function renderResource(resource, renderers = {}) {
 								</div>
 							);
 						case "object":
-							return Array.isArray(value) &&
-								!value.filter(v => v).length ? null : (
+							if (
+								Array.isArray(value) &&
+								!value.filter(v => v).length
+							)
+								return null;
+							return (
 								<div key={key} className="pv3">
 									<h2 className="f5 fw5 mt0 mb3 ttc">
 										{key}
 									</h2>
 									<div>
-										{Array.isArray(value) ? (
+										{renderers[key] ? (
+											renderers[key](value)
+										) : Array.isArray(value) ? (
 											<div className="flex flex-wrap">
 												{value
 													.filter(v => v)

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import Autocomplete from "react-autocomplete";
+// import Autocomplete from "react-autocomplete";
 import Octicon, {
 	Pin,
 	Home,
@@ -48,16 +48,20 @@ export default function Nav(props) {
 			<div className="mt3 db-ns dn">
 				<Link
 					to="/feed"
-					className="link flex items-center near-black pointer pv1 mv1 focus-no-outline"
+					className={`link flex items-center pointer pv1 mv1 focus-no-outline ${
+						currentResource === "feed" ? "purple fw5" : "mid-gray"
+					}`}
 				>
-					<div className="flex justify-center items-center w2 mr2 black-40">
+					<div className="flex justify-center items-center w2 mr2">
 						<Octicon icon={Pulse} />
 					</div>
 					<span>Feed</span>
 				</Link>
 				<Link
 					to="/map"
-					className="link flex items-center near-black pointer pv1 mv1 focus-no-outline"
+					className={`link flex items-center near-black pointer pv1 mv1 focus-no-outline ${
+						currentResource === "map" ? "purple fw5" : "mid-gray"
+					}`}
 				>
 					<div className="flex justify-center items-center w2 mr2">
 						<svg
@@ -66,7 +70,6 @@ export default function Nav(props) {
 							viewBox="0 0 14 16"
 							fill="none"
 							xmlns="http://www.w3.org/2000/svg"
-							className="black-40"
 						>
 							<path
 								fill-rule="evenodd"
@@ -81,7 +84,7 @@ export default function Nav(props) {
 				</Link>
 			</div>
 
-			<ul className="mt3 list pa0 db-ns dn">
+			<ul className="mt3 mb0 list pa0 db-ns dn">
 				{tabs.map(({ name, icon }) => (
 					<li key={name} className="pv1 mv1">
 						<Link
@@ -89,7 +92,7 @@ export default function Nav(props) {
 							className={`link flex items-center focus-no-outline ${
 								name.toLowerCase() === currentResource
 									? "purple fw5"
-									: "near-black"
+									: "mid-gray"
 							}`}
 						>
 							<div className="flex justify-center items-center w2 mr2">
@@ -108,6 +111,7 @@ export default function Nav(props) {
 					</li>
 				))}
 			</ul>
+
 			<div className="mt3 db-ns dn">
 				<div
 					className="link flex items-center near-black pointer pv1 mv1"
@@ -228,7 +232,9 @@ function SearchBar(props) {
 						className="moon-gray link pointer"
 					>
 						<div className="pa3 hover-bg-gray">
-							📡
+							<span role="img" aria-label="Node icon">
+								📡
+							</span>
 							<span className="ml3 truncate">
 								{result.name || `Node ${result.id}`}
 							</span>
@@ -242,7 +248,9 @@ function SearchBar(props) {
 						className="moon-gray link pointer"
 					>
 						<div className="pa3">
-							🏠
+							<span role="img" aria-label="Building icon">
+								🏠
+							</span>
 							<span className="ml3 truncate">
 								{result.address}
 							</span>
@@ -256,7 +264,9 @@ function SearchBar(props) {
 						className="moon-gray link pointer"
 					>
 						<div className="pa3">
-							🙏
+							<span role="img" aria-label="Request icon">
+								🙏
+							</span>
 							<span className="ml3 truncate">
 								{result.building.address}
 							</span>
@@ -271,7 +281,9 @@ function SearchBar(props) {
 						className="moon-gray link pointer"
 					>
 						<div className="pa3">
-							👤
+							<span role="img" aria-label="Member icon">
+								👤
+							</span>
 							<span className="ml3 ttc truncate">
 								{result.name}
 							</span>
