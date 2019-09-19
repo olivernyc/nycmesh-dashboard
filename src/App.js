@@ -149,7 +149,7 @@ function App() {
               resourceName="buildings"
               resourceId={match.params.id}
               titleExtractor={resource => resource.address}
-              blacklist={["lat", "lng", "bin_address"]}
+              blacklist={["lat", "lng", "bin", "bin_address", "requests"]}
             />
           )}
         />

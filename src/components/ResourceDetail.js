@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useAuth0 } from "../react-auth0-wrapper";
-import Octicon, { Settings } from "@primer/octicons-react";
+import Octicon, { Pencil } from "@primer/octicons-react";
 import NodeName from "./NodeName";
 import Button from "./Button";
 
@@ -55,10 +55,7 @@ export default function ResourceList(props) {
 						  )} ${resourceId}`}
 				</h1>
 				<div>
-					<Button
-						title="Filters"
-						icon={<Octicon icon={Settings} />}
-					/>
+					<Button title="Update" icon={<Octicon icon={Pencil} />} />
 				</div>
 			</div>
 			{renderResource(resource, renderers, blacklist)}
