@@ -87,9 +87,9 @@ export default function NodeMap(props) {
 				defaultZoom={DEFAULT_ZOOM}
 				defaultCenter={DEFAULT_CENTER}
 				defaultOptions={options}
-				loadingElement={<div className="h-100 flex flex-column" />}
-				containerElement={<div className="h-100 flex flex-column" />}
-				mapElement={<div className="h-100 flex flex-column" />}
+				loadingElement={<div className="flex" style={{ flex: 1 }} />}
+				containerElement={<div className="flex" style={{ flex: 1 }} />}
+				mapElement={<div className="flex" style={{ flex: 1 }} />}
 				googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyBNClp7oJsw-eleEoR3-PQKV23tpeW-FpE"
 			>
 				{

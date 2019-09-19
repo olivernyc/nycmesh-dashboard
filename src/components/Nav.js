@@ -33,16 +33,18 @@ export default function Nav(props) {
 	const currentResource = pathComponents.length ? pathComponents[1] : "/";
 	return (
 		<div className="flex flex-column w-100 mw5-ns bg-near-white pa3 br b--light-gray f6">
-			<div className="flex items-center justify-between">
-				<Link
-					to="/"
-					className="link flex items-center black focus-no-outline"
-				>
-					<div className="flex justify-center items-center w2-ns mr2-ns mr3">
-						<div className={`h1 w1 br-pill bg-gold`} />
-					</div>
-					<span className="fw5 nowrap">NYC Mesh</span>
-				</Link>
+			<div>
+				<div className="flex items-center justify-between">
+					<Link
+						to="/"
+						className="link flex items-center black focus-no-outline"
+					>
+						<div className="flex justify-center items-center w2-ns mr2-ns mr3">
+							<div className={`h1 w1 br-pill bg-gold`} />
+						</div>
+						<span className="fw5 nowrap">NYC Mesh</span>
+					</Link>
+				</div>
 			</div>
 
 			<div className="mt3 db-ns dn">
