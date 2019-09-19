@@ -37,3 +37,7 @@ body {
 .BaseTable__table {
 	outline: none !important;
 }
+
+.focus-no-outline:focus {
+	outline: none;
+}

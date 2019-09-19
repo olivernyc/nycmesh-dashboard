@@ -106,7 +106,7 @@ function App() {
                         {cellData
                           .filter(node => node) // Handle null values from API bug
                           .map(node => (
-                            <div className=" bg-near-white br2 ph1 pv05 flex items-center mr1">
+                            <div className=" bg-near-white br2 ph1 pv05 flex items-center mr2">
                               <div
                                 className="h05 w05 br-pill mr1"
                                 style={{
@@ -252,7 +252,7 @@ function App() {
             <ResourceDetail
               resourceName="members"
               resourceId={match.params.id}
-              titleExtractor={resource => resource.email}
+              titleExtractor={resource => resource.name}
             />
           )}
         />

@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { useAuth0 } from "../react-auth0-wrapper";
+import NodeName from "./NodeName";
 
 export default function ResourceList(props) {
 	const [resource, setResource] = useState({});
@@ -46,6 +48,15 @@ export default function ResourceList(props) {
 				</h1>
 			</div>
 			{renderResource(resource, renderers)}
+			{// Temp hack
+			resourceName === "nodes" ? (
+				<a
+					href={`https://www.nycmesh.net/map/nodes/${resource.id}`}
+					className="blue link"
+				>
+					View on map →
+				</a>
+			) : null}
 		</div>
 	);
 }
@@ -116,13 +127,34 @@ function renderResource(resource, renderers = {}) {
 									</h2>
 									<div>
 										{Array.isArray(value) ? (
-											<pre>
-												{JSON.stringify(
-													value.filter(v => v),
-													null,
-													2
-												)}
-											</pre>
+											<div className="flex flex-wrap">
+												{value
+													.filter(v => v)
+													.map(value => {
+														if (key === "nodes")
+															return (
+																<Link
+																	to={`/nodes/${value.id}`}
+																	className="mr1 link dark-gray"
+																>
+																	<NodeName
+																		node={
+																			value
+																		}
+																	/>
+																</Link>
+															);
+														return (
+															<pre>
+																{JSON.stringify(
+																	value,
+																	null,
+																	2
+																)}
+															</pre>
+														);
+													})}
+											</div>
 										) : (
 											renderResource(value, renderers)
 										)}
