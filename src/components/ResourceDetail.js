@@ -61,12 +61,9 @@ export default function ResourceList(props) {
 			{renderResource(resource, renderers, blacklist)}
 			{// Temp hack
 			resourceName === "nodes" ? (
-				<a
-					href={`https://www.nycmesh.net/map/nodes/${resource.id}`}
-					className="blue link"
-				>
+				<Link to={`/map/nodes/${resource.id}`} className="blue link">
 					View on map →
-				</a>
+				</Link>
 			) : null}
 		</div>
 	);

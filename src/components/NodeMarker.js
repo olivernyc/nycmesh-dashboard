@@ -28,14 +28,14 @@ function getIcon(node) {
 	if (name && name.includes("Supernode"))
 		return {
 			url: "/img/map/supernode.svg",
-			anchor: { x: 8, y: 8 }
+			anchor: { x: 9, y: 9 }
 		};
 
 	// Hub
 	if (notes && notes.includes("hub"))
 		return {
 			url: "/img/map/hub.svg",
-			anchor: { x: 8, y: 8 }
+			anchor: { x: 9, y: 9 }
 		};
 
 	// Omni

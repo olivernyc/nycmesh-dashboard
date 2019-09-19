@@ -62,7 +62,7 @@ export default function Nav(props) {
 				</Link>
 				<Link
 					to="/map"
-					className={`link flex items-center near-black pointer pv1 mv1 focus-no-outline ${
+					className={`link flex items-center pointer pv1 mv1 focus-no-outline ${
 						currentResource === "map" ? "purple fw5" : "mid-gray"
 					}`}
 				>
@@ -85,13 +85,7 @@ export default function Nav(props) {
 							}`}
 						>
 							<div className="flex justify-center items-center w2 mr2">
-								<div
-									className={`h1 w1 br-pill flex items-center justify-center ${
-										name.toLowerCase() === currentResource
-											? "purple"
-											: "black-40"
-									}`}
-								>
+								<div className="h1 w1 br-pill flex items-center justify-center">
 									{icon}
 								</div>
 							</div>
@@ -103,10 +97,10 @@ export default function Nav(props) {
 
 			<div className="mt3 db-ns dn">
 				<div
-					className="link flex items-center near-black pointer pv1 mv1"
+					className="link flex items-center mid-gray pointer pv1 mv1"
 					onClick={() => setShowSearch(true)}
 				>
-					<div className="flex justify-center items-center w2 mr2 black-40">
+					<div className="flex justify-center items-center w2 mr2">
 						<Octicon icon={Search} />
 					</div>
 					<span>Search</span>
