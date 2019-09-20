@@ -13,6 +13,12 @@ export default function LinkLine(props) {
 		device_types[0],
 		device_types[1]
 	);
+	const strokeOpacity = getOpacity(
+		nodes[0],
+		nodes[1],
+		device_types[0],
+		device_types[1]
+	);
 	const strokeWeight = getWeight(
 		nodes[0],
 		nodes[1],
@@ -28,7 +34,7 @@ export default function LinkLine(props) {
 	const options = {
 		strokeColor,
 		strokeWeight,
-		strokeOpacity: 1,
+		strokeOpacity,
 		zIndex
 	};
 	return <Polyline path={path} options={options} visible={visible} />;
@@ -42,8 +48,19 @@ const isBackbone = (node, device_type) =>
 
 function getColor(node1, node2, device_type1, device_type2) {
 	if (isBackbone(node1, device_type1) && isBackbone(node2, device_type2))
-		return "rgba(0,122,255,0.75)";
-	return "rgba(255,45,85,0.5)";
+		return "rgb(0,122,255)";
+	return "rgb(255,45,85)";
+}
+
+function getOpacity(node1, node2, device_type1, device_type2) {
+	if (
+		(isHub(node1) || isSupernode(node1)) &&
+		(isHub(node2) || isSupernode(node2))
+	)
+		return 1;
+	if (isBackbone(node1, device_type1) && isBackbone(node2, device_type2))
+		return 0.75;
+	return 0.5;
 }
 
 function getWeight(node1, node2, device_type1, device_type2) {
