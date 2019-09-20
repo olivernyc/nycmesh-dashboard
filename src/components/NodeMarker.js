@@ -22,7 +22,7 @@ export default function NodeMarker(props) {
 }
 
 function getIcon(node) {
-	const { name, notes, device_types } = node;
+	const { name, notes, devices } = node;
 
 	// Supernode -- TODO: Have a flag in db like "upstream"
 	if (name && name.includes("Supernode"))
@@ -39,8 +39,7 @@ function getIcon(node) {
 		};
 
 	// Omni
-	if (device_types && device_types.filter(d => d.name !== "Unknown").length)
-		// TODO: Less hacky
+	if (devices.filter(device => device.type.name === "Omni").length)
 		return {
 			url: "/img/map/omni.svg",
 			anchor: { x: 6, y: 6 }
@@ -53,11 +52,10 @@ function getIcon(node) {
 }
 
 function getZ(node) {
-	const { name, notes, device_types } = node;
+	const { name, notes, devices } = node;
 
 	if (name && name.includes("Supernode")) return 4;
 	if (notes && notes.includes("hub")) return 3;
-	if (device_types && device_types.filter(d => d.name === "Omni").length)
-		return 2;
+	if (devices.filter(device => device.type.name === "Omni").length) return 2;
 	return 1;
 }
