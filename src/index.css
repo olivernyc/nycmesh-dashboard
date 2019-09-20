@@ -45,3 +45,10 @@
 .focus-no-outline:focus {
 	outline: none;
 }
+
+/*
+https://github.com/tomchentw/react-google-maps/issues/764#issuecomment-442163940
+*/
+.g-map > div {
+	background-color: transparent !important;
+}

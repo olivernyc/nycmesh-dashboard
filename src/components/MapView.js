@@ -58,7 +58,7 @@ const options = {
 	mapTypeControlOptions: {
 		position: "3"
 	},
-	backgroundColor: "#f5f5f5",
+	backgroundColor: "#fff",
 	gestureHandling: "greedy",
 	clickableIcons: false
 };
@@ -107,7 +107,7 @@ export default function NodeMap(props) {
 				defaultOptions={options}
 				loadingElement={<div className="flex" style={{ flex: 1 }} />}
 				containerElement={<div className="flex" style={{ flex: 1 }} />}
-				mapElement={<div className="flex" style={{ flex: 1 }} />}
+				mapElement={<div className="g-map flex" style={{ flex: 1 }} />}
 				googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyBNClp7oJsw-eleEoR3-PQKV23tpeW-FpE"
 			>
 				<NodeLayer nodes={nodes} />
