@@ -5,7 +5,7 @@ import Octicon, { Pencil } from "@primer/octicons-react";
 import NodeName from "./NodeName";
 import Button from "./Button";
 
-export default function ResourceList(props) {
+export default function ResourceDetail(props) {
 	const [resource, setResource] = useState({});
 
 	const {
@@ -49,10 +49,7 @@ export default function ResourceList(props) {
 				<h1 className="mv0 f5 fw5 ttc pv3">
 					{titleExtractor && resource.id
 						? titleExtractor(resource)
-						: `${resourceName.slice(
-								0,
-								resourceName.length - 1
-						  )} ${resourceId}`}
+						: null}
 				</h1>
 				<div>
 					<Button title="Update" icon={<Octicon icon={Pencil} />} />
@@ -149,6 +146,9 @@ function renderResource(resource, renderers = {}, blacklist = []) {
 														if (key === "nodes")
 															return (
 																<Link
+																	key={
+																		value.id
+																	}
 																	to={`/nodes/${value.id}`}
 																	className="mr1 link dark-gray"
 																>
@@ -159,6 +159,24 @@ function renderResource(resource, renderers = {}, blacklist = []) {
 																	/>
 																</Link>
 															);
+
+														if (key === "requests")
+															return (
+																<Link
+																	key={
+																		value.id
+																	}
+																	to={`/requests/${value.id}`}
+																	className="mr1 link dark-gray w-100"
+																>
+																	{
+																		value
+																			.building
+																			.address
+																	}
+																</Link>
+															);
+
 														return (
 															<pre>
 																{JSON.stringify(

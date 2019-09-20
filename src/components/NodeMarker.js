@@ -3,7 +3,7 @@ import { Marker } from "react-google-maps";
 
 export default function NodeMarker(props) {
 	const { node, visible, onClick } = props;
-	const { notes, lat, lng, name } = node;
+	const { lat, lng } = node;
 	const title = node.name || String(node.id);
 	const icon = getIcon(node);
 	const zIndex = getZ(node);

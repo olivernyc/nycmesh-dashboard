@@ -127,16 +127,8 @@ function LinkLayer(props) {
 function SectorLayer(props) {
 	const { nodes } = props;
 	return nodes.map(node =>
-		node.devices
-			.filter(
-				(device, index) => node.device_types[index].name !== "Unknown"
-			)
-			.map((device, index) => (
-				<Sector
-					key={device.id}
-					device={device}
-					deviceType={node.device_types[index]}
-				/>
-			))
+		node.devices.map((device, index) => (
+			<Sector key={device.id} device={device} />
+		))
 	);
 }

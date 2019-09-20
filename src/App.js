@@ -118,7 +118,10 @@ function App() {
                         {cellData
                           .filter(node => node) // Handle null values from API bug
                           .map(node => (
-                            <div className=" bg-near-white br2 ph1 pv05 flex items-center mr2">
+                            <div
+                              key={node.id}
+                              className=" bg-near-white br2 ph1 pv05 flex items-center mr2"
+                            >
                               <div
                                 className="h05 w05 br-pill mr1"
                                 style={{
@@ -149,7 +152,7 @@ function App() {
               resourceName="buildings"
               resourceId={match.params.id}
               titleExtractor={resource => resource.address}
-              blacklist={["lat", "lng", "bin", "bin_address", "requests"]}
+              blacklist={["id", "lat", "lng", "bin", "bin_address", "requests"]}
             />
           )}
         />
@@ -201,6 +204,8 @@ function App() {
             <ResourceDetail
               resourceName="requests"
               resourceId={match.params.id}
+              blacklist={["id"]}
+              titleExtractor={resource => resource.building.address}
               renderers={{
                 date: value => <DateCell cellData={value} />,
                 email: value => (
@@ -223,8 +228,8 @@ function App() {
                     {value.map(panoramaURL => (
                       <div className="h4 w-50 pa1">
                         <div
-                          className="h-100 w-100 cover bg-center"
-                          style={{ background: `url('${panoramaURL}')` }}
+                          className="h-100 w-100 cover bg-center bg-near-white"
+                          style={{ backgroundImage: `url('${panoramaURL}')` }}
                         />
                       </div>
                     ))}
@@ -289,6 +294,7 @@ function App() {
               resourceName="members"
               resourceId={match.params.id}
               titleExtractor={resource => resource.name}
+              blacklist={["id"]}
               renderers={{
                 email: value => (
                   <a className="link blue" href={`mailto:${value}`}>
