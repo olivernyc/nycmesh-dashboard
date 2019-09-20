@@ -76,15 +76,19 @@ export default function NodeMap(props) {
 	const [links, setLinks] = useState([]);
 	const { isAuthenticated, getTokenSilently } = useAuth0();
 	useEffect(() => {
-		async function fetchData() {
+		async function fetchNodes() {
 			const token = await getTokenSilently();
 			const nodesRes = await fetchResource("nodes", token);
-			const linksRes = await fetchResource("links", token);
 			setNodes(nodesRes);
+		}
+		async function fetchLinks() {
+			const token = await getTokenSilently();
+			const linksRes = await fetchResource("links", token);
 			setLinks(linksRes);
 		}
 		if (!isAuthenticated) return;
-		fetchData();
+		fetchNodes();
+		fetchLinks();
 	}, [isAuthenticated, getTokenSilently]);
 	return (
 		<div className="h-100 w-100 flex flex-column">
