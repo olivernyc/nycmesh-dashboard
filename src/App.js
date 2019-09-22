@@ -1,5 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import LazyLoad from "react-lazyload";
 import { useAuth0 } from "./components/Auth0";
 import Nav from "./components/Nav";
 import Feed from "./components/Feed";
@@ -67,7 +68,7 @@ function App() {
                 { name: "building", width: 350 },
                 { name: "notes" },
                 {
-                  name: "created",
+                  name: "create_date",
                   width: 150,
                   cellRenderer: DateCell
                 }
@@ -86,7 +87,7 @@ function App() {
                 resource.name || `Node ${resource.id}`
               }
               renderers={{
-                created: value => <DateCell cellData={value} />,
+                create_date: value => <DateCell cellData={value} />,
                 building: value => (
                   <Link className="link blue" to={`/buildings/${value.id}`}>
                     {value.address}
@@ -173,20 +174,26 @@ function App() {
                     <span className="fw5 near-black truncate">{cellData}</span>
                   )
                 },
-                { name: "member" },
+                {
+                  name: "member",
+                  cellRenderer: ({ cellData }) => <span>{cellData.email}</span>
+                },
                 { name: "roof_access", width: 120 },
                 {
                   name: "panoramas",
                   cellRenderer: ({ cellData }) => (
                     <div className="flex items-center overflow-hidden">
-                      {cellData.map(panoramaURL => (
-                        <img
-                          key={panoramaURL}
-                          src={panoramaURL}
-                          className="h1 mr1"
-                          alt="panorama thumbnail"
-                        />
-                      ))}
+                      {cellData
+                        .filter(panorama => panorama.url)
+                        .map(panorama => (
+                          <LazyLoad height={16}>
+                            <img
+                              src={panorama.url}
+                              className="h1 mr1"
+                              alt="panorama thumbnail"
+                            />
+                          </LazyLoad>
+                        ))}
                     </div>
                   )
                 },
