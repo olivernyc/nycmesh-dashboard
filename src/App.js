@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
-import { useAuth0 } from "./react-auth0-wrapper";
+import { useAuth0 } from "./components/Auth0";
 import Nav from "./components/Nav";
 import Feed from "./components/Feed";
 import MapView from "./components/MapView";
@@ -26,8 +26,10 @@ function App() {
         className="sans-serif w-100 flex flex-row-ns flex-column justify-between-ns"
         style={{ height: "100vh" }}
       >
-        <Route component={Nav} />
-
+        <div className="fixed-ns w-100 mw5-ns h-100">
+          <Route component={Nav} />
+        </div>
+        <div className="mw5 w-100" />
         <Route path="/feed" component={Feed} />
         <Route path="/map" component={MapView} />
 
@@ -152,7 +154,7 @@ function App() {
               resourceName="buildings"
               resourceId={match.params.id}
               titleExtractor={resource => resource.address}
-              blacklist={["id", "lat", "lng", "bin", "bin_address", "requests"]}
+              blacklist={["id", "lat", "lng", "bin_address", "requests"]}
             />
           )}
         />

@@ -10,7 +10,7 @@ import Octicon, {
 	Search,
 	Globe
 } from "@primer/octicons-react";
-import { useAuth0 } from "../react-auth0-wrapper";
+import { useAuth0 } from "./Auth0";
 
 const tabs = [
 	{
@@ -33,7 +33,7 @@ export default function Nav(props) {
 	const pathComponents = props.location.pathname.split("/");
 	const currentResource = pathComponents.length ? pathComponents[1] : "/";
 	return (
-		<div className="flex flex-column w-100 mw5-ns bg-near-white pa3 br b--light-gray f6">
+		<div className="flex flex-column w-100 h-100-ns mw5-ns bg-near-white pa3 br b--light-gray f6">
 			<div>
 				<div className="flex items-center justify-between">
 					<Link

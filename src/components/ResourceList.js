@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import Octicon, { Settings } from "@primer/octicons-react";
 import Button from "./Button";
 
-import { useAuth0 } from "../react-auth0-wrapper";
+import { useAuth0 } from "./Auth0";
 
 export default function ResourceList(props) {
 	const { resourceName, columns } = props;

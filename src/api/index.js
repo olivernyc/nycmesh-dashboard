@@ -10,7 +10,7 @@ export async function fetchResource(resource, token) {
 		if (res.status !== 200) throw Error(res.error);
 		return await res.json();
 	} catch (error) {
-		alert(`Failed to fetch ${resource}`);
+		alert(`Failed to fetch ${resource}: ${error.message}`);
 		return [];
 	}
 }

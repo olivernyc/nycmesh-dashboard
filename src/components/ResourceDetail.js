@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useAuth0 } from "../react-auth0-wrapper";
+import { useAuth0 } from "./Auth0";
 import Octicon, { Pencil } from "@primer/octicons-react";
 import NodeName from "./NodeName";
 import Button from "./Button";
@@ -42,6 +42,8 @@ export default function ResourceDetail(props) {
 		if (!isAuthenticated) return;
 		fetchData();
 	}, [isAuthenticated, getTokenSilently, resourceName, resourceId]);
+
+	if (Object.keys(resource).length === 0) return null;
 
 	return (
 		<div className="w-100 ph4-ns ph3">

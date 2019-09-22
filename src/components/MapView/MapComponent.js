@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { withScriptjs, withGoogleMap, GoogleMap } from "react-google-maps";
 import Octicon, { Settings } from "@primer/octicons-react";
-import { useAuth0 } from "../react-auth0-wrapper";
+import { useAuth0 } from "../Auth0";
 
-import Button from "./Button";
+import Button from "../Button";
 import NodeMarker from "./NodeMarker";
 import LinkLine from "./LinkLine";
 import Sector from "./Sector";
-import { fetchResource } from "../api";
+import { fetchResource } from "../../api";
 
 const DEFAULT_ZOOM = 11;
 const DEFAULT_CENTER = { lat: 40.69, lng: -73.9595798 };
@@ -63,7 +63,7 @@ const options = {
 	clickableIcons: false
 };
 
-const MapComponent = withScriptjs(
+const GoogleMapComponent = withScriptjs(
 	withGoogleMap(props => (
 		<GoogleMap ref={props.mapRef} {...props}>
 			{props.children}
@@ -71,37 +71,12 @@ const MapComponent = withScriptjs(
 	))
 );
 
-export default function NodeMap(props) {
-	const [nodes, setNodes] = useState([]);
-	const [links, setLinks] = useState([]);
-	const { isAuthenticated, getTokenSilently } = useAuth0();
-	useEffect(() => {
-		async function fetchNodes() {
-			const token = await getTokenSilently();
-			const nodesRes = await fetchResource("nodes", token);
-			setNodes(nodesRes);
-		}
-		async function fetchLinks() {
-			const token = await getTokenSilently();
-			const linksRes = await fetchResource("links", token);
-			setLinks(linksRes);
-		}
-		if (!isAuthenticated) return;
-		fetchNodes();
-		fetchLinks();
-	}, [isAuthenticated, getTokenSilently]);
+export default function MapComponent(props) {
+	const { nodes, links } = props;
+	if (!nodes || !links) throw new Error("Missing nodes or links");
 	return (
 		<div className="h-100 w-100 flex flex-column">
-			<div className="flex items-center justify-between ph4-ns ph3">
-				<h1 className="mv0 f5 fw5 ttc pv3">Map</h1>
-				<div>
-					<Button
-						title="Filters"
-						icon={<Octicon icon={Settings} />}
-					/>
-				</div>
-			</div>
-			<MapComponent
+			<GoogleMapComponent
 				defaultZoom={DEFAULT_ZOOM}
 				defaultCenter={DEFAULT_CENTER}
 				defaultOptions={options}
@@ -113,7 +88,7 @@ export default function NodeMap(props) {
 				<NodeLayer nodes={nodes} />
 				<LinkLayer links={links} />
 				<SectorLayer nodes={nodes} />
-			</MapComponent>
+			</GoogleMapComponent>
 		</div>
 	);
 }
