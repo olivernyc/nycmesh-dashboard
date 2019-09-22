@@ -70,7 +70,8 @@ export default function NodeMap(props) {
 			</div>
 			<div className="w-100">
 				{feed.map(item => {
-					const itemClassName = "pv3 ph4 bb b--light-gray f6 w-100";
+					const itemClassName =
+						"pv3 ph4-ns ph3 bb b--light-gray f6 w-100";
 					switch (item.type) {
 						case "node":
 							return (
