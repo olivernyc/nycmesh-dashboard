@@ -58,12 +58,6 @@ export default function ResourceDetail(props) {
 				</div>
 			</div>
 			{renderResource(resource, renderers, blacklist)}
-			{// Temp hack
-			resourceName === "nodes" ? (
-				<Link to={`/map/nodes/${resource.id}`} className="blue link">
-					View on map →
-				</Link>
-			) : null}
 		</div>
 	);
 }
@@ -77,15 +71,6 @@ function renderResource(resource, renderers = {}, blacklist = []) {
 				.filter(key => !blacklist.includes(key))
 				.map(key => {
 					const value = resource[key];
-					if (!value)
-						return (
-							<div key={key} className="flex items-center mv2">
-								<div className="w4">
-									<span className="mid-gray">{key}</span>
-								</div>
-								<span className="light-silver">No {key}</span>
-							</div>
-						);
 
 					if (renderers[key] && !Array.isArray(value))
 						return (
@@ -96,6 +81,16 @@ function renderResource(resource, renderers = {}, blacklist = []) {
 								<span className="dark-gray">
 									{renderers[key](value)}
 								</span>
+							</div>
+						);
+
+					if (!value)
+						return (
+							<div key={key} className="flex items-center mv2">
+								<div className="w4">
+									<span className="mid-gray">{key}</span>
+								</div>
+								<span className="light-silver">No {key}</span>
 							</div>
 						);
 

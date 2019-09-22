@@ -178,7 +178,13 @@ function App() {
                   name: "member",
                   cellRenderer: ({ cellData }) => <span>{cellData.email}</span>
                 },
-                { name: "roof_access", width: 120 },
+                {
+                  name: "roof_access",
+                  width: 120,
+                  cellRenderer: ({ cellData }) => (
+                    <span>{cellData ? "Yes" : "No"}</span>
+                  )
+                },
                 {
                   name: "panoramas",
                   cellRenderer: ({ cellData }) => (
@@ -227,6 +233,7 @@ function App() {
                     {value}
                   </a>
                 ),
+                roof_access: value => (value ? "Yes" : "No"),
                 building: value => (
                   <Link className="link blue" to={`/buildings/${value.id}`}>
                     {value.address}
