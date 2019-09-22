@@ -28,13 +28,15 @@ export default function NodeMap(props) {
 	}, [isAuthenticated, getTokenSilently]);
 	return (
 		<div className="h-100 w-100 flex flex-column">
-			<div className="flex items-center justify-between ph4-ns ph3">
-				<h1 className="mv0 f5 fw5 ttc pv3">Map</h1>
-				<div>
-					<Button
-						title="Filters"
-						icon={<Octicon icon={Settings} />}
-					/>
+			<div>
+				<div className="flex items-center justify-between ph4-ns ph3">
+					<h1 className="mv0 f5 fw5 ttc pv3">Map</h1>
+					<div>
+						<Button
+							title="Filters"
+							icon={<Octicon icon={Settings} />}
+						/>
+					</div>
 				</div>
 			</div>
 			<MapComponent nodes={nodes} links={links} />
