@@ -12,25 +12,18 @@ export default function NodeMap(props) {
 	const [requests, setRequests] = useState([]);
 	const { isAuthenticated, getTokenSilently } = useAuth0();
 	useEffect(() => {
-		async function fetchNodes() {
+		async function fetchData() {
 			const token = await getTokenSilently();
+			// TODO: Fetch in parallel or make api endpoint for feed
 			const nodesRes = await fetchResource("nodes", token);
-			setNodes(nodesRes);
-		}
-		async function fetchLinks() {
-			const token = await getTokenSilently();
 			const linksRes = await fetchResource("links", token);
-			setLinks(linksRes);
-		}
-		async function fetchRequests() {
-			const token = await getTokenSilently();
 			const requestsRes = await fetchResource("requests", token);
+			setNodes(nodesRes);
+			setLinks(linksRes);
 			setRequests(requestsRes);
 		}
 		if (!isAuthenticated) return;
-		fetchNodes();
-		fetchLinks();
-		fetchRequests();
+		fetchData();
 	}, [isAuthenticated, getTokenSilently]);
 
 	const feed = [];
@@ -147,35 +140,39 @@ export default function NodeMap(props) {
 												{item.item.member.name}{" "}
 												submitted panoramas
 											</p>
-											<LazyLoad height={256}>
-												<div className="h4 w-100 pb2">
+											<div className="h4 w-100 mb2 bg-near-white">
+												<LazyLoad height={128}>
 													<div
-														className="h-100 w-100 cover bg-center bg-near-white"
+														className="h-100 w-100 cover bg-center"
 														style={{
 															backgroundImage: `url('${item.item.panoramas[0].url}')`
 														}}
 													/>
-												</div>
-											</LazyLoad>
-											<LazyLoad height={256}>
-												<div className="flex flex-wrap man1">
-													{item.item.panoramas
-														.slice(1, 3)
-														.map(p => (
-															<div
-																key={p.id}
-																className="h4 w-50 pa1"
-															>
-																<div
-																	className="h-100 w-100 cover bg-center bg-near-white"
-																	style={{
-																		backgroundImage: `url('${p.url}')`
-																	}}
-																/>
+												</LazyLoad>
+											</div>
+											<div className="flex flex-wrap man1">
+												{item.item.panoramas
+													.slice(1, 3)
+													.map(p => (
+														<div
+															key={p.id}
+															className="w-50 pa1"
+														>
+															<div className="w-100 bg-near-white">
+																<LazyLoad
+																	height={128}
+																>
+																	<div
+																		className="h4 w-100 cover bg-center"
+																		style={{
+																			backgroundImage: `url('${p.url}')`
+																		}}
+																	/>
+																</LazyLoad>
 															</div>
-														))}
-												</div>
-											</LazyLoad>
+														</div>
+													))}
+											</div>
 										</div>
 									</div>
 								</div>
