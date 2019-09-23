@@ -33,77 +33,85 @@ export default function Nav(props) {
 	const pathComponents = props.location.pathname.split("/");
 	const currentResource = pathComponents.length ? pathComponents[1] : "/";
 	return (
-		<div className="flex flex-column w-100 h-100-ns mw5-ns bg-near-white pa3 br b--light-gray f6">
-			<div>
-				<div className="flex items-center justify-between">
-					<Link
-						to="/"
-						className="link flex items-center black focus-no-outline"
-					>
-						<div className="flex justify-center items-center w2-ns mr2-ns mr3">
-							<div className={`h1 w1 br-pill bg-gold`} />
+		<div>
+			<div className="fixed-ns bg-near-white w-100 mw5-ns h-100-ns">
+				<div className="flex flex-column w-100 h-100-ns mw5-ns bg-near-white pa3 br b--light-gray f6">
+					<div>
+						<div className="flex items-center justify-between">
+							<Link
+								to="/"
+								className="link flex items-center black focus-no-outline"
+							>
+								<div className="flex justify-center items-center w2-ns mr2-ns mr3">
+									<div className={`h1 w1 br-pill bg-gold`} />
+								</div>
+								<span className="fw5 nowrap">NYC Mesh</span>
+							</Link>
 						</div>
-						<span className="fw5 nowrap">NYC Mesh</span>
-					</Link>
-				</div>
-			</div>
-
-			<div className="mt3 db-ns dn">
-				<Link
-					to="/feed"
-					className={`link flex items-center pointer pv1 mv1 focus-no-outline ${
-						currentResource === "feed" ? "purple fw5" : "mid-gray"
-					}`}
-				>
-					<div className="flex justify-center items-center w2 mr2">
-						<Octicon icon={Pulse} />
 					</div>
-					<span>Feed</span>
-				</Link>
-				<Link
-					to="/map"
-					className={`link flex items-center pointer pv1 mv1 focus-no-outline ${
-						currentResource === "map" ? "purple fw5" : "mid-gray"
-					}`}
-				>
-					<div className="flex justify-center items-center w2 mr2">
-						<Octicon icon={Globe} />
-					</div>
-					<span>Map</span>
-				</Link>
-			</div>
 
-			<ul className="mt3 mb0 list pa0 db-ns dn">
-				{tabs.map(({ name, icon }) => (
-					<li key={name} className="pv1 mv1">
+					<div className="mt3 db-ns dn">
 						<Link
-							to={`/${name.toLowerCase()}`}
-							className={`link flex items-center focus-no-outline ${
-								name.toLowerCase() === currentResource
+							to="/feed"
+							className={`link flex items-center pointer pv1 mv1 focus-no-outline ${
+								currentResource === "feed"
 									? "purple fw5"
 									: "mid-gray"
 							}`}
 						>
 							<div className="flex justify-center items-center w2 mr2">
-								<div className="h1 w1 br-pill flex items-center justify-center">
-									{icon}
-								</div>
+								<Octicon icon={Pulse} />
 							</div>
-							<span>{name}</span>
+							<span>Feed</span>
 						</Link>
-					</li>
-				))}
-			</ul>
-
-			<div className="mt3 db-ns dn">
-				<div
-					className="link flex items-center mid-gray pointer pv1 mv1"
-					onClick={() => setShowSearch(true)}
-				>
-					<div className="flex justify-center items-center w2 mr2">
-						<Octicon icon={Search} />
+						<Link
+							to="/map"
+							className={`link flex items-center pointer pv1 mv1 focus-no-outline ${
+								currentResource === "map"
+									? "purple fw5"
+									: "mid-gray"
+							}`}
+						>
+							<div className="flex justify-center items-center w2 mr2">
+								<Octicon icon={Globe} />
+							</div>
+							<span>Map</span>
+						</Link>
 					</div>
-					<span>Search</span>
+
+					<ul className="mt3 mb0 list pa0 db-ns dn">
+						{tabs.map(({ name, icon }) => (
+							<li key={name} className="pv1 mv1">
+								<Link
+									to={`/${name.toLowerCase()}`}
+									className={`link flex items-center focus-no-outline ${
+										name.toLowerCase() === currentResource
+											? "purple fw5"
+											: "mid-gray"
+									}`}
+								>
+									<div className="flex justify-center items-center w2 mr2">
+										<div className="h1 w1 br-pill flex items-center justify-center">
+											{icon}
+										</div>
+									</div>
+									<span>{name}</span>
+								</Link>
+							</li>
+						))}
+					</ul>
+
+					<div className="mt3 db-ns dn">
+						<div
+							className="link flex items-center mid-gray pointer pv1 mv1"
+							onClick={() => setShowSearch(true)}
+						>
+							<div className="flex justify-center items-center w2 mr2">
+								<Octicon icon={Search} />
+							</div>
+							<span>Search</span>
+						</div>
+					</div>
 				</div>
 			</div>
 			{showSearch ? (
@@ -149,10 +157,7 @@ function SearchBar(props) {
 	const sections = Object.keys(results);
 
 	return (
-		<div
-			className="absolute absolute--fill bg-white-80 z-5"
-			onClick={onClick}
-		>
+		<div className="fixed absolute--fill bg-white-80 z-5" onClick={onClick}>
 			<div className="h-100 w-100 flex items-start">
 				<div
 					className="w-100 mw6 center f5 bg-dark-gray br2 overflow-hidden white mt6 shadow"

@@ -27,9 +27,7 @@ function App() {
         className="sans-serif w-100 flex flex-row-ns flex-column justify-between-ns"
         style={{ height: "100vh" }}
       >
-        <div className="fixed-ns bg-near-white w-100 mw5-ns h-100-ns">
-          <Route component={Nav} />
-        </div>
+        <Route component={Nav} />
         <div className="mw5 w-100" />
         <Route path="/feed" component={Feed} />
         <Route path="/map" component={MapView} />
