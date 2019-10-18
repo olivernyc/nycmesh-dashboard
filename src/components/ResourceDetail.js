@@ -53,7 +53,8 @@ export default function ResourceDetail(props) {
 						? titleExtractor(resource)
 						: null}
 				</h1>
-				<div>
+				<div className="flex items-center">
+					{props.buttons ? props.buttons(resource) : null}
 					<Button title="Update" icon={<Octicon icon={Pencil} />} />
 				</div>
 			</div>
@@ -74,7 +75,7 @@ function renderResource(resource, renderers = {}, blacklist = []) {
 
 					if (renderers[key] && !Array.isArray(value))
 						return (
-							<div key={key} className="flex items-center mv2">
+							<div key={key} className="flex items-start mv2">
 								<div className="w4">
 									<span className="mid-gray">{key}</span>
 								</div>

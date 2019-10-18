@@ -8,6 +8,7 @@ import MapView from "./components/MapView";
 import DateCell from "./components/DateCell";
 import ResourceList from "./components/ResourceList";
 import ResourceDetail from "./components/ResourceDetail";
+import Button from "./components/Button";
 
 function App() {
   const { loading, isAuthenticated, loginWithRedirect } = useAuth0();
@@ -174,13 +175,13 @@ function App() {
                 },
                 {
                   name: "member",
-                  cellRenderer: ({ cellData }) => <span>{cellData.email}</span>
+                  cellRenderer: ({ cellData }) => <span>{cellData.name}</span>
                 },
                 {
                   name: "roof_access",
                   width: 120,
                   cellRenderer: ({ cellData }) => (
-                    <span>{cellData ? "Yes" : "No"}</span>
+                    <span className="ttc">{cellData}</span>
                   )
                 },
                 {
@@ -219,6 +220,27 @@ function App() {
               resourceId={match.params.id}
               blacklist={["id"]}
               titleExtractor={resource => resource.building.address}
+              buttons={resource => [
+                <div className="mr2">
+                  <a
+                    className="black link"
+                    target="_"
+                    href={`https://earth.google.com/web/search/${resource.building.address
+                      .split(" ")
+                      .map(encodeURIComponent)
+                      .join("+")}@${resource.building.lat},${
+                      resource.building.lng
+                    },${resource.building.alt}a,300d,35y,0.6h,65t,0r`}
+                  >
+                    <Button title="View Earth" />
+                  </a>
+                </div>,
+                <div className="mr2">
+                  <a className="black link" target="_" href="#">
+                    <Button title="View Ticket" />
+                  </a>
+                </div>
+              ]}
               renderers={{
                 date: value => <DateCell cellData={value} />,
                 email: value => (
@@ -232,23 +254,23 @@ function App() {
                   </a>
                 ),
                 roof_access: value => (value ? "Yes" : "No"),
-                building: value => (
-                  <Link className="link blue" to={`/buildings/${value.id}`}>
-                    {value.address}
-                  </Link>
-                ),
-                panoramas: value => (
-                  <div className="flex flex-wrap man1">
-                    {value.map(panoramaURL => (
-                      <div className="h4 w-50 pa1">
-                        <div
-                          className="h-100 w-100 cover bg-center bg-near-white"
-                          style={{ backgroundImage: `url('${panoramaURL}')` }}
-                        />
-                      </div>
-                    ))}
-                  </div>
-                )
+                panoramas: value => {
+                  const panoramas = value.filter(panorama => panorama.url);
+                  return (
+                    <div className="flex flex-wrap man1">
+                      {panoramas.map(panorama => (
+                        <div className="h4 w-50 pa1">
+                          <div
+                            className="h-100 w-100 cover bg-center bg-near-white"
+                            style={{
+                              backgroundImage: `url('${panorama.url}')`
+                            }}
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  );
+                }
               }}
             />
           )}

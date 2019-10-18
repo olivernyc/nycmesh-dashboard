@@ -10,7 +10,7 @@ export default function Button(props) {
 			}}
 		>
 			{icon}
-			<span className="ml2">{title}</span>
+			<span className={icon ? "ml2" : ""}>{title}</span>
 		</div>
 	);
 }
