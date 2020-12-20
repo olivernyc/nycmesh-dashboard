@@ -2,10 +2,12 @@
   "name": "nycmesh-dashboard",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://localhost:9000",
   "dependencies": {
     "@auth0/auth0-spa-js": "^1.1.1",
     "@primer/components": "^13.3.0",
     "@primer/octicons-react": "^9.1.1",
+    "@react-google-maps/api": "^1.10.1",
     "date-fns": "^1.30.1",
     "react": "^16.9.0",
     "react-autocomplete": "^1.8.1",
@@ -13,12 +15,12 @@
     "react-dom": "^16.9.0",
     "react-google-maps": "^9.4.5",
     "react-lazyload": "^2.6.2",
+    "react-map-gl": "^5.2.5",
     "react-router-dom": "^5.0.1",
-    "react-scripts": "3.1.0",
+    "react-scripts": "^3.4.1",
     "styled-components": "^4.3.2",
     "tachyons": "^4.11.1"
   },
-  "proxy": "http://localhost:9000",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",

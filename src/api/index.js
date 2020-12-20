@@ -2,15 +2,43 @@ export async function fetchResource(resource, token) {
 	const path = `${process.env.REACT_APP_API_ROOT}/${resource}`;
 	const options = {
 		headers: {
-			Authorization: `Bearer ${token}`
-		}
+			Authorization: `Bearer ${token}`,
+		},
 	};
-	try {
-		const res = await fetch(path, options);
-		if (res.status !== 200) throw Error(res.error);
-		return await res.json();
-	} catch (error) {
-		alert(`Failed to fetch ${resource}: ${error.message}`);
-		return [];
-	}
+	console.log(options);
+	const res = await fetch(path, options);
+	if (res.status !== 200) throw Error(res.error);
+	return await res.json();
+}
+
+export async function updateResource(
+	resourceType,
+	resourceId,
+	resourcePatch,
+	token
+) {
+	const path = `${process.env.REACT_APP_API_ROOT}/${resourceType}/${resourceId}`;
+	const options = {
+		method: "POST",
+		headers: {
+			Authorization: `Bearer ${token}`,
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify(resourcePatch),
+	};
+	const res = await fetch(path, options);
+	if (res.status !== 200) throw Error(res.error);
+	return await res.json();
+}
+
+export async function search(query, token) {
+	const path = `${process.env.REACT_APP_API_ROOT}/search?s=${query}`;
+	const options = {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	};
+	const res = await fetch(path, options);
+	if (res.status !== 200) throw Error(res.error);
+	return await res.json();
 }

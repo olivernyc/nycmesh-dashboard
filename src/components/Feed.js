@@ -28,28 +28,28 @@ export default function NodeMap(props) {
 
 	const feed = [];
 	feed.push(
-		...links.map(link => ({
+		...links.map((link) => ({
 			type: "link",
 			date: link.create_date,
-			item: link
+			item: link,
 		}))
 	);
 
 	feed.push(
-		...nodes.map(node => ({
+		...nodes.map((node) => ({
 			type: "node",
 			date: node.create_date,
-			item: node
+			item: node,
 		}))
 	);
 
 	feed.push(
 		...requests
-			.filter(request => request.panoramas && request.panoramas.length)
-			.map(request => ({
+			.filter((request) => request.panoramas && request.panoramas.length)
+			.map((request) => ({
 				type: "panorama",
 				date: request.panoramas[0].date,
-				item: request
+				item: request,
 			}))
 	);
 
@@ -69,7 +69,7 @@ export default function NodeMap(props) {
 				</div>
 			</div>
 			<div className="w-100">
-				{feed.map(item => {
+				{feed.map((item) => {
 					const itemClassName =
 						"pv3 ph4-ns ph3 bb b--light-gray f6 w-100";
 					switch (item.type) {
@@ -129,7 +129,7 @@ export default function NodeMap(props) {
 										<span className="mr3">🌇</span>
 										<div className="w-100">
 											<span className="fw5 mr2">
-												{item.item.address}
+												{item.item.building.address}
 											</span>
 											<time className="mid-gray">
 												{format(
@@ -146,7 +146,7 @@ export default function NodeMap(props) {
 													<div
 														className="h-100 w-100 cover bg-center"
 														style={{
-															backgroundImage: `url('${item.item.panoramas[0].url}')`
+															backgroundImage: `url('${item.item.panoramas[0].url}')`,
 														}}
 													/>
 												</LazyLoad>
@@ -154,7 +154,7 @@ export default function NodeMap(props) {
 											<div className="flex flex-wrap man1">
 												{item.item.panoramas
 													.slice(1, 3)
-													.map(p => (
+													.map((p) => (
 														<div
 															key={p.id}
 															className="w-50 pa1"
@@ -166,7 +166,7 @@ export default function NodeMap(props) {
 																	<div
 																		className="h4 w-100 cover bg-center"
 																		style={{
-																			backgroundImage: `url('${p.url}')`
+																			backgroundImage: `url('${p.url}')`,
 																		}}
 																	/>
 																</LazyLoad>

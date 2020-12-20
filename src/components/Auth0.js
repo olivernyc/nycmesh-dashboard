@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import createAuth0Client from "@auth0/auth0-spa-js";
 
-const DEFAULT_REDIRECT_CALLBACK = appState => {
+const DEFAULT_REDIRECT_CALLBACK = (appState) => {
   window.history.replaceState(
     {},
     document.title,
@@ -30,8 +30,13 @@ export const Auth0Provider = ({
       setAuth0(auth0FromHook);
 
       if (window.location.search.includes("code=")) {
+        // try {
         const { appState } = await auth0FromHook.handleRedirectCallback();
         onRedirectCallback(appState);
+        // }
+        // catch (error) {
+        //   // window.location.replace("/");
+        // }
       }
 
       const isAuthenticated = await auth0FromHook.isAuthenticated();
@@ -83,7 +88,7 @@ export const Auth0Provider = ({
         loginWithRedirect: (...p) => auth0Client.loginWithRedirect(...p),
         getTokenSilently: (...p) => auth0Client.getTokenSilently(...p),
         getTokenWithPopup: (...p) => auth0Client.getTokenWithPopup(...p),
-        logout: (...p) => auth0Client.logout(...p)
+        logout: (...p) => auth0Client.logout(...p),
       }}
     >
       {children}
