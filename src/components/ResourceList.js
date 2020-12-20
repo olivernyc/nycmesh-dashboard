@@ -21,8 +21,8 @@ export default function ResourceList(props) {
 				const token = await getTokenSilently();
 				const options = {
 					headers: {
-						Authorization: `Bearer ${token}`
-					}
+						Authorization: `Bearer ${token}`,
+					},
 				};
 				try {
 					const res = await fetch(path, options);
@@ -67,7 +67,7 @@ export default function ResourceList(props) {
 								flexGrow: column.width ? 0 : 1,
 								className: "f6 fw4 dark-gray pointer",
 								headerClassName: "ttu f7 fw5 near-black",
-								cellRenderer: column.cellRenderer
+								cellRenderer: column.cellRenderer,
 							}))}
 							headerRenderer={({ rowData, cells }) => (
 								<div className="ph3-ns flex w-100 h-100 bg-white f6">

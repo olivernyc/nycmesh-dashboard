@@ -2,8 +2,10 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useAuth0 } from "./Auth0";
 import Octicon, { Pencil } from "@primer/octicons-react";
+import ResourceEdit from "./ResourceEdit";
 import NodeName from "./NodeName";
 import Button from "./Button";
+import Device from "./Device";
 
 export default function ResourceDetail(props) {
 	const [resource, setResource] = useState({});
@@ -13,12 +15,13 @@ export default function ResourceDetail(props) {
 		resourceId,
 		titleExtractor,
 		renderers,
-		blacklist
+		blacklist,
 	} = props;
 	const { isAuthenticated, getTokenSilently } = useAuth0();
 
 	useEffect(() => {
 		async function fetchData() {
+			setResource({});
 			const resource = await fetchResource(resourceName);
 			setResource(resource);
 			async function fetchResource() {
@@ -26,8 +29,8 @@ export default function ResourceDetail(props) {
 				const token = await getTokenSilently();
 				const options = {
 					headers: {
-						Authorization: `Bearer ${token}`
-					}
+						Authorization: `Bearer ${token}`,
+					},
 				};
 				try {
 					const res = await fetch(path, options);
@@ -46,17 +49,13 @@ export default function ResourceDetail(props) {
 	if (Object.keys(resource).length === 0) return null;
 
 	return (
-		<div className="w-100 ph4-ns ph3">
+		<div className="w-100 ph3">
 			<div className="flex items-center justify-between ">
-				<h1 className="mv0 f5 fw5 ttc pv3">
+				<h1 className="mv0 f3 fw7 ttc pv3">
 					{titleExtractor && resource.id
 						? titleExtractor(resource)
 						: null}
 				</h1>
-				<div className="flex items-center">
-					{props.buttons ? props.buttons(resource) : null}
-					<Button title="Update" icon={<Octicon icon={Pencil} />} />
-				</div>
 			</div>
 			{renderResource(resource, renderers, blacklist)}
 		</div>
@@ -68,15 +67,18 @@ function renderResource(resource, renderers = {}, blacklist = []) {
 	return (
 		<div className="f6">
 			{resourceKeys
-				.filter(key => !key.includes("_id"))
-				.filter(key => !blacklist.includes(key))
-				.map(key => {
+				.filter((key) => !key.includes("_id"))
+				.filter((key) => !blacklist.includes(key))
+				.map((key) => {
 					const value = resource[key];
 
 					if (renderers[key] && !Array.isArray(value))
 						return (
 							<div key={key} className="flex items-start mv2">
-								<div className="w4">
+								<div
+									className="w4"
+									style={{ minWidth: "8rem" }}
+								>
 									<span className="mid-gray">{key}</span>
 								</div>
 								<span className="dark-gray">
@@ -87,8 +89,11 @@ function renderResource(resource, renderers = {}, blacklist = []) {
 
 					if (!value)
 						return (
-							<div key={key} className="flex items-center mv2">
-								<div className="w4">
+							<div key={key} className="flex items-start mv2">
+								<div
+									className="w4"
+									style={{ minWidth: "8rem" }}
+								>
 									<span className="mid-gray">{key}</span>
 								</div>
 								<span className="light-silver">No {key}</span>
@@ -98,11 +103,11 @@ function renderResource(resource, renderers = {}, blacklist = []) {
 					switch (typeof value) {
 						case "string":
 							return (
-								<div
-									key={key}
-									className="flex items-center mv2"
-								>
-									<div className="w4">
+								<div key={key} className="flex items-start mv2">
+									<div
+										className="w4"
+										style={{ minWidth: "8rem" }}
+									>
 										<span className="mid-gray">{key}</span>
 									</div>
 									<span className="dark-gray">{value}</span>
@@ -110,11 +115,11 @@ function renderResource(resource, renderers = {}, blacklist = []) {
 							);
 						case "boolean":
 							return (
-								<div
-									key={key}
-									className="flex items-center mv2"
-								>
-									<div className="w4">
+								<div key={key} className="flex items-start mv2">
+									<div
+										className="w4"
+										style={{ minWidth: "8rem" }}
+									>
 										<span className="mid-gray">{key}</span>
 									</div>
 									<span className="dark-gray">
@@ -125,7 +130,7 @@ function renderResource(resource, renderers = {}, blacklist = []) {
 						case "object":
 							if (
 								Array.isArray(value) &&
-								!value.filter(v => v).length
+								!value.filter((v) => v).length
 							)
 								return null;
 							return (
@@ -137,10 +142,10 @@ function renderResource(resource, renderers = {}, blacklist = []) {
 										{renderers[key] ? (
 											renderers[key](value)
 										) : Array.isArray(value) ? (
-											<div className="flex flex-wrap">
+											<div className="">
 												{value
-													.filter(v => v)
-													.map(value => {
+													.filter((v) => v)
+													.map((value) => {
 														if (key === "nodes")
 															return (
 																<Link
@@ -167,12 +172,35 @@ function renderResource(resource, renderers = {}, blacklist = []) {
 																	to={`/requests/${value.id}`}
 																	className="mr1 link dark-gray w-100"
 																>
-																	{
-																		value
-																			.building
-																			.address
-																	}
+																	{value.building
+																		? value
+																				.building
+																				.address
+																		: value.id}
 																</Link>
+															);
+
+														if (key === "devices")
+															return (
+																<div>
+																	<Device
+																		device={
+																			value
+																		}
+																	/>
+																</div>
+															);
+
+														if (key === "panoramas")
+															return (
+																<div>
+																	<img
+																		className="w-100 mw6"
+																		src={
+																			value.url
+																		}
+																	/>
+																</div>
 															);
 
 														return (
@@ -194,11 +222,11 @@ function renderResource(resource, renderers = {}, blacklist = []) {
 							);
 						default:
 							return (
-								<div
-									key={key}
-									className="flex items-center mv2"
-								>
-									<div className="w4">
+								<div key={key} className="flex items-start mv2">
+									<div
+										className="w4"
+										style={{ minWidth: "8rem" }}
+									>
 										<span className="mid-gray">{key}</span>
 									</div>
 									<span className="dark-gray">{value}</span>
