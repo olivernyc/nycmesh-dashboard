@@ -52,7 +52,7 @@ function NodeMap({ history, match }) {
 	);
 
 	return (
-		<div className="h-100 w-100 overflow-hidden flex flex-row-l flex-column-l flex-column-reverse">
+		<div className="h-100 w-100 overflow-hidden flex flex-row-l flex-column-l flex-column-reverse bg-white">
 			{sidebar}
 			<MapContext.Provider
 				value={{

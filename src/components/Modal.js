@@ -6,7 +6,7 @@ export default function Modal({
 	title,
 	buttonLabel = "Done",
 	children,
-	onClick,
+	onDone,
 	onCancel,
 }) {
 	return (
@@ -26,7 +26,7 @@ export default function Modal({
 							primary
 							label={buttonLabel}
 							type="submit"
-							onClick={onClick}
+							onClick={onDone}
 						/>
 					</div>
 				</div>

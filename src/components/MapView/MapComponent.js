@@ -4,42 +4,34 @@ import { GoogleMap, LoadScript } from "@react-google-maps/api";
 import NodeLayer from "./NodeLayer";
 import RequestLayer from "./RequestLayer";
 import LinkLayer from "./LinkLayer";
+import { styles, darkStyles } from "./styles";
 
 const DEFAULT_ZOOM = 12;
 const DEFAULT_CENTER = { lat: 40.69, lng: -73.9595798 };
 
+// TODO: Add event listener to handle darkmode change
+const darkMode =
+	window.matchMedia &&
+	window.matchMedia("(prefers-color-scheme: dark)").matches;
+
+if (darkMode) {
+	styles.push(...darkStyles);
+}
+
 const options = {
 	fullscreenControl: false,
 	streetViewControl: false,
-	mapTypeControl: true,
+	mapTypeControl: false,
 	zoomControlOptions: {
 		position: 9,
 	},
 	mapTypeControlOptions: {
 		position: 7,
 	},
-	backgroundColor: "#fff",
+	backgroundColor: "transparent",
 	gestureHandling: "greedy",
 	clickableIcons: false,
-	styles: [
-		{
-			elementType: "labels.icon",
-			stylers: [
-				{
-					visibility: "off",
-				},
-			],
-		},
-		{
-			featureType: "road",
-			elementType: "labels.icon",
-			stylers: [
-				{
-					visibility: "off",
-				},
-			],
-		},
-	],
+	styles,
 };
 
 function MapComponent({
@@ -64,7 +56,7 @@ function MapComponent({
 					zoom={DEFAULT_ZOOM}
 					center={DEFAULT_CENTER}
 					options={options}
-					mapContainerClassName="flex h-100 w-100"
+					mapContainerClassName="flex h-100 w-100 bg-white"
 					onLoad={onLoad}
 					onClick={onClick}
 				>

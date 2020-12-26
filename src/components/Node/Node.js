@@ -113,7 +113,6 @@ export default function Node({ id }) {
 					]}
 					onSubmit={async (nodePatch) => {
 						const token = await getAccessTokenSilently();
-						alert("??");
 						await updateResource(
 							"nodes",
 							node.id,
