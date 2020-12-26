@@ -5,10 +5,9 @@ export async function fetchResource(resource, token) {
 			Authorization: `Bearer ${token}`,
 		},
 	};
-	console.log(options);
 	const res = await fetch(path, options);
 	if (res.status !== 200) throw Error(res.error);
-	return await res.json();
+	return res.json();
 }
 
 export async function updateResource(
@@ -28,7 +27,7 @@ export async function updateResource(
 	};
 	const res = await fetch(path, options);
 	if (res.status !== 200) throw Error(res.error);
-	return await res.json();
+	return res.json();
 }
 
 export async function search(query, token) {
@@ -40,5 +39,5 @@ export async function search(query, token) {
 	};
 	const res = await fetch(path, options);
 	if (res.status !== 200) throw Error(res.error);
-	return await res.json();
+	return res.json();
 }

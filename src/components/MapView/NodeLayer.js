@@ -1,20 +1,16 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 import NodeMarker from "./NodeMarker";
 
-function NodeLayer(props) {
-	const { nodes, selectedNodes, onClick } = props;
-
-	console.log("render nodes");
+function NodeLayer({ nodes, selectedNode, onClick }) {
 	return nodes
 		.filter((node) => node.status === "active")
 		.map((node) => (
 			<NodeMarker
 				key={node.id}
 				node={node}
-				dimmed={
-					Object.keys(selectedNodes).length && !selectedNodes[node.id]
-				}
+				selected={false}
+				dimmed={false}
 				onClick={() => onClick(node)}
 			/>
 		));

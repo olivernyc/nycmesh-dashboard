@@ -1,31 +1,46 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Polyline } from "@react-google-maps/api";
+import { MapContext } from ".";
 
-export default function LinkLine(props) {
-	const { link, visible } = props;
-	const { nodes, devices } = link; // TODO: This is weird
-	const { lat: lat1, lng: lng1 } = devices[0];
-	const { lat: lat2, lng: lng2 } = devices[1];
+export default function LinkLine({ link }) {
+	const { selectedNode } = useContext(MapContext);
+	const selected =
+		selectedNode === link.nodes[0].id || selectedNode === link.nodes[1].id;
+	const dimmed =
+		selectedNode &&
+		selectedNode !== link.nodes[0].id &&
+		selectedNode !== link.nodes[1].id;
+	return <LinkLineMemo link={link} selected={selected} dimmed={dimmed} />;
+}
+
+const LinkLineMemo = React.memo(LinkLine2);
+
+function LinkLine2({ link, selected, dimmed }) {
+	// TODO: This is weird
+	const [node1, node2] = link.nodes;
+	const [device1, device2] = link.devices;
 	const path = [
-		{ lat: lat1, lng: lng1 },
-		{ lat: lat2, lng: lng2 },
+		{ lat: device1.lat, lng: device1.lng },
+		{ lat: device2.lat, lng: device2.lng },
 	];
-	const strokeColor = getColor(nodes[0], nodes[1], devices[0], devices[1]);
+	const strokeColor = getColor(node1, node2, device1, device2);
 	const strokeOpacity = getOpacity(
-		nodes[0],
-		nodes[1],
-		devices[0],
-		devices[1]
+		node1,
+		node2,
+		device1,
+		device2,
+		dimmed,
+		selected
 	);
-	const strokeWeight = getWeight(nodes[0], nodes[1], devices[0], devices[1]);
-	const zIndex = getZIndex(nodes[0], nodes[1], devices[0], devices[1]);
+	const strokeWeight = getWeight(node1, node2, device1, device2);
+	const zIndex = getZIndex(node1, node2, device1, device2);
 	const options = {
 		strokeColor,
 		strokeWeight,
 		strokeOpacity,
 		zIndex,
 	};
-	return <Polyline path={path} options={options} visible={visible} />;
+	return <Polyline path={path} options={options} />;
 }
 
 const isSupernode = (node) => node.name && node.name.includes("Supernode");
@@ -44,14 +59,16 @@ function getColor(node1, node2, device1, device2) {
 	return "rgb(255,45,85)";
 }
 
-function getOpacity(node1, node2, device1, device2) {
+function getOpacity(node1, node2, device1, device2, dimmed, selected) {
+	if (selected) return 1;
+	if (dimmed) return 0.25;
 	if (
 		(isHub(node1) || isSupernode(node1)) &&
 		(isHub(node2) || isSupernode(node2))
 	)
 		return 1;
 	if (isBackbone(node1, device1) && isBackbone(node2, device2)) return 1;
-	return 0.5;
+	return 0.75;
 }
 
 function getWeight(node1, node2) {
