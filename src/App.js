@@ -25,9 +25,7 @@ function App() {
       className="h-100 w-100 flex items-center justify-center"
       style={{ height: "100vh" }}
     >
-      <div className="h3 w3">
-        <div className="loading-ring-large" />
-      </div>
+      <div className="loading-ring-large" />
     </div>
   );
 
