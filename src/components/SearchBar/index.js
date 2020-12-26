@@ -57,14 +57,13 @@ export default function SearchBar(props) {
 		position: "absolute",
 		zIndex: 9,
 		overflow: "auto",
-		maxHeight: "50%", // TODO: don't cheat, let it flow to the bottom
+		maxHeight: "calc(100vh - 4rem)",
 		borderRadius: "0.25rem",
 		marginTop: "-0.5rem",
-		marginLeft: "-0.75rem",
 	};
 
 	return (
-		<div className="pv2 ph3">
+		<div className="pv2 ph1">
 			<Autocomplete
 				ref={(element) => {
 					inputRef = element;
@@ -80,16 +79,17 @@ export default function SearchBar(props) {
 					return (
 						<div className="flex items-center relative h2">
 							{loading ? (
-								<div className="loading-ring" />
+								<div className="loading-ring absolute ml3" />
 							) : (
-								<div className="cursor-text absolute">
+								<div className="cursor-text absolute ml3">
 									<Octicon icon={SearchIcon} size="small" />
 								</div>
 							)}
 							<input
-								className="f6 bn no-outline w-100 mw6 pv3 pl4 bg-transparent absolute"
+								className="w-100 flex f6 bn no-outline w-100 mw6 pv3 bg-transparent ma0"
 								autoComplete="nope"
 								spellCheck="false"
+								style={{ paddingLeft: "3rem" }}
 								{...props}
 							/>
 						</div>
@@ -98,17 +98,24 @@ export default function SearchBar(props) {
 				renderMenu={(items, value, style) => {
 					return (
 						<div
-							className={`bg-white ${items.length ? "pv1" : ""}`}
+							className={`bg-white w-100 mw4 ${
+								items.length ? "pv1" : ""
+							}`}
 							style={{ ...style, ...menuStyle }}
 						>
-							{items}
-							{query && !loading && items.length === 1 ? (
-								<div className="pa4 flex items-center justify-center">
-									<span className="f6 gray fw5">
-										No search results found
-									</span>
-								</div>
-							) : null}
+							<div
+								style={{ maxWidth: "100vw" }}
+								className="w-100"
+							>
+								{items}
+								{query && !loading && items.length === 1 ? (
+									<div className="pa4 w-100 flex items-center justify-center">
+										<span className="f6 gray fw5">
+											No search results found
+										</span>
+									</div>
+								) : null}
+							</div>
 						</div>
 					);
 				}}
@@ -186,7 +193,7 @@ export default function SearchBar(props) {
 											{title}
 										</span>
 										<span
-											className={`mr2 ${
+											className={`mr2 nowrap ${
 												isHighlighted ? "white" : "gray"
 											}`}
 										>

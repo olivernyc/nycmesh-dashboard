@@ -26,6 +26,7 @@ export default function Tooltip({ lat, lng, label }) {
 					width="12"
 					height="12"
 					aria-hidden="true"
+					style={{ marginTop: "-1px" }}
 				>
 					<path fillRule="evenodd" fill="white" d="M0 5l6 6 6-6H0z" />
 				</svg>
