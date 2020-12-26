@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Octicon, { Settings } from "@primer/octicons-react";
+import Octicon, { FilterIcon } from "@primer/octicons-react";
 import LazyLoad from "react-lazyload";
 import { format, isEqual, isAfter } from "date-fns";
 import { useAuth0 } from "@auth0/auth0-react";
@@ -65,7 +65,7 @@ export default function NodeMap(props) {
 				<div>
 					<Button
 						title="Filters"
-						icon={<Octicon icon={Settings} />}
+						icon={<Octicon icon={FilterIcon} />}
 					/>
 				</div>
 			</div>

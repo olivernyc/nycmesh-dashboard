@@ -1,28 +1,28 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Octicon, {
-	Pin,
-	Home,
-	Person,
-	Unverified,
-	Pulse,
-	Globe,
+	PinIcon,
+	HomeIcon,
+	PersonIcon,
+	UnverifiedIcon,
+	PulseIcon,
+	GlobeIcon,
 } from "@primer/octicons-react";
 import { useAuth0 } from "@auth0/auth0-react";
 
 const tabs = [
 	{
 		name: "Nodes",
-		icon: <Octicon icon={Pin} />,
+		icon: <Octicon icon={PinIcon} />,
 	},
 	{
 		name: "Buildings",
-		icon: <Octicon icon={Home} />,
+		icon: <Octicon icon={HomeIcon} />,
 	},
-	{ name: "Requests", icon: <Octicon icon={Unverified} /> },
+	{ name: "Requests", icon: <Octicon icon={UnverifiedIcon} /> },
 	{
 		name: "Members",
-		icon: <Octicon icon={Person} />,
+		icon: <Octicon icon={PersonIcon} />,
 	},
 ];
 
@@ -95,7 +95,7 @@ export default function Nav(props) {
 								}`}
 							>
 								<div className="flex justify-center items-center w2 mr1">
-									<Octicon icon={Pulse} />
+									<Octicon icon={PulseIcon} />
 								</div>
 								<span>Feed</span>
 							</Link>
@@ -110,7 +110,7 @@ export default function Nav(props) {
 							}`}
 						>
 							<div className="flex justify-center items-center w2 mr1">
-								<Octicon icon={Globe} />
+								<Octicon icon={GlobeIcon} />
 							</div>
 							<span>Map</span>
 						</Link>

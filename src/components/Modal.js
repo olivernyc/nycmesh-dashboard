@@ -2,7 +2,7 @@ import React from "react";
 
 import Button from "./Button2";
 
-export default function ({
+export default function Modal({
 	title,
 	buttonLabel = "Done",
 	children,

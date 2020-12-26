@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Section from "./Section";
 import Modal from "./Modal";
 
-export default function ({ node }) {
+export default function LinksList({ node }) {
 	const [showAll, setShowAll] = useState(false);
 	const [editing, setEditing] = useState(false);
 
