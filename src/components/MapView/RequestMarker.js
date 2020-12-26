@@ -1,27 +1,52 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Marker } from "@react-google-maps/api";
+import Tooltip from "./Tooltip";
+import { MapContext } from ".";
 
-export default function RequestMarker(props) {
-	const { request, visible, onClick, dimmed } = props;
-	const { id, building } = request;
-	const { lat, lng } = building;
-	const title = String(id);
-	const icon = {
-		url: "/img/map/request.svg",
-		anchor: { x: 6, y: 6 },
-	};
-	const zIndex = 0;
-	const opacity = dimmed ? 0.5 : 1;
-	if (lat === "NaN" || lng === "NaN") return null;
+const icon = {
+	url: "/img/map/request.svg",
+	anchor: { x: 5, y: 5 },
+};
+
+function RequestMarker({ request, onClick }) {
+	const { selectedNode, selectedRequest } = useContext(MapContext);
+	const selected = selectedRequest === request.id;
+	const dimmed =
+		(selectedRequest && selectedRequest !== request.id) ||
+		(selectedNode && selectedRequest !== request.id);
+
 	return (
-		<Marker
-			position={{ lat, lng }}
-			title={title}
-			icon={icon}
-			options={{ opacity }}
-			zIndex={zIndex}
-			visible={visible}
+		<RequestMarkerMemo
+			request={request}
+			selected={selected}
+			dimmed={dimmed}
 			onClick={onClick}
 		/>
 	);
 }
+
+const RequestMarkerMemo = React.memo(RequestMarker2);
+
+function RequestMarker2({ request, selected, dimmed, onClick }) {
+	const { id, building } = request;
+	const { lat, lng } = building;
+	const title = String(id);
+	const zIndex = 0;
+	const opacity = dimmed ? 0.25 : 1;
+	if (lat === "NaN" || lng === "NaN") return null;
+	return (
+		<React.Fragment>
+			<Marker
+				position={{ lat, lng }}
+				title={title}
+				icon={icon}
+				options={{ opacity }}
+				zIndex={zIndex}
+				onClick={onClick}
+			/>
+			{selected && <Tooltip lat={lat} lng={lng} label={request.id} />}
+		</React.Fragment>
+	);
+}
+
+export default React.memo(RequestMarker);

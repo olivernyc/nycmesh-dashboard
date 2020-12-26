@@ -5,20 +5,18 @@ import NodeLayer from "./NodeLayer";
 import RequestLayer from "./RequestLayer";
 import LinkLayer from "./LinkLayer";
 
-import Tooltip from "./Tooltip";
-
-const DEFAULT_ZOOM = 11;
+const DEFAULT_ZOOM = 12;
 const DEFAULT_CENTER = { lat: 40.69, lng: -73.9595798 };
 
 const options = {
 	fullscreenControl: false,
 	streetViewControl: false,
-	mapTypeControl: false,
+	mapTypeControl: true,
 	zoomControlOptions: {
-		position: "9",
+		position: 9,
 	},
 	mapTypeControlOptions: {
-		position: "3",
+		position: 7,
 	},
 	backgroundColor: "#fff",
 	gestureHandling: "greedy",
@@ -44,9 +42,15 @@ const options = {
 	],
 };
 
-function MapComponent(props) {
-	console.log("render map");
-	const { nodes, links, requests, selectedNodes = [] } = props;
+function MapComponent({
+	nodes,
+	links,
+	requests,
+	onLoad,
+	onClick,
+	onNodeClick,
+	onRequestClick,
+}) {
 	if (!nodes || !links) throw new Error("Missing nodes or links");
 
 	return (
@@ -61,23 +65,15 @@ function MapComponent(props) {
 					center={DEFAULT_CENTER}
 					options={options}
 					mapContainerClassName="flex h-100 w-100"
-					onLoad={props.onLoad}
-					onClick={props.onClick}
+					onLoad={onLoad}
+					onClick={onClick}
 				>
-					<NodeLayer
-						nodes={props.nodes}
-						selectedNodes={props.selectedNodes}
-						onClick={props.onNodeClick}
-					/>
-					<LinkLayer links={links} />
+					<NodeLayer nodes={nodes} onClick={onNodeClick} />
 					<RequestLayer
 						requests={requests}
-						selectedNodes={props.selectedNodes}
-						onClick={props.onRequestClick}
+						onClick={onRequestClick}
 					/>
-					{Object.values(selectedNodes).map((node) => (
-						<Tooltip node={node} />
-					))}
+					<LinkLayer links={links} />
 				</GoogleMap>
 			</LoadScript>
 		</div>

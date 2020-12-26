@@ -1,10 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12">
 	<circle
-	    fill="#777"
+		fill="#555"
 		stroke="white"
-		r="4"
-	    stroke-width="2"
-		cx="6"
-		cy="6"
+		r="3"
+		stroke-width="2"
+		cx="5"
+		cy="5"
 	/>
 </svg>
