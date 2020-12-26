@@ -80,7 +80,7 @@ export default function Request(props) {
 				</div>
 			</div>
 
-			<Section title="Details" onEdit={() => setEditing(true)}>
+			<Section title="Details" onEdit={() => setEditing("request")}>
 				{request.name && <Field name="name" value={request.name} />}
 				<Field name="status" value={request.status} />
 				<Field name="apartment" value={request.apartment} />
@@ -89,17 +89,17 @@ export default function Request(props) {
 			<Section title="Building" onEdit={() => setEditing("building")}>
 				<BuildingPreview building={request.building} />
 			</Section>
-			<Section title="Members" onEdit={() => setEditing(true)}>
+			<Section title="Members" onEdit={() => setEditing("members")}>
 				<MemberPreview member={request.member} />
 			</Section>
 			<Section
 				title="Panoramas"
 				editLabel="Add"
-				onEdit={() => setEditing(true)}
+				onEdit={() => setEditing("panoramas")}
 			>
 				<Panos panos={request.panoramas} />
 			</Section>
-			{editing && (
+			{editing === "request" && (
 				<ResourceEdit
 					resourceType="request"
 					resource={request}

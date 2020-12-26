@@ -87,7 +87,7 @@ export default function SearchBar(props) {
 								</div>
 							)}
 							<input
-								className="w-100 flex f6 bn no-outline w-100 mw6 pv3 bg-transparent ma0"
+								className="w-100 flex f6 bn no-outline w-100 mw6 pv3 bg-transparent black ma0"
 								autoComplete="nope"
 								spellCheck="false"
 								style={{ paddingLeft: "3rem" }}
