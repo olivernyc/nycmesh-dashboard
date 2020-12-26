@@ -1,6 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
-import { useAuth0 } from "./components/Auth0";
+import { withAuthenticationRequired } from "@auth0/auth0-react";
+
 import Nav from "./components/Nav";
 import SearchBar from "./components/SearchBar";
 import Search from "./components/Search";
@@ -10,7 +11,6 @@ import DateCell from "./components/DateCell";
 import ResourceList from "./components/ResourceList";
 import ResourceDetail from "./components/ResourceDetail";
 import Button from "./components/Button";
-
 import Nodes from "./components/Nodes";
 import Node from "./components/Node";
 import Buildings from "./components/Buildings";
@@ -18,26 +18,6 @@ import Building from "./components/Building";
 import Requests from "./components/Requests";
 
 function App() {
-  const { loading, isAuthenticated, loginWithRedirect } = useAuth0();
-
-  const loadingScreen = (
-    <div
-      className="h-100 w-100 flex items-center justify-center"
-      style={{ height: "100vh" }}
-    >
-      <div className="loading-ring-large" />
-    </div>
-  );
-
-  if (loading) return loadingScreen;
-
-  if (!isAuthenticated) {
-    loginWithRedirect({
-      appState: { targetUrl: window.location.pathname },
-    });
-    return loadingScreen;
-  }
-
   return (
     <Router>
       <div
@@ -207,4 +187,13 @@ function App() {
   );
 }
 
-export default App;
+export default withAuthenticationRequired(App, {
+  onRedirecting: () => (
+    <div
+      className="h-100 w-100 flex items-center justify-center"
+      style={{ height: "100vh" }}
+    >
+      <div className="loading-ring-large" />
+    </div>
+  ),
+});

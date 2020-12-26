@@ -1,21 +1,22 @@
 import React, { useState, useEffect } from "react";
 import Autocomplete from "react-autocomplete";
-import { search } from "../../api";
-import { useAuth0 } from "../Auth0";
-import Status from "../Status";
+import { useAuth0 } from "@auth0/auth0-react";
 import Octicon, { Search as SearchIcon } from "@primer/octicons-react";
 import { Link } from "react-router-dom";
+
+import { search } from "../../api";
+import Status from "../Status";
 
 export default function SearchBar(props) {
 	const [query, setQuery] = useState("");
 	const [loading, setLoading] = useState(0);
 	const [resultsMap, setResultsMap] = useState({});
-	const { isAuthenticated, getTokenSilently } = useAuth0();
+	const { isAuthenticated, getAccessTokenSilently } = useAuth0();
 
 	useEffect(() => {
 		async function fetchResults() {
 			setLoading((l) => l + 1);
-			const token = await getTokenSilently();
+			const token = await getAccessTokenSilently();
 			const results = await search(query, token);
 			setResultsMap((r) => ({
 				...r,
@@ -26,7 +27,7 @@ export default function SearchBar(props) {
 		if (!query) return;
 		if (!isAuthenticated) return;
 		fetchResults();
-	}, [query, isAuthenticated, getTokenSilently]);
+	}, [query, isAuthenticated, getAccessTokenSilently]);
 
 	let inputRef;
 

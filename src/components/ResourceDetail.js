@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useAuth0 } from "./Auth0";
+import { useAuth0 } from "@auth0/auth0-react";
+
 import NodeName from "./NodeName";
 import Device from "./Device";
 
@@ -14,7 +15,7 @@ export default function ResourceDetail(props) {
 		renderers,
 		blacklist,
 	} = props;
-	const { isAuthenticated, getTokenSilently } = useAuth0();
+	const { isAuthenticated, getAccessTokenSilently } = useAuth0();
 
 	useEffect(() => {
 		async function fetchData() {
@@ -23,7 +24,7 @@ export default function ResourceDetail(props) {
 			setResource(resource);
 			async function fetchResource() {
 				const path = `${process.env.REACT_APP_API_ROOT}/${resourceName}/${resourceId}`;
-				const token = await getTokenSilently();
+				const token = await getAccessTokenSilently();
 				const options = {
 					headers: {
 						Authorization: `Bearer ${token}`,
@@ -41,7 +42,7 @@ export default function ResourceDetail(props) {
 		}
 		if (!isAuthenticated) return;
 		fetchData();
-	}, [isAuthenticated, getTokenSilently, resourceName, resourceId]);
+	}, [isAuthenticated, getAccessTokenSilently, resourceName, resourceId]);
 
 	if (Object.keys(resource).length === 0) return null;
 

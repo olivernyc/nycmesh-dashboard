@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-// import Autocomplete from "react-autocomplete";
 import Octicon, {
 	Pin,
 	Home,
@@ -9,7 +8,7 @@ import Octicon, {
 	Pulse,
 	Globe,
 } from "@primer/octicons-react";
-import { useAuth0 } from "./Auth0";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const tabs = [
 	{
@@ -150,7 +149,7 @@ export default function Nav(props) {
 function SearchBar(props) {
 	const [value, setValue] = useState("");
 	const [results, setResults] = useState({});
-	const { isAuthenticated, getTokenSilently } = useAuth0();
+	const { isAuthenticated, getAccessTokenSilently } = useAuth0();
 	const { onClick } = props;
 
 	useEffect(() => {
@@ -159,7 +158,7 @@ function SearchBar(props) {
 			setResults(res);
 			async function fetchSearch() {
 				const path = `${process.env.REACT_APP_API_ROOT}/search?s=${value}`;
-				const token = await getTokenSilently();
+				const token = await getAccessTokenSilently();
 				const options = {
 					headers: {
 						Authorization: `Bearer ${token}`,
@@ -178,7 +177,7 @@ function SearchBar(props) {
 		if (!isAuthenticated) return;
 		if (!value) return;
 		performSearch();
-	}, [isAuthenticated, getTokenSilently, value]);
+	}, [isAuthenticated, getAccessTokenSilently, value]);
 
 	const sections = Object.keys(results);
 
