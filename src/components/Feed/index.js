@@ -4,8 +4,8 @@ import LazyLoad from "react-lazyload";
 import { format, isEqual, isAfter, parseISO } from "date-fns";
 import { useAuth0 } from "@auth0/auth0-react";
 
+import Button2 from "../Button2";
 import { fetchResource } from "../../api";
-import Button from "../Button";
 
 export default function NodeMap(props) {
 	const [nodes, setNodes] = useState([]);
@@ -63,7 +63,7 @@ export default function NodeMap(props) {
 			<div className="flex items-center justify-between ph4-ns ph3">
 				<h1 className="mv0 f5 fw5 ttc pv3">Feed</h1>
 				<div>
-					<Button
+					<Button2
 						title="Filters"
 						icon={<Octicon icon={FilterIcon} />}
 					/>
