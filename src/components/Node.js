@@ -1,18 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { useAuth0 } from "./Auth0";
-import { Link } from "react-router-dom";
-import Octicon, { Pencil } from "@primer/octicons-react";
 
 import { fetchResource, updateResource } from "../api";
 
 import ResourceEdit from "./ResourceEdit";
-import ResourceSelect from "./ResourceSelect";
-import DateCell from "./DateCell";
 import Device from "./Device";
 import MemberPreview from "./MemberPreview";
 import BuildingPreview from "./BuildingPreview";
 import Status from "./Status";
 import Panos from "./Panos";
+import LinksList from "./LinksList";
+import Section from "./Section";
 
 export default function Node(props) {
 	const [node, setNode] = useState();
@@ -55,13 +53,6 @@ export default function Node(props) {
 		return <div className="w-100">Error</div>;
 	}
 
-	const createDate = new Date(node.create_date).toLocaleDateString({
-		weekday: "long",
-		year: "numeric",
-		month: "long",
-		day: "numeric",
-	});
-
 	return (
 		<div className="w-100 pa3 f6">
 			<div className="">
@@ -79,7 +70,7 @@ export default function Node(props) {
 				<Field name="status" value={node.status} />
 				<Field name="notes" value={node.notes} />
 			</Section>
-			<Section title="Building" onEdit={() => setEditing("building")}>
+			<Section title="Building">
 				<BuildingPreview building={node.building} />
 			</Section>
 			<Section
@@ -88,7 +79,7 @@ export default function Node(props) {
 				onEdit={() => setEditing(true)}
 			>
 				{node.members.map((member) => (
-					<MemberPreview member={member} />
+					<MemberPreview key={member.id} member={member} />
 				))}
 			</Section>
 			<Section
@@ -97,19 +88,10 @@ export default function Node(props) {
 				onEdit={() => setEditing(true)}
 			>
 				{node.devices.map((device) => (
-					<Device device={device} />
+					<Device key={device.id} device={device} />
 				))}
 			</Section>
-			<Section
-				title="Links"
-				editLabel="Add"
-				onEdit={() => setEditing(true)}
-			>
-				{node.connected_nodes &&
-					node.connected_nodes.map((node) => (
-						<NodePreview node={node} />
-					))}
-			</Section>
+			<LinksList node={node} />
 			<Section
 				title="Panoramas"
 				editLabel="Add"
@@ -149,76 +131,6 @@ export default function Node(props) {
 					onCancel={() => setEditing(false)}
 				/>
 			)}
-			{editing === "building" && (
-				<BuildingSelect
-					node={node}
-					onSubmit={async (newBuilding) => {
-						const token = await getTokenSilently();
-						const nodePatch = {
-							building_id: 422,
-						};
-						await updateResource(
-							"nodes",
-							node.id,
-							nodePatch,
-							token
-						);
-						const resource = await fetchResource(
-							`nodes/${id}`,
-							token
-						);
-						setNode(resource);
-						setEditing(false);
-					}}
-					onCancel={() => setEditing(false)}
-				/>
-			)}
-		</div>
-	);
-}
-
-function BuildingSelect(props) {
-	const { node } = props;
-	return (
-		<ResourceSelect
-			resourceType="building"
-			resource={node}
-			onSubmit={props.onSubmit}
-			onCancel={props.onCancel}
-		/>
-	);
-}
-
-function Section(props) {
-	return (
-		<div className="mt3">
-			<div className="pv3 flex item-center justify-between bb b--light-gray">
-				<span className="f5 fw7">{props.title}</span>
-				<button
-					className="bn pa0 bg-transparent purple pointer fw5"
-					onClick={props.onEdit}
-				>
-					{props.editLabel || "Edit"}
-				</button>
-			</div>
-			{props.children}
-		</div>
-	);
-}
-
-function MultiSection(props) {
-	return (
-		<div className="mt3">
-			<div className="pv3 flex items-center justify-between bb b--light-gray">
-				<span className="f5 fw7">{props.title}</span>
-				<button
-					className="bn pa0 bg-transparent purple pointer fw5"
-					onClick={props.onEdit}
-				>
-					Edit
-				</button>
-			</div>
-			{props.children}
 		</div>
 	);
 }
@@ -232,17 +144,6 @@ function Field(props) {
 			<span className="dark-gray">
 				{props.value || `No ${props.name}`}
 			</span>
-		</div>
-	);
-}
-
-function NodePreview({ node }) {
-	if (!node) return <div>Invalid node</div>;
-	return (
-		<div className="pv2 bb b--light-gray">
-			<div className="mb1">
-				<span className="fw5">{node.name || node.id}</span>
-			</div>
 		</div>
 	);
 }

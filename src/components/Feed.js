@@ -77,7 +77,13 @@ export default function NodeMap(props) {
 							return (
 								<div className={itemClassName}>
 									<div className="flex items-start w-100 mw6">
-										<span className="mr3">🎉</span>
+										<span
+											className="mr3"
+											role="img"
+											aria-label="party emoji"
+										>
+											🎉
+										</span>
 										<div>
 											<span className="fw5 mr2">
 												{item.item.building}
@@ -101,7 +107,13 @@ export default function NodeMap(props) {
 							return (
 								<div className={itemClassName}>
 									<div className="flex items-start w-100 mw6">
-										<span className="mr3">🔗</span>
+										<span
+											className="mr3"
+											role="img"
+											aria-label="chain link emoji"
+										>
+											🔗
+										</span>
 										<div>
 											<span className="fw5 mr2">
 												{item.item.nodes[1].name ||
@@ -126,7 +138,13 @@ export default function NodeMap(props) {
 							return (
 								<div className={itemClassName}>
 									<div className="flex items-start w-100 mw6">
-										<span className="mr3">🌇</span>
+										<span
+											className="mr3"
+											role="img"
+											aria-label="city sunrise emoji"
+										>
+											🌇
+										</span>
 										<div className="w-100">
 											<span className="fw5 mr2">
 												{item.item.building.address}

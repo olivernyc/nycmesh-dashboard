@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 import { useAuth0 } from "./components/Auth0";
 import Nav from "./components/Nav";
 import SearchBar from "./components/SearchBar";
@@ -94,9 +94,7 @@ function App() {
                     </a>
                   </div>,
                   <div className="mr2">
-                    <a className="black link" target="_" href="#">
-                      <Button title="View Ticket" />
-                    </a>
+                    <Button title="View Ticket" />
                   </div>,
                 ]}
                 renderers={{
@@ -121,6 +119,7 @@ function App() {
                             <img
                               className="w-100 cover bg-center bg-near-white"
                               src={panorama.url}
+                              alt="rooftop panorama thumbnail"
                             />
                           </div>
                         ))}

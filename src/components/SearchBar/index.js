@@ -8,25 +8,25 @@ import { Link } from "react-router-dom";
 
 export default function SearchBar(props) {
 	const [query, setQuery] = useState("");
-	const [loading, setLoading] = useState(false);
+	const [loading, setLoading] = useState(0);
 	const [resultsMap, setResultsMap] = useState({});
 	const { isAuthenticated, getTokenSilently } = useAuth0();
 
 	useEffect(() => {
 		async function fetchResults() {
-			setLoading(true);
+			setLoading((l) => l + 1);
 			const token = await getTokenSilently();
 			const results = await search(query, token);
-			setResultsMap({
-				...resultsMap,
+			setResultsMap((r) => ({
+				...r,
 				[query]: results,
-			});
-			setLoading(false);
+			}));
+			setLoading((l) => l - 1);
 		}
 		if (!query) return;
 		if (!isAuthenticated) return;
 		fetchResults();
-	}, [query, isAuthenticated]);
+	}, [query, isAuthenticated, getTokenSilently]);
 
 	let inputRef;
 
@@ -116,7 +116,6 @@ export default function SearchBar(props) {
 					let title;
 					let subtitle;
 					let icon;
-					let status;
 					if (item.type === "show_all") {
 						return (
 							<Link to={`/search`} className="link dark-gray">
@@ -141,13 +140,13 @@ export default function SearchBar(props) {
 						);
 					}
 					if (item.type === "node") {
-						const { id, name, status } = item.item;
+						const { id, name } = item.item;
 						title = name || id;
 						subtitle = id;
 						icon = "📡";
 					}
 					if (item.type === "request") {
-						const { building, member, status } = item.item;
+						const { building, member } = item.item;
 						title = building.address;
 						subtitle = member.name;
 						icon = "🌆";
@@ -205,31 +204,6 @@ export default function SearchBar(props) {
 							</div>
 						</Link>
 					);
-
-					return null;
-
-					const {
-						name,
-						borough,
-						locality,
-						postalcode,
-					} = item.properties;
-					const address1 = titleCase(name);
-					const address2 = `${borough}, ${locality} ${postalcode}`;
-					return (
-						<div
-							key={item.properties.id}
-							className="pa3 bb b--light-gray pointer bg-white"
-							style={{
-								backgroundColor: isHighlighted
-									? "#f5f5f5"
-									: "#fff",
-							}}
-						>
-							<span>{address1} </span>
-							<span className="gray">{address2}</span>
-						</div>
-					);
 				}}
 				onChange={(event) => setQuery(event.target.value)}
 				onSelect={(value, item) => {
@@ -245,12 +219,4 @@ export default function SearchBar(props) {
 			/>
 		</div>
 	);
-}
-
-function titleCase(text) {
-	return text
-		.toLowerCase()
-		.split(" ")
-		.map((s) => s.charAt(0).toUpperCase() + s.substring(1))
-		.join(" ");
 }

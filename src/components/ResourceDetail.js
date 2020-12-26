@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useAuth0 } from "./Auth0";
-import Octicon, { Pencil } from "@primer/octicons-react";
-import ResourceEdit from "./ResourceEdit";
 import NodeName from "./NodeName";
-import Button from "./Button";
 import Device from "./Device";
 
 export default function ResourceDetail(props) {
@@ -195,6 +192,7 @@ function renderResource(resource, renderers = {}, blacklist = []) {
 															return (
 																<div>
 																	<img
+																		alt="rooftop panorama"
 																		className="w-100 mw6"
 																		src={
 																			value.url
