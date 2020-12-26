@@ -6,14 +6,14 @@ const INTERVAL_PER_MILE = 20;
 export default React.memo(Sector);
 
 function Sector(props) {
-	const { device, dimmed } = props;
+	const { device, opacity = 1 } = props;
 	// if (dimmed) return null;
 
 	const { lat, lng, azimuth } = device;
 	const { range, width } = device.type;
 
 	const intervalCount = Math.ceil(INTERVAL_PER_MILE * range);
-	const fillOpacity = dimmed ? 0 : (range < 1 ? 0.04 : 0.05) / intervalCount;
+	const fillOpacity = (opacity * (range < 1 ? 0.04 : 0.05)) / intervalCount;
 	const fillColor = range < 1 ? "rgb(90,200,250)" : "rgb(0,122,255)";
 
 	const interval = range / intervalCount;

@@ -6,17 +6,18 @@ import Tooltip from "./Tooltip";
 import { MapContext } from ".";
 
 export default function NodeMarker({ node, onClick }) {
-	const { selectedNode } = useContext(MapContext);
-	const selected =
-		selectedNode === node.id ||
-		(node.connected_nodes &&
-			node.connected_nodes.filter((n) => n.id === selectedNode).length);
-	const dimmed = selectedNode && selectedNode !== node.id;
+	const { selectedNode, connectedNodes } = useContext(MapContext);
+	const neighbors = connectedNodes[node.id];
+	const isSelected = selectedNode === node.id;
+	const isNeighbor =
+		neighbors && neighbors.filter((n) => n.id === selectedNode).length;
+	const isDimmed = selectedNode && !isSelected && !isNeighbor;
 	return (
 		<NodeMarkerMemo
 			node={node}
-			selected={selected}
-			dimmed={dimmed}
+			isSelected={isSelected}
+			isNeighbor={isNeighbor}
+			isDimmed={isDimmed}
 			onClick={onClick}
 		/>
 	);
@@ -24,12 +25,13 @@ export default function NodeMarker({ node, onClick }) {
 
 const NodeMarkerMemo = React.memo(NodeMarker2);
 
-function NodeMarker2({ node, selected, dimmed, onClick }) {
-	const { lat, lng } = node;
+function NodeMarker2({ node, isSelected, isNeighbor, isDimmed, onClick }) {
+	const { lat, lng, devices } = node;
 	const title = node.name || String(node.id);
 	const icon = getIcon(node);
-	const zIndex = getZ(node);
-	const opacity = dimmed ? 0.25 : 1;
+	let zIndex = getZ(node);
+	const opacity = isDimmed ? 0.25 : 1;
+	const sectorOpacity = isNeighbor ? 0.5 : isDimmed ? 0 : 1;
 	return (
 		<React.Fragment>
 			<Marker
@@ -40,10 +42,14 @@ function NodeMarker2({ node, selected, dimmed, onClick }) {
 				zIndex={zIndex}
 				onClick={onClick}
 			/>
-			{node.devices.map((device, index) => (
-				<Sector key={device.id} device={device} dimmed={dimmed} />
+			{devices.map((device) => (
+				<Sector
+					key={device.id}
+					device={device}
+					opacity={sectorOpacity}
+				/>
 			))}
-			{selected && (
+			{isSelected && (
 				<Tooltip lat={lat} lng={lng} label={node.name || node.id} />
 			)}
 		</React.Fragment>

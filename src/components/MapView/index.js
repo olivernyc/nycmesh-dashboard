@@ -58,6 +58,7 @@ function NodeMap({ history, match }) {
 				value={{
 					selectedNode: parseInt(nodeId),
 					selectedRequest: parseInt(requestId),
+					connectedNodes: mapData.connectedNodes,
 				}}
 			>
 				<MapComponent
@@ -81,6 +82,7 @@ function useMapData() {
 		nodes: [],
 		requests: [],
 		links: [],
+		connectedNodes: {},
 	});
 	const { isAuthenticated, getAccessTokenSilently } = useAuth0();
 	useEffect(() => {
@@ -91,10 +93,19 @@ function useMapData() {
 				fetchResource("requests", token),
 				fetchResource("links", token),
 			]);
+			const connectedNodes = {};
+			linksRes.forEach((link) => {
+				const [node1, node2] = link.nodes;
+				connectedNodes[node1.id] = connectedNodes[node1.id] || [];
+				connectedNodes[node2.id] = connectedNodes[node2.id] || [];
+				connectedNodes[node1.id].push(node2);
+				connectedNodes[node2.id].push(node1);
+			});
 			setMapData({
 				nodes: nodesRes,
 				requests: requestsRes,
 				links: linksRes,
+				connectedNodes,
 			});
 		}
 		if (!isAuthenticated) return;
