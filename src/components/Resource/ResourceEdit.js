@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
-import Input from "./Input";
-import Button from "./Button2";
+import Input from "../Input";
+import Button from "../Button";
 
 export default function ResourceEdit(props) {
 	const { resourceType, resource } = props;

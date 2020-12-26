@@ -67,7 +67,7 @@ function getIcon(node) {
 		};
 
 	// Hub
-	if (notes && notes.includes("hub"))
+	if (notes && notes.toLowerCase().includes("hub"))
 		return {
 			url: "/img/map/hub.svg",
 			anchor: { x: 9, y: 9 },
@@ -90,7 +90,7 @@ function getZ(node) {
 	const { name, notes, devices } = node;
 
 	if (name && name.includes("Supernode")) return 4;
-	if (notes && notes.includes("hub")) return 3;
+	if (notes && notes.toLowerCase().includes("hub")) return 3;
 	if (devices.filter((device) => device.type.name === "Omni").length)
 		return 2;
 	return 1;

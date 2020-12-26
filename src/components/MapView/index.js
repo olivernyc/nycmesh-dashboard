@@ -3,9 +3,9 @@ import { useAuth0 } from "@auth0/auth0-react";
 
 import { fetchResource } from "../../api";
 import MapComponent from "./MapComponent";
-import Node from "../Node";
-import Request from "../Request";
-import Member from "../Member";
+import Node from "../Node/Node";
+import Request from "../Request/Request";
+import Member from "../Member/Member";
 
 export default React.memo(NodeMap);
 

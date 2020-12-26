@@ -1,6 +1,6 @@
 import React from "react";
 
-import Status from "./Status";
+import Status from "../Status";
 
 export default function Device(props) {
 	const { device } = props;

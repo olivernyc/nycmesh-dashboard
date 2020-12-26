@@ -1,5 +1,5 @@
 import React from "react";
-import ResourceDetail from "./ResourceDetail";
+import ResourceDetail from "../Resource/ResourceDetail";
 
 export default function Member(props) {
 	const { id } = props;

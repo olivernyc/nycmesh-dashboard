@@ -1,25 +1,24 @@
 import React, { useState, useEffect } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 
-import { fetchResource, updateResource } from "../api";
+import { fetchResource, updateResource } from "../../api";
 
-import ResourceEdit from "./ResourceEdit";
+import ResourceEdit from "../Resource/ResourceEdit";
+import ResourceSection from "../Resource/ResourceSection";
+import MemberPreview from "../Member/MemberPreview";
+import BuildingPreview from "../Building/BuildingPreview";
+import Status from "../Status";
+import Panos from "../Panos";
+
 import Device from "./Device";
-import MemberPreview from "./MemberPreview";
-import BuildingPreview from "./BuildingPreview";
-import Status from "./Status";
-import Panos from "./Panos";
 import LinksList from "./LinksList";
-import Section from "./Section";
 
-export default function Node(props) {
+export default function Node({ id }) {
 	const [node, setNode] = useState();
 	const [editing, setEditing] = useState(null);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState();
 	const { isAuthenticated, getAccessTokenSilently } = useAuth0();
-
-	const { id } = props;
 
 	useEffect(() => {
 		async function fetchData() {
@@ -65,15 +64,15 @@ export default function Node(props) {
 				<Status status={node.status} />
 			</div>
 
-			<Section title="Details" onEdit={() => setEditing("node")}>
+			<ResourceSection title="Details" onEdit={() => setEditing("node")}>
 				{node.name && <Field name="name" value={node.name} />}
 				<Field name="status" value={node.status} />
 				<Field name="notes" value={node.notes} />
-			</Section>
-			<Section title="Building">
+			</ResourceSection>
+			<ResourceSection title="Building">
 				<BuildingPreview building={node.building} />
-			</Section>
-			<Section
+			</ResourceSection>
+			<ResourceSection
 				title="Members"
 				editLabel="Add"
 				onEdit={() => setEditing(true)}
@@ -81,8 +80,8 @@ export default function Node(props) {
 				{node.members.map((member) => (
 					<MemberPreview key={member.id} member={member} />
 				))}
-			</Section>
-			<Section
+			</ResourceSection>
+			<ResourceSection
 				title="Devices"
 				editLabel="Add"
 				onEdit={() => setEditing(true)}
@@ -90,15 +89,15 @@ export default function Node(props) {
 				{node.devices.map((device) => (
 					<Device key={device.id} device={device} />
 				))}
-			</Section>
+			</ResourceSection>
 			<LinksList node={node} />
-			<Section
+			<ResourceSection
 				title="Panoramas"
 				editLabel="Add"
 				onEdit={() => setEditing(true)}
 			>
 				<Panos panos={node.panoramas} />
-			</Section>
+			</ResourceSection>
 			{editing === "node" && (
 				<ResourceEdit
 					resourceType="node"

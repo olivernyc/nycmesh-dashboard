@@ -44,7 +44,7 @@ function LinkLine2({ link, selected, dimmed }) {
 }
 
 const isSupernode = (node) => node.name && node.name.includes("Supernode");
-const isHub = (node) => node.notes && node.notes.includes("hub");
+const isHub = (node) => node.notes && node.notes.toLowerCase().includes("hub");
 const isOmni = (device) => device.type.name === "Omni";
 const isBackbone = (node, device) =>
 	isSupernode(node) || isHub(node) || isOmni(device);

@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import BaseTable, { AutoResizer } from "react-base-table";
 import "react-base-table/styles.css";
 import { Link } from "react-router-dom";
-import Octicon, { Settings } from "@primer/octicons-react";
+import Octicon, { FilterIcon } from "@primer/octicons-react";
 import { useAuth0 } from "@auth0/auth0-react";
 
-import Button from "./Button";
+import Button from "../Button2";
 
 export default function ResourceList(props) {
 	const { resourceName, columns } = props;
@@ -45,7 +45,7 @@ export default function ResourceList(props) {
 				<div>
 					<Button
 						title="Filters"
-						icon={<Octicon icon={Settings} />}
+						icon={<Octicon icon={FilterIcon} />}
 					/>
 				</div>
 			</div>
@@ -76,7 +76,7 @@ export default function ResourceList(props) {
 							)}
 							rowRenderer={({ rowData, cells }) => (
 								<Link
-									to={`/${resourceName}/${rowData.id}`}
+									to={`/map/${resourceName}/${rowData.id}`}
 									className="w-100 h-100 flex link ph3-ns"
 								>
 									{cells}

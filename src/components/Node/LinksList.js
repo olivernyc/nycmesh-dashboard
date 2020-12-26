@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import Section from "./Section";
-import Modal from "./Modal";
+import ResourceSection from "../Resource/ResourceSection";
+import Modal from "../Modal";
 
-export default function ({ node }) {
+export default function LinksList({ node }) {
 	const [showAll, setShowAll] = useState(false);
 	const [editing, setEditing] = useState(false);
 
@@ -17,7 +17,11 @@ export default function ({ node }) {
 	);
 
 	return (
-		<Section title="Links" editLabel="Add" onEdit={() => setEditing(true)}>
+		<ResourceSection
+			title="Links"
+			editLabel="Add"
+			onEdit={() => setEditing(true)}
+		>
 			{content}
 			{node.connected_nodes && node.connected_nodes.length > 5 && (
 				<button
@@ -30,7 +34,7 @@ export default function ({ node }) {
 			{editing && (
 				<Modal title="Add link" onCancel={() => setEditing(false)} />
 			)}
-		</Section>
+		</ResourceSection>
 	);
 }
 
