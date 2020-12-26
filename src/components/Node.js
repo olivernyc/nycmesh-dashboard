@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useAuth0 } from "./Auth0";
+import { useAuth0 } from "@auth0/auth0-react";
 
 import { fetchResource, updateResource } from "../api";
 
@@ -17,7 +17,7 @@ export default function Node(props) {
 	const [editing, setEditing] = useState(null);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState();
-	const { isAuthenticated, getTokenSilently } = useAuth0();
+	const { isAuthenticated, getAccessTokenSilently } = useAuth0();
 
 	const { id } = props;
 
@@ -26,7 +26,7 @@ export default function Node(props) {
 			if (!id) return;
 			try {
 				setLoading(true);
-				const token = await getTokenSilently();
+				const token = await getAccessTokenSilently();
 				const resource = await fetchResource(`nodes/${id}`, token);
 				setNode(resource);
 				setLoading(false);
@@ -37,7 +37,7 @@ export default function Node(props) {
 		}
 		if (!isAuthenticated) return;
 		fetchData();
-	}, [isAuthenticated, getTokenSilently, id]);
+	}, [isAuthenticated, getAccessTokenSilently, id]);
 
 	if (!id) return null;
 
@@ -113,7 +113,7 @@ export default function Node(props) {
 						{ key: "notes", type: "textarea" },
 					]}
 					onSubmit={async (nodePatch) => {
-						const token = await getTokenSilently();
+						const token = await getAccessTokenSilently();
 						alert("??");
 						await updateResource(
 							"nodes",

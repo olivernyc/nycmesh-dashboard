@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { useAuth0 } from "../Auth0";
+import { useAuth0 } from "@auth0/auth0-react";
 
 import { fetchResource } from "../../api";
 import MapComponent from "./MapComponent";
@@ -82,10 +82,10 @@ function useMapData() {
 		requests: [],
 		links: [],
 	});
-	const { isAuthenticated, getTokenSilently } = useAuth0();
+	const { isAuthenticated, getAccessTokenSilently } = useAuth0();
 	useEffect(() => {
 		async function fetchAll() {
-			const token = await getTokenSilently();
+			const token = await getAccessTokenSilently();
 			const [nodesRes, requestsRes, linksRes] = await Promise.all([
 				fetchResource("nodes", token),
 				fetchResource("requests", token),
@@ -103,6 +103,6 @@ function useMapData() {
 		} catch (error) {
 			alert(error);
 		}
-	}, [isAuthenticated, getTokenSilently]);
+	}, [isAuthenticated, getAccessTokenSilently]);
 	return mapData;
 }

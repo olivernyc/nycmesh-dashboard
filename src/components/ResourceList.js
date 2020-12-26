@@ -3,14 +3,14 @@ import BaseTable, { AutoResizer } from "react-base-table";
 import "react-base-table/styles.css";
 import { Link } from "react-router-dom";
 import Octicon, { Settings } from "@primer/octicons-react";
-import Button from "./Button";
+import { useAuth0 } from "@auth0/auth0-react";
 
-import { useAuth0 } from "./Auth0";
+import Button from "./Button";
 
 export default function ResourceList(props) {
 	const { resourceName, columns } = props;
 	const [data, setData] = useState([]);
-	const { isAuthenticated, getTokenSilently } = useAuth0();
+	const { isAuthenticated, getAccessTokenSilently } = useAuth0();
 
 	useEffect(() => {
 		async function fetchData() {
@@ -18,7 +18,7 @@ export default function ResourceList(props) {
 			setData(data);
 			async function fetchResource(resource) {
 				const path = `${process.env.REACT_APP_API_ROOT}/${resource}`;
-				const token = await getTokenSilently();
+				const token = await getAccessTokenSilently();
 				const options = {
 					headers: {
 						Authorization: `Bearer ${token}`,
@@ -36,7 +36,7 @@ export default function ResourceList(props) {
 		}
 		if (!isAuthenticated) return;
 		fetchData();
-	}, [isAuthenticated, getTokenSilently, resourceName]);
+	}, [isAuthenticated, getAccessTokenSilently, resourceName]);
 
 	return (
 		<div className="w-100">

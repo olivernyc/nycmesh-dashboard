@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import Octicon, { Settings } from "@primer/octicons-react";
 import LazyLoad from "react-lazyload";
 import { format, isEqual, isAfter } from "date-fns";
-import { useAuth0 } from "./Auth0";
+import { useAuth0 } from "@auth0/auth0-react";
+
 import Button from "./Button";
 import { fetchResource } from "../api";
 
@@ -10,10 +11,10 @@ export default function NodeMap(props) {
 	const [nodes, setNodes] = useState([]);
 	const [links, setLinks] = useState([]);
 	const [requests, setRequests] = useState([]);
-	const { isAuthenticated, getTokenSilently } = useAuth0();
+	const { isAuthenticated, getAccessTokenSilently } = useAuth0();
 	useEffect(() => {
 		async function fetchData() {
-			const token = await getTokenSilently();
+			const token = await getAccessTokenSilently();
 			// TODO: Fetch in parallel or make api endpoint for feed
 			const nodesRes = await fetchResource("nodes", token);
 			const linksRes = await fetchResource("links", token);
@@ -24,7 +25,7 @@ export default function NodeMap(props) {
 		}
 		if (!isAuthenticated) return;
 		fetchData();
-	}, [isAuthenticated, getTokenSilently]);
+	}, [isAuthenticated, getAccessTokenSilently]);
 
 	const feed = [];
 	feed.push(
