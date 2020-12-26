@@ -1,5 +1,4 @@
 import React from "react";
-import LazyLoad from "react-lazyload";
 import DateCell from "./DateCell";
 
 import ResourceList from "./ResourceList";

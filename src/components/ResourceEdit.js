@@ -61,6 +61,7 @@ export default function ResourceEdit(props) {
 										}
 									/>
 								);
+							return null;
 						})}
 					</div>
 					<div className="pa3 flex justify-end">

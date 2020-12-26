@@ -7,7 +7,6 @@ import Octicon, {
 	Person,
 	Unverified,
 	Pulse,
-	Search,
 	Globe,
 } from "@primer/octicons-react";
 import { useAuth0 } from "./Auth0";

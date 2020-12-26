@@ -1,13 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useAuth0 } from "./Auth0";
-import { Link } from "react-router-dom";
-import Octicon, { Pencil } from "@primer/octicons-react";
 
 import { fetchResource } from "../api";
 
 import ResourceEdit from "./ResourceEdit";
-import DateCell from "./DateCell";
-import Device from "./Device";
 import MemberPreview from "./MemberPreview";
 import BuildingPreview from "./BuildingPreview";
 import Status from "./Status";
@@ -87,7 +83,11 @@ export default function Request(props) {
 			<Section title="Details" onEdit={() => setEditing(true)}>
 				{request.name && <Field name="name" value={request.name} />}
 				<Field name="status" value={request.status} />
+				<Field name="apartment" value={request.apartment} />
 				<Field name="notes" value={request.notes} />
+			</Section>
+			<Section title="Building" onEdit={() => setEditing("building")}>
+				<BuildingPreview building={request.building} />
 			</Section>
 			<Section title="Members" onEdit={() => setEditing(true)}>
 				<MemberPreview member={request.member} />
@@ -101,8 +101,33 @@ export default function Request(props) {
 			</Section>
 			{editing && (
 				<ResourceEdit
-					name="request"
-					id={request.id}
+					resourceType="request"
+					resource={request}
+					fields={[
+						{
+							key: "status",
+							type: "select",
+							options: ["open", "closed"],
+						},
+						{ key: "apartment", type: "text" },
+						{ key: "notes", type: "textarea" },
+					]}
+					onSubmit={async (nodePatch) => {
+						// const token = await getTokenSilently();
+						// alert("??");
+						// await updateResource(
+						// 	"nodes",
+						// 	node.id,
+						// 	nodePatch,
+						// 	token
+						// );
+						// const resource = await fetchResource(
+						// 	`nodes/${id}`,
+						// 	token
+						// );
+						// setNode(resource);
+						// setEditing(false);
+					}}
 					onCancel={() => setEditing(false)}
 				/>
 			)}
