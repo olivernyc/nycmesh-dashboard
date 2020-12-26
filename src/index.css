@@ -163,4 +163,7 @@
 		box-shadow: rgba(0, 0, 0, 0.5) 0px 4px 20px 0px,
 			rgba(0, 0, 0, 0.0666) 0px 1px 1px 0px;
 	}
+	.tooltip-triangle path {
+		fill: #090909;
+	}
 }
