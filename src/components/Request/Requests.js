@@ -1,7 +1,7 @@
 import React from "react";
-import DateCell from "./DateCell";
 
-import ResourceList from "./ResourceList";
+import DateCell from "../Resource/DateCell";
+import ResourceList from "../Resource/ResourceList";
 
 export default function Requests(props) {
   return (

@@ -1,6 +1,11 @@
 import React from "react";
 
-export default function Section({ title, editLabel, children, onEdit }) {
+export default function ResourceSection({
+	title,
+	editLabel,
+	children,
+	onEdit,
+}) {
 	return (
 		<div className="mt3">
 			<div className="pv3 flex item-center justify-between bb b--light-gray">

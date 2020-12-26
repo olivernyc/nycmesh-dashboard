@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 
-import { fetchResource } from "../api";
+import { fetchResource } from "../../api";
 
-import ResourceEdit from "./ResourceEdit";
-import MemberPreview from "./MemberPreview";
-import BuildingPreview from "./BuildingPreview";
-import Status from "./Status";
-import Panos from "./Panos";
+import ResourceEdit from "../Resource/ResourceEdit";
+import MemberPreview from "../Member/MemberPreview";
+import BuildingPreview from "../Building/BuildingPreview";
+import Status from "../Status";
+import Panos from "../Panos";
 
 export default function Request(props) {
 	const [request, setRequest] = useState();

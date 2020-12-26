@@ -1,7 +1,7 @@
 import React from "react";
 
-import ResourceList from "./ResourceList";
-import DateCell from "./DateCell";
+import ResourceList from "../Resource/ResourceList";
+import DateCell from "../Resource/DateCell";
 
 export default function Nodes(props) {
 	return (

@@ -1,6 +1,6 @@
 import React from "react";
 
-import Button from "./Button2";
+import Button from "./Button";
 
 export default function Modal({
 	title,

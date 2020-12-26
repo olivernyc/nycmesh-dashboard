@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import Octicon, { FilterIcon } from "@primer/octicons-react";
 import LazyLoad from "react-lazyload";
-import { format, isEqual, isAfter } from "date-fns";
+import { format, isEqual, isAfter, parseISO } from "date-fns";
 import { useAuth0 } from "@auth0/auth0-react";
 
-import Button from "./Button";
-import { fetchResource } from "../api";
+import { fetchResource } from "../../api";
+import Button from "../Button";
 
 export default function NodeMap(props) {
 	const [nodes, setNodes] = useState([]);
@@ -31,7 +31,7 @@ export default function NodeMap(props) {
 	feed.push(
 		...links.map((link) => ({
 			type: "link",
-			date: link.create_date,
+			date: parseISO(link.create_date),
 			item: link,
 		}))
 	);
@@ -39,7 +39,7 @@ export default function NodeMap(props) {
 	feed.push(
 		...nodes.map((node) => ({
 			type: "node",
-			date: node.create_date,
+			date: parseISO(node.create_date),
 			item: node,
 		}))
 	);
@@ -49,7 +49,7 @@ export default function NodeMap(props) {
 			.filter((request) => request.panoramas && request.panoramas.length)
 			.map((request) => ({
 				type: "panorama",
-				date: request.panoramas[0].date,
+				date: parseISO(request.panoramas[0].date),
 				item: request,
 			}))
 	);
@@ -92,7 +92,7 @@ export default function NodeMap(props) {
 											<time className="mid-gray">
 												{format(
 													item.date,
-													"MMM D, YYYY"
+													"MMM d, yyyy"
 												)}
 											</time>
 											<p className="mb0 mt2 m">
@@ -123,7 +123,7 @@ export default function NodeMap(props) {
 											<time className="mid-gray">
 												{format(
 													item.date,
-													"MMM D, YYYY"
+													"MMM d, yyyy"
 												)}
 											</time>
 											<p className="mb0 mt2 m">
@@ -153,7 +153,7 @@ export default function NodeMap(props) {
 											<time className="mid-gray">
 												{format(
 													item.date,
-													"MMM D, YYYY"
+													"MMM d, yyyy"
 												)}
 											</time>
 											<p className="mv2">

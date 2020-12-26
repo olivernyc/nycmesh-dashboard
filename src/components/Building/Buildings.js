@@ -1,6 +1,6 @@
 import React from "react";
 
-import ResourceList from "./ResourceList";
+import ResourceList from "../Resource/ResourceList";
 
 export default function Buildings(props) {
 	return (

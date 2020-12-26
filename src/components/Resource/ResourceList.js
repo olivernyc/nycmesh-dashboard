@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import Octicon, { FilterIcon } from "@primer/octicons-react";
 import { useAuth0 } from "@auth0/auth0-react";
 
-import Button from "./Button";
+import Button from "../Button";
 
 export default function ResourceList(props) {
 	const { resourceName, columns } = props;
@@ -76,7 +76,7 @@ export default function ResourceList(props) {
 							)}
 							rowRenderer={({ rowData, cells }) => (
 								<Link
-									to={`/${resourceName}/${rowData.id}`}
+									to={`/map/${resourceName}/${rowData.id}`}
 									className="w-100 h-100 flex link ph3-ns"
 								>
 									{cells}
