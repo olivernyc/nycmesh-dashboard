@@ -27,8 +27,9 @@ export default function Tooltip({ lat, lng, label }) {
 					height="12"
 					aria-hidden="true"
 					style={{ marginTop: "-1px" }}
+					className="tooltip-triangle"
 				>
-					<path fillRule="evenodd" d="M0 5l6 6 6-6H0z" />
+					<path fillRule="evenodd" d="M0 5l6 6 6-6H0z" fill="white" />
 				</svg>
 			</div>
 		</OverlayView>
