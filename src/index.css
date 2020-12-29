@@ -142,7 +142,7 @@
 		color: #fff;
 	}
 	.near-black {
-		color: #111;
+		color: #eee;
 	}
 	.dark-gray {
 		color: #ccc;
@@ -165,5 +165,8 @@
 	}
 	.tooltip-triangle path {
 		fill: #090909;
+	}
+	.BaseTable__row--customized {
+		border-color: #222;
 	}
 }
