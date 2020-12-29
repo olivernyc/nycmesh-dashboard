@@ -3,13 +3,14 @@ import { useAuth0 } from "./Auth0";
 import { Link } from "react-router-dom";
 import Octicon, { Pencil } from "@primer/octicons-react";
 
-import { fetchResource, updateResource } from "../api";
+import { fetchResource, updateResource, addMember } from "../api";
 
 import ResourceEdit from "./ResourceEdit";
 import ResourceSelect from "./ResourceSelect";
 import DateCell from "./DateCell";
 import Device from "./Device";
 import MemberPreview from "./MemberPreview";
+import MemberSelect from "./MemberSelect";
 import BuildingPreview from "./BuildingPreview";
 import Status from "./Status";
 import Panos from "./Panos";
@@ -85,10 +86,10 @@ export default function Node(props) {
 			<Section
 				title="Members"
 				editLabel="Add"
-				onEdit={() => setEditing(true)}
+				onEdit={() => setEditing("members")}
 			>
 				{node.members.map((member) => (
-					<MemberPreview member={member} />
+					<MemberPreview key={member.id} member={member} />
 				))}
 			</Section>
 			<Section
@@ -97,7 +98,7 @@ export default function Node(props) {
 				onEdit={() => setEditing(true)}
 			>
 				{node.devices.map((device) => (
-					<Device device={device} />
+					<Device key={device.id} device={device} />
 				))}
 			</Section>
 			<Section
@@ -168,6 +169,18 @@ export default function Node(props) {
 							token
 						);
 						setNode(resource);
+						setEditing(false);
+					}}
+					onCancel={() => setEditing(false)}
+				/>
+			)}
+			{editing === "members" && (
+				<MemberSelect
+					onSubmit={async (memberId) => {
+						const token = await getTokenSilently();
+						const newNode = await addMember(node, memberId, token);
+
+						setNode(newNode);
 						setEditing(false);
 					}}
 					onCancel={() => setEditing(false)}

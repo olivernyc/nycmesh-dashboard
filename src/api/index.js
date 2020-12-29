@@ -42,3 +42,20 @@ export async function search(query, token) {
 	if (res.status !== 200) throw Error(res.error);
 	return await res.json();
 }
+
+export async function addMember(node, memberId, token) {
+	const path = `${process.env.REACT_APP_API_ROOT}/nodes/${node.id}/memberships`;
+
+	const options = {
+		method: "POST",
+		headers: {
+			Authorization: `Bearer ${token}`,
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify({member_id: memberId}),
+	};
+
+	const res = await fetch(path, options);
+	if (res.status !== 200) throw Error(res.error);
+	return await res.json();
+}
