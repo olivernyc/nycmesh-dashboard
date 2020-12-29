@@ -53,7 +53,7 @@ export default function Request(props) {
 		return <div className="w-100">Error</div>;
 	}
 
-	const createDate = new Date(request.create_date).toLocaleDateString({
+	const localizedDate = new Date(request.date).toLocaleDateString(undefined, {
 		weekday: "long",
 		year: "numeric",
 		month: "long",
@@ -71,6 +71,7 @@ export default function Request(props) {
 
 			<Section title="Details" onEdit={() => setEditing("request")}>
 				{request.name && <Field name="name" value={request.name} />}
+				<Field name="date" value={localizedDate} />
 				<Field name="roof access" value={request.roof_access} />
 				<Field name="apartment" value={request.apartment} />
 				<Field name="notes" value={request.notes} />
