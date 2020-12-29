@@ -43,10 +43,7 @@ export default function ResourceList(props) {
 			<div className="flex items-center justify-between ph4-ns ph3">
 				<h1 className="mv0 f5 fw5 ttc pv3">{resourceName}</h1>
 				<div>
-					<Button
-						title="Filters"
-						icon={<Octicon icon={FilterIcon} />}
-					/>
+					<Button title="Filters" icon={<Octicon icon={FilterIcon} />} />
 				</div>
 			</div>
 			<div style={{ height: "calc(100vh - 50px)" }}>
@@ -77,7 +74,7 @@ export default function ResourceList(props) {
 							rowRenderer={({ rowData, cells }) => (
 								<Link
 									to={`/map/${resourceName}/${rowData.id}`}
-									className="w-100 h-100 flex link ph3-ns"
+									className="w-100 h-100 flex link ph3-ns bg-white"
 								>
 									{cells}
 								</Link>
