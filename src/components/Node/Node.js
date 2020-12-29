@@ -9,13 +9,14 @@ import MemberPreview from "../Member/MemberPreview";
 import BuildingPreview from "../Building/BuildingPreview";
 import Status from "../Status";
 import Panos from "../Panos";
+import Field from "../Field";
 
 import Device from "./Device";
 import LinksList from "./LinksList";
 
 export default function Node({ id }) {
 	const [node, setNode] = useState();
-	const [editing, setEditing] = useState(null);
+	const [editing, setEditing] = useState();
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState();
 	const { isAuthenticated, getAccessTokenSilently } = useAuth0();
@@ -25,6 +26,7 @@ export default function Node({ id }) {
 			if (!id) return;
 			try {
 				setLoading(true);
+				setError();
 				const token = await getAccessTokenSilently();
 				const resource = await fetchResource(`nodes/${id}`, token);
 				setNode(resource);
@@ -113,35 +115,14 @@ export default function Node({ id }) {
 					]}
 					onSubmit={async (nodePatch) => {
 						const token = await getAccessTokenSilently();
-						await updateResource(
-							"nodes",
-							node.id,
-							nodePatch,
-							token
-						);
-						const resource = await fetchResource(
-							`nodes/${id}`,
-							token
-						);
+						await updateResource("nodes", node.id, nodePatch, token);
+						const resource = await fetchResource(`nodes/${id}`, token);
 						setNode(resource);
 						setEditing(false);
 					}}
 					onCancel={() => setEditing(false)}
 				/>
 			)}
-		</div>
-	);
-}
-
-function Field(props) {
-	return (
-		<div className="mv3">
-			<div className="w4 mb1" style={{ minWidth: "8rem" }}>
-				<span className="mid-gray ttc">{props.name}</span>
-			</div>
-			<span className="dark-gray">
-				{props.value || `No ${props.name}`}
-			</span>
 		</div>
 	);
 }

@@ -65,8 +65,6 @@ function NodeMap({ history, match }) {
 					nodes={mapData.nodes}
 					links={mapData.links}
 					requests={mapData.requests}
-					selectedNode={parseInt(nodeId)}
-					selectedRequest={parseInt(requestId)}
 					onNodeClick={handleNodeClick}
 					onRequestClick={handleRequestClick}
 					onClick={handleMapClick}

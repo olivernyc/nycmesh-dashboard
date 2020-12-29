@@ -6,6 +6,7 @@ import { fetchResource } from "../../api";
 import ResourceEdit from "../Resource/ResourceEdit";
 import MemberPreview from "../Member/MemberPreview";
 import BuildingPreview from "../Building/BuildingPreview";
+import Field from "../Field";
 import Status from "../Status";
 import Panos from "../Panos";
 
@@ -67,29 +68,17 @@ export default function Request(props) {
 					<Status status={request.status} />
 				</span>
 			</div>
-			<div className="flex mt2"></div>
-
-			<div className="mt3">
-				<div>
-					<div className="mb1">
-						<span className="mid-gray">Created</span>
-					</div>
-					<div>
-						<span className="fw6 dark-gray">{createDate}</span>
-					</div>
-				</div>
-			</div>
 
 			<Section title="Details" onEdit={() => setEditing("request")}>
 				{request.name && <Field name="name" value={request.name} />}
-				<Field name="status" value={request.status} />
+				<Field name="roof access" value={request.roof_access} />
 				<Field name="apartment" value={request.apartment} />
 				<Field name="notes" value={request.notes} />
 			</Section>
-			<Section title="Building" onEdit={() => setEditing("building")}>
+			<Section title="Building">
 				<BuildingPreview building={request.building} />
 			</Section>
-			<Section title="Members" onEdit={() => setEditing("members")}>
+			<Section title="Member">
 				<MemberPreview member={request.member} />
 			</Section>
 			<Section
@@ -135,32 +124,21 @@ export default function Request(props) {
 	);
 }
 
-function Section(props) {
+function Section({ title, children, editLabel, onEdit }) {
 	return (
 		<div className="mt3">
 			<div className="pv3 flex item-center justify-between bb b--light-gray">
-				<span className="f5 fw7">{props.title}</span>
-				<button
-					className="bn pa0 bg-transparent purple pointer fw5"
-					onClick={() => props.onEdit(true)}
-				>
-					Edit
-				</button>
+				<span className="f5 fw7">{title}</span>
+				{onEdit && (
+					<button
+						className="bn pa0 bg-transparent purple pointer fw5"
+						onClick={() => onEdit(true)}
+					>
+						{editLabel || "Edit"}
+					</button>
+				)}
 			</div>
-			{props.children}
-		</div>
-	);
-}
-
-function Field(props) {
-	return (
-		<div className="mv2">
-			<div className="w4 mb1" style={{ minWidth: "8rem" }}>
-				<span className="mid-gray ttc">{props.name}</span>
-			</div>
-			<span className="dark-gray">
-				{props.value || `No ${props.name}`}
-			</span>
+			{children}
 		</div>
 	);
 }

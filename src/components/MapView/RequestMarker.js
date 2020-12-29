@@ -14,7 +14,6 @@ function RequestMarker({ request, onClick }) {
 	const dimmed =
 		(selectedRequest && selectedRequest !== request.id) ||
 		(selectedNode && selectedRequest !== request.id);
-
 	return (
 		<RequestMarkerMemo
 			request={request}
@@ -32,8 +31,9 @@ function RequestMarker2({ request, selected, dimmed, onClick }) {
 	const { lat, lng } = building;
 	const title = String(id);
 	const zIndex = 0;
-	const opacity = dimmed ? 0.25 : 1;
+	const opacity = selected ? 1 : dimmed ? 0.25 : 0.5;
 	if (lat === "NaN" || lng === "NaN") return null;
+	if (request.status === "closed" && !selected) return null;
 	return (
 		<React.Fragment>
 			<Marker

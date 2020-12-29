@@ -32,6 +32,7 @@ function NodeMarker2({ node, isSelected, isNeighbor, isDimmed, onClick }) {
 	let zIndex = getZ(node);
 	const opacity = isDimmed ? 0.25 : 1;
 	const sectorOpacity = isNeighbor ? 0.5 : isDimmed ? 0 : 1;
+	if (node.status !== "active" && !isSelected) return null;
 	return (
 		<React.Fragment>
 			<Marker
@@ -43,11 +44,7 @@ function NodeMarker2({ node, isSelected, isNeighbor, isDimmed, onClick }) {
 				onClick={onClick}
 			/>
 			{devices.map((device) => (
-				<Sector
-					key={device.id}
-					device={device}
-					opacity={sectorOpacity}
-				/>
+				<Sector key={device.id} device={device} opacity={sectorOpacity} />
 			))}
 			{isSelected && (
 				<Tooltip lat={lat} lng={lng} label={node.name || node.id} />
@@ -91,7 +88,6 @@ function getZ(node) {
 
 	if (name && name.includes("Supernode")) return 4;
 	if (notes && notes.toLowerCase().includes("hub")) return 3;
-	if (devices.filter((device) => device.type.name === "Omni").length)
-		return 2;
+	if (devices.filter((device) => device.type.name === "Omni").length) return 2;
 	return 1;
 }
