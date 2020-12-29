@@ -41,16 +41,3 @@ function sector(device) {
 		</div>
 	);
 }
-
-function deviceDirection(device) {
-	const { azimuth } = device;
-	if (device.type.width === 360) return "";
-	if (azimuth >= 337.5 || azimuth < 22.5) return "N";
-	if (azimuth >= 22.5 && azimuth < 67.5) return "NE";
-	if (azimuth >= 67.5 && azimuth < 112.5) return "E";
-	if (azimuth >= 112.5 && azimuth < 157.5) return "SE";
-	if (azimuth >= 157.5 && azimuth < 202.5) return "S";
-	if (azimuth >= 202.5 && azimuth < 247.5) return "SW";
-	if (azimuth >= 247.5 && azimuth < 292.5) return "W";
-	if (azimuth >= 292.5 && azimuth < 337.5) return "NW";
-}
