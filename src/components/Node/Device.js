@@ -12,16 +12,14 @@ export default function Device(props) {
 					<span className="fw5 mr2">{device.type.name}</span>
 					<Status status={device.status} />
 				</div>
-				<span className="mid-gray">
-					{device.type.width}° {deviceDirection(device)}
-				</span>
+				<span className="mid-gray">{device.ssid || "No SSID"}</span>
 			</div>
 		</div>
 	);
 }
 
 function sector(device) {
-	const rotate = device.azimuth;
+	const rotate = device.azimuth - device.type.width / 2;
 	const skew = device.type.width - 90;
 
 	if (device.type.width === 360)
@@ -42,17 +40,4 @@ function sector(device) {
 			</div>
 		</div>
 	);
-}
-
-function deviceDirection(device) {
-	const { azimuth } = device;
-	if (device.type.width === 360) return "";
-	if (azimuth >= 337.5 || azimuth < 22.5) return "N";
-	if (azimuth >= 22.5 && azimuth < 67.5) return "NE";
-	if (azimuth >= 67.5 && azimuth < 112.5) return "E";
-	if (azimuth >= 112.5 && azimuth < 157.5) return "SE";
-	if (azimuth >= 157.5 && azimuth < 202.5) return "S";
-	if (azimuth >= 202.5 && azimuth < 247.5) return "SW";
-	if (azimuth >= 247.5 && azimuth < 292.5) return "W";
-	if (azimuth >= 292.5 && azimuth < 337.5) return "NW";
 }
