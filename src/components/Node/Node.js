@@ -54,6 +54,26 @@ export default function Node({ id }) {
 		return <div className="w-100">Error</div>;
 	}
 
+	const localizedInstallDate = new Date(node.create_date).toLocaleDateString(
+		undefined,
+		{
+			weekday: "long",
+			year: "numeric",
+			month: "long",
+			day: "numeric",
+		}
+	);
+
+	const localizedAbandonDate = new Date(node.abandon_date).toLocaleDateString(
+		undefined,
+		{
+			weekday: "long",
+			year: "numeric",
+			month: "long",
+			day: "numeric",
+		}
+	);
+
 	return (
 		<div className="w-100 pa3 f6">
 			<div className="">
@@ -68,7 +88,10 @@ export default function Node({ id }) {
 
 			<ResourceSection title="Details" onEdit={() => setEditing("node")}>
 				{node.name && <Field name="name" value={node.name} />}
-				<Field name="status" value={node.status} />
+				<Field name="installed" value={localizedInstallDate} />
+				{node.abandon_date && (
+					<Field name="deactivated" value={localizedAbandonDate} />
+				)}
 				<Field name="notes" value={node.notes} />
 			</ResourceSection>
 			<ResourceSection title="Building">
