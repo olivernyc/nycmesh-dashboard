@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
 
 export default function Panos({ panos }) {
 	const [selected, setSelected] = useState(null);
@@ -43,14 +42,14 @@ export default function Panos({ panos }) {
 						</svg>
 					</button>
 					<div className="h-100 w-100 flex items-center justify-center">
-						<Link to={selected.url} className="db cursor-zoom-in">
+						<a href={selected.url} className="db cursor-zoom-in">
 							<img
 								src={selected.url}
 								alt="rooftop panorama"
 								className="h-100 w-100"
 								style={{ objectFit: "contain" }}
 							/>
-						</Link>
+						</a>
 					</div>
 				</div>
 			) : null}
