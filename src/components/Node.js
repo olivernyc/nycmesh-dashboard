@@ -3,7 +3,7 @@ import { useAuth0 } from "./Auth0";
 import { Link } from "react-router-dom";
 import Octicon, { Pencil } from "@primer/octicons-react";
 
-import { fetchResource, updateResource, addMember } from "../api";
+import { fetchResource, updateResource, destroyResource, addMember } from "../api";
 
 import ResourceEdit from "./ResourceEdit";
 import ResourceSelect from "./ResourceSelect";
@@ -41,6 +41,16 @@ export default function Node(props) {
 		if (!isAuthenticated) return;
 		fetchData();
 	}, [isAuthenticated, getTokenSilently, id]);
+
+	async function removeMember(member) {
+		const token = await getTokenSilently();
+		await destroyResource("memberships", member.membership_id, token);
+
+		setNode({
+			...node,
+			members: node.members.filter(m => m.id !== member.id)
+		});
+	}
 
 	if (!id) return null;
 
@@ -89,7 +99,11 @@ export default function Node(props) {
 				onEdit={() => setEditing("members")}
 			>
 				{node.members.map((member) => (
-					<MemberPreview key={member.id} member={member} />
+					<MemberPreview
+						key={member.id}
+						member={member}
+						onDelete={removeMember}
+					/>
 				))}
 			</Section>
 			<Section

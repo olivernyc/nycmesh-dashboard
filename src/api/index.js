@@ -31,6 +31,20 @@ export async function updateResource(
 	return await res.json();
 }
 
+export async function destroyResource(resourceType, resourceId, token) {
+	const path = `${process.env.REACT_APP_API_ROOT}/${resourceType}/${resourceId}`;
+	const options = {
+		method: "DELETE",
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	};
+
+	const res = await fetch(path, options);
+	if (res.status !== 200) throw Error(res.error);
+	return await res.json();
+}
+
 export async function search(query, token) {
 	const path = `${process.env.REACT_APP_API_ROOT}/search?s=${query}`;
 	const options = {

@@ -132,3 +132,14 @@
 		transform: rotate(359deg);
 	}
 }
+
+.show-on-hover {
+}
+
+.show-on-hover--content {
+	visibility: hidden;
+}
+
+.show-on-hover:hover .show-on-hover--content {
+	visibility: visible;
+}
