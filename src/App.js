@@ -26,9 +26,7 @@ function App() {
         <Route component={Nav} />
         <div className="mw5 w-100" />
         <div className="w-100 flex flex-column">
-          <div className="bb b--light-gray">
-            <SearchBar />
-          </div>
+          <Route component={SearchBar} />
           <Route path="/search" component={Search} />
           <Route path="/feed" component={Feed} />
           <Route

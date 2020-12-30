@@ -109,10 +109,15 @@
 	cursor: zoom-in;
 }
 
+.map-sidebar {
+	margin-top: -85px;
+}
+
 @media screen and (min-width: 60rem) {
 	.map-sidebar {
 		min-width: 24rem;
 		max-width: 24rem;
+		margin-top: 0;
 	}
 }
 

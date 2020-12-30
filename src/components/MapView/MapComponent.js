@@ -46,7 +46,10 @@ function MapComponent({
 	if (!nodes || !links) throw new Error("Missing nodes or links");
 
 	return (
-		<div className="h-100-l h5 w-100 flex flex-column">
+		<div
+			className="h-100-l w-100 flex flex-column"
+			style={{ height: "calc(100vh - 51px)" }}
+		>
 			<LoadScript
 				id="script-loader"
 				googleMapsApiKey="AIzaSyBNClp7oJsw-eleEoR3-PQKV23tpeW-FpE"
@@ -61,10 +64,7 @@ function MapComponent({
 					onClick={onClick}
 				>
 					<NodeLayer nodes={nodes} onClick={onNodeClick} />
-					<RequestLayer
-						requests={requests}
-						onClick={onRequestClick}
-					/>
+					<RequestLayer requests={requests} onClick={onRequestClick} />
 					<LinkLayer links={links} />
 				</GoogleMap>
 			</LoadScript>
