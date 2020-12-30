@@ -15,7 +15,7 @@ export default function Panos({ panos }) {
 					key={pano.url}
 					src={pano.url}
 					alt="rooftop panorama thumbnail"
-					className="bg-near-white mt2"
+					className="bg-near-white mt2 pointer"
 					onClick={() => setSelected(pano)}
 				/>
 			))}
