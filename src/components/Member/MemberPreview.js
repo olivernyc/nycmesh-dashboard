@@ -10,7 +10,7 @@ export default function MemberPreview(props) {
 					<span className="fw5">{member.name}</span>
 				</div>
 				<div className="mid-gray">
-					<span>{member.email}</span> • <span>{member.phone}</span>
+					<span>{member.email}</span>
 				</div>
 			</div>
 		</div>
