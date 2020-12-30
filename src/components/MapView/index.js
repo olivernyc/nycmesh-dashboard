@@ -44,7 +44,7 @@ function NodeMap({ history, match }) {
 
 	const { nodeId, requestId, memberId } = match.params;
 	const sidebar = (nodeId || requestId || memberId) && (
-		<div className="w-100 h-100 overflow-y-scroll map-sidebar">
+		<div className="w-100 h-100 z-5 bg-white overflow-y-scroll-l map-sidebar">
 			{nodeId && <Node id={nodeId} />}
 			{requestId && <Request id={requestId} />}
 			{memberId && <Member id={memberId} />}
@@ -84,6 +84,12 @@ function useMapData() {
 	});
 	const { isAuthenticated, getAccessTokenSilently } = useAuth0();
 	useEffect(() => {
+		if (!isAuthenticated) return;
+		try {
+			fetchAll();
+		} catch (error) {
+			alert(error);
+		}
 		async function fetchAll() {
 			const token = await getAccessTokenSilently();
 			const [nodesRes, requestsRes, linksRes] = await Promise.all([
@@ -105,12 +111,6 @@ function useMapData() {
 				links: linksRes,
 				connectedNodes,
 			});
-		}
-		if (!isAuthenticated) return;
-		try {
-			fetchAll();
-		} catch (error) {
-			alert(error);
 		}
 	}, [isAuthenticated, getAccessTokenSilently]);
 	return mapData;
