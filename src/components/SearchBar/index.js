@@ -1,34 +1,34 @@
 import React, { useState, useEffect } from "react";
 import Autocomplete from "react-autocomplete";
-import { search } from "../../api";
-import { useAuth0 } from "../Auth0";
-import Status from "../Status";
-import Octicon, { Search as SearchIcon } from "@primer/octicons-react";
+import { useAuth0 } from "@auth0/auth0-react";
+import Octicon, { SearchIcon } from "@primer/octicons-react";
 import { Link } from "react-router-dom";
 
-export default function SearchBar(props) {
+import { search } from "../../api";
+import Status from "../Status";
+
+export default function SearchBar({ history }) {
 	const [query, setQuery] = useState("");
-	const [loading, setLoading] = useState(false);
+	const [loading, setLoading] = useState(0);
 	const [resultsMap, setResultsMap] = useState({});
-	const { isAuthenticated, getTokenSilently } = useAuth0();
+	const [inputRef, setInputRef] = useState();
+	const { isAuthenticated, getAccessTokenSilently } = useAuth0();
 
 	useEffect(() => {
 		async function fetchResults() {
-			setLoading(true);
-			const token = await getTokenSilently();
+			setLoading((l) => l + 1);
+			const token = await getAccessTokenSilently();
 			const results = await search(query, token);
-			setResultsMap({
-				...resultsMap,
+			setResultsMap((r) => ({
+				...r,
 				[query]: results,
-			});
-			setLoading(false);
+			}));
+			setLoading((l) => l - 1);
 		}
 		if (!query) return;
 		if (!isAuthenticated) return;
 		fetchResults();
-	}, [query, isAuthenticated]);
-
-	let inputRef;
+	}, [query, isAuthenticated, getAccessTokenSilently]);
 
 	const items = [];
 	if (query) {
@@ -52,23 +52,18 @@ export default function SearchBar(props) {
 	}
 
 	const menuStyle = {
-		boxShadow:
-			"rgba(66, 66, 66, 0.5) 0px 4px 20px 0px, rgba(0, 0, 0, 0.0666) 0px 1px 1px 0px",
 		position: "absolute",
 		zIndex: 9,
 		overflow: "auto",
-		maxHeight: "50%", // TODO: don't cheat, let it flow to the bottom
+		maxHeight: "calc(100vh - 4rem)",
 		borderRadius: "0.25rem",
 		marginTop: "-0.5rem",
-		marginLeft: "-0.75rem",
 	};
 
 	return (
-		<div className="pv2 ph3">
+		<div className="f6-l f5 bb b--light-gray">
 			<Autocomplete
-				ref={(element) => {
-					inputRef = element;
-				}}
+				ref={(element) => setInputRef(element)}
 				value={query}
 				items={items}
 				getItemValue={(item) => {
@@ -78,37 +73,41 @@ export default function SearchBar(props) {
 				wrapperStyle={{ width: "100%" }}
 				renderInput={(props) => {
 					return (
-						<div className="flex items-center relative h2">
-							{loading ? (
-								<div className="loading-ring" />
+						<div className="flex items-center relative">
+							{loading && query ? (
+								<div className="loading-ring absolute pl3" />
 							) : (
-								<div className="cursor-text absolute">
+								<div className="cursor-text absolute ml3">
 									<Octicon icon={SearchIcon} size="small" />
 								</div>
 							)}
 							<input
-								className="f6 bn no-outline w-100 mw6 pv3 pl4 bg-transparent absolute"
+								className="w-100 flex bn no-outline w-100 mw6 pv3 bg-transparent black ma0"
 								autoComplete="nope"
 								spellCheck="false"
+								style={{ paddingLeft: "3rem" }}
 								{...props}
 							/>
 						</div>
 					);
 				}}
 				renderMenu={(items, value, style) => {
+					if (!items.length) return <div />;
 					return (
 						<div
-							className={`bg-white ${items.length ? "pv1" : ""}`}
+							className={`bg-white w-100 mw4 shadow ba b--light-gray ml1-l ${
+								items.length ? "pv1" : ""
+							}`}
 							style={{ ...style, ...menuStyle }}
 						>
-							{items}
-							{query && !loading && items.length === 1 ? (
-								<div className="pa4 flex items-center justify-center">
-									<span className="f6 gray fw5">
-										No search results found
-									</span>
-								</div>
-							) : null}
+							<div style={{ maxWidth: "100vw" }} className="w-100">
+								{items}
+								{query && !loading && items.length === 1 ? (
+									<div className="pa4 w-100 flex items-center justify-center">
+										<span className="gray fw5">No search results found</span>
+									</div>
+								) : null}
+							</div>
 						</div>
 					);
 				}}
@@ -116,24 +115,17 @@ export default function SearchBar(props) {
 					let title;
 					let subtitle;
 					let icon;
-					let status;
 					if (item.type === "show_all") {
 						return (
-							<Link to={`/search`} className="link dark-gray">
-								<div
-									key="show_all"
-									className="ph1 pv05 bg-white"
-								>
+							<Link to={`/search?q=${query}`} className="link dark-gray">
+								<div key="show_all" className="ph1 pv05 bg-white">
 									<div
-										className={`ph2 pv1 pointer f6 br2 ${
-											isHighlighted
-												? "bg-purple white"
-												: ""
+										className={`ph2 pv1 pointer br2 ${
+											isHighlighted ? "bg-purple white" : ""
 										}`}
 									>
 										<div className="pv05">
-											Show all results for{" "}
-											<span className="fw5">{query}</span>
+											Show all results for <span className="fw5">{query}</span>
 										</div>
 									</div>
 								</div>
@@ -141,13 +133,13 @@ export default function SearchBar(props) {
 						);
 					}
 					if (item.type === "node") {
-						const { id, name, status } = item.item;
+						const { id, name } = item.item;
 						title = name || id;
 						subtitle = id;
 						icon = "📡";
 					}
 					if (item.type === "request") {
-						const { building, member, status } = item.item;
+						const { building, member } = item.item;
 						title = building.address;
 						subtitle = member.name;
 						icon = "🌆";
@@ -169,7 +161,7 @@ export default function SearchBar(props) {
 								className="ph1 pv05 bg-white"
 							>
 								<div
-									className={`ph2 pv1 pointer f6 br2 ${
+									className={`ph2 pv1 pointer br2 ${
 										isHighlighted ? "bg-purple white" : ""
 									}`}
 								>
@@ -183,11 +175,9 @@ export default function SearchBar(props) {
 												{icon}
 											</span>
 										</div>
-										<span className="truncate mr2">
-											{title}
-										</span>
+										<span className="truncate mr2">{title}</span>
 										<span
-											className={`mr2 ${
+											className={`mr2 nowrap ${
 												isHighlighted ? "white" : "gray"
 											}`}
 										>
@@ -195,9 +185,7 @@ export default function SearchBar(props) {
 										</span>
 										{item.item.status && (
 											<div>
-												<Status
-													status={item.item.status}
-												/>
+												<Status status={item.item.status} />
 											</div>
 										)}
 									</div>
@@ -205,52 +193,17 @@ export default function SearchBar(props) {
 							</div>
 						</Link>
 					);
-
-					return null;
-
-					const {
-						name,
-						borough,
-						locality,
-						postalcode,
-					} = item.properties;
-					const address1 = titleCase(name);
-					const address2 = `${borough}, ${locality} ${postalcode}`;
-					return (
-						<div
-							key={item.properties.id}
-							className="pa3 bb b--light-gray pointer bg-white"
-							style={{
-								backgroundColor: isHighlighted
-									? "#f5f5f5"
-									: "#fff",
-							}}
-						>
-							<span>{address1} </span>
-							<span className="gray">{address2}</span>
-						</div>
-					);
 				}}
 				onChange={(event) => setQuery(event.target.value)}
 				onSelect={(value, item) => {
-					// setValue(value);
-					// onSelect({
-					// 	address: value,
-					// 	bin: item.properties.pad_bin,
-					// 	lat: item.geometry.coordinates[1],
-					// 	lng: item.geometry.coordinates[0],
-					// });
 					inputRef.blur();
+					if (value === "show_all") {
+						history.push(`/search?q=${query}`);
+					} else {
+						history.push(`/map/${item.type}s/${item.item.id}`);
+					}
 				}}
 			/>
 		</div>
 	);
-}
-
-function titleCase(text) {
-	return text
-		.toLowerCase()
-		.split(" ")
-		.map((s) => s.charAt(0).toUpperCase() + s.substring(1))
-		.join(" ");
 }

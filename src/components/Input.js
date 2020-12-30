@@ -2,7 +2,7 @@ import React from "react";
 
 export default function Input(props) {
 	let input;
-	const inputClass = "ba b--moon-gray br2 pa1";
+	const inputClass = "ba b--moon-gray bg-white black br2 pa1";
 	if (props.type === "textarea") {
 		input = (
 			<textarea

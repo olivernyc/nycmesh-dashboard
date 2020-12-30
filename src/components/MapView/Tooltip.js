@@ -6,32 +6,19 @@ const getPixelPositionOffset = (width, height) => ({
 	y: -height,
 });
 
-export default function NodeDetail(props) {
-	const { node } = props;
-
-	if (!node) {
-		return null;
-	}
-
-	const { lat, lng } = node;
+export default function Tooltip({ lat, lng, label }) {
+	const handleRef = (ref) =>
+		ref && window.google.maps.OverlayView.preventMapHitsFrom(ref);
 
 	return (
 		<OverlayView
-			position={new window.google.maps.LatLng(lat, lng)}
+			position={{ lat, lng }}
 			mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
 			getPixelPositionOffset={getPixelPositionOffset}
 		>
-			<div
-				ref={(ref) =>
-					ref &&
-					window.google.maps.OverlayView.preventMapHitsFrom(ref)
-				}
-				className="flex flex-column items-center"
-			>
+			<div ref={handleRef} className="flex flex-column items-center">
 				<div className="flex items-center bg-white br1 overflow-hidden shadow pv05 ph1">
-					<span className="f6 nowrap helvetica db">
-						{node.name || node.id}
-					</span>
+					<span className="f6 nowrap helvetica db">{label}</span>
 				</div>
 				<svg
 					viewBox="0 5 12 12"
@@ -40,8 +27,9 @@ export default function NodeDetail(props) {
 					height="12"
 					aria-hidden="true"
 					style={{ marginTop: "-1px" }}
+					className="tooltip-triangle"
 				>
-					<path fillRule="evenodd" fill="white" d="M0 5l6 6 6-6H0z" />
+					<path fillRule="evenodd" d="M0 5l6 6 6-6H0z" fill="white" />
 				</svg>
 			</div>
 		</OverlayView>

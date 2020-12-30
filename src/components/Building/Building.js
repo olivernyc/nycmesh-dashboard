@@ -1,6 +1,6 @@
 import React from "react";
 
-import ResourceDetail from "./ResourceDetail";
+import ResourceDetail from "../Resource/ResourceDetail";
 
 export default function Building(props) {
 	return (

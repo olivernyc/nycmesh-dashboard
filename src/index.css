@@ -109,10 +109,15 @@
 	cursor: zoom-in;
 }
 
+.map-sidebar {
+	margin-top: -85px;
+}
+
 @media screen and (min-width: 60rem) {
 	.map-sidebar {
 		min-width: 24rem;
 		max-width: 24rem;
+		margin-top: 0;
 	}
 }
 
@@ -120,6 +125,7 @@
 	max-width: 24rem;
 }
 
+<<<<<<< HEAD
 .spin {
 	animation: spin 2s infinite linear;
 }
@@ -130,6 +136,60 @@
 	}
 	100% {
 		transform: rotate(359deg);
+	}
+}
+
+@media (prefers-color-scheme: dark) {
+	html {
+		background-color: #090909;
+		color: #eee;
+	}
+
+	.bg-white {
+		background-color: #090909;
+	}
+	.bg-white-70 {
+		background-color: rgba(0, 0, 0, 0.9);
+	}
+	.bg-near-white {
+		background-color: #111;
+	}
+	.bg-purple {
+		background-color: rgb(94, 92, 230);
+	}
+	.black {
+		color: #fff;
+	}
+	.near-black {
+		color: #eee;
+	}
+	.dark-gray {
+		color: #ccc;
+	}
+	.mid-gray {
+		color: #aaa;
+	}
+	.purple {
+		color: rgb(94, 92, 230);
+	}
+	.hover-near-black:hover {
+		color: #eee;
+	}
+	.b--light-gray {
+		border-color: #222;
+	}
+	.b--moon-gray {
+		border-color: #333;
+	}
+	.shadow {
+		box-shadow: rgba(0, 0, 0, 0.5) 0px 4px 20px 0px,
+			rgba(0, 0, 0, 0.0666) 0px 1px 1px 0px;
+	}
+	.tooltip-triangle path {
+		fill: #090909;
+	}
+	.BaseTable__row--customized {
+		border-color: #222;
 	}
 }
 

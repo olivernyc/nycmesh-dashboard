@@ -12,13 +12,15 @@ export default function Panos({ panos }) {
 		<div>
 			{panos.map((pano) => (
 				<img
+					key={pano.url}
 					src={pano.url}
-					className="bg-near-white mt2"
+					alt="rooftop panorama thumbnail"
+					className="bg-near-white mt2 pointer"
 					onClick={() => setSelected(pano)}
 				/>
 			))}
 			{selected ? (
-				<div className="absolute absolute--fill z-5 bg-black flex items-center justify-center">
+				<div className="fixed absolute--fill z-5 bg-black">
 					<button
 						className="absolute top-0 left-0 ma3 white b"
 						onClick={() => setSelected(null)}
@@ -39,13 +41,16 @@ export default function Panos({ panos }) {
 							<line x1="6" y1="6" x2="18" y2="18" />
 						</svg>
 					</button>
-					<a href={selected.url}>
-						<img
-							src={selected.url}
-							className="cursor-zoom-in"
-							style={{ objectFit: "contain" }}
-						/>
-					</a>
+					<div className="h-100 w-100 flex items-center justify-center">
+						<a href={selected.url} className="db cursor-zoom-in">
+							<img
+								src={selected.url}
+								alt="rooftop panorama"
+								className="h-100 w-100"
+								style={{ objectFit: "contain" }}
+							/>
+						</a>
+					</div>
 				</div>
 			) : null}
 		</div>

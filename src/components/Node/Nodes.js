@@ -1,7 +1,8 @@
 import React from "react";
 
-import ResourceList from "./ResourceList";
-import DateCell from "./DateCell";
+import ResourceList from "../Resource/ResourceList";
+import DateCell from "../Resource/DateCell";
+import Status from "../Status";
 
 export default function Nodes(props) {
 	return (
@@ -18,19 +19,7 @@ export default function Nodes(props) {
 				{
 					name: "status",
 					width: 80,
-					cellRenderer: ({ cellData }) => (
-						<div
-							className="ph1 pv1 br2 f7 fw5 ttc black-60"
-							style={{
-								backgroundColor:
-									cellData === "active"
-										? "rgba(48,209,88,0.25)"
-										: "rgba(142,142,147,0.25)",
-							}}
-						>
-							{cellData}
-						</div>
-					),
+					cellRenderer: ({ cellData }) => <Status status={cellData} />,
 				},
 				{ name: "building", width: 350 },
 				{ name: "notes" },

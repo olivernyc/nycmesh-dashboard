@@ -1,18 +1,9 @@
 import React, { useState } from "react";
 
-import Input from "./Input";
 import Button from "./Button2";
 
 export default function ResourceEdit(props) {
 	const { resourceType, resource } = props;
-	const [newResource, setNewResource] = useState(resource);
-
-	const updateValue = (key, newValue) => {
-		setNewResource({
-			...newResource,
-			[key]: newValue,
-		});
-	};
 	return (
 		<div className="absolute absolute--fill bg-white-70 z-5">
 			<div
@@ -23,7 +14,6 @@ export default function ResourceEdit(props) {
 				<form
 					onSubmit={(event) => {
 						event.preventDefault();
-						props.onSubmit(newResource);
 					}}
 				>
 					<div className="pa3 bg-near-white bt bb b--light-gray f6 fw5">

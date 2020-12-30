@@ -1,15 +1,38 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Marker } from "@react-google-maps/api";
 
 import Sector from "./Sector";
+import Tooltip from "./Tooltip";
+import { MapContext } from ".";
 
-export default function NodeMarker(props) {
-	const { node, visible, dimmed, onClick } = props;
-	const { lat, lng } = node;
+export default function NodeMarker({ node, onClick }) {
+	const { selectedNode, connectedNodes } = useContext(MapContext);
+	const neighbors = connectedNodes[node.id];
+	const isSelected = selectedNode === node.id;
+	const isNeighbor =
+		neighbors && neighbors.filter((n) => n.id === selectedNode).length;
+	const isDimmed = selectedNode && !isSelected && !isNeighbor;
+	return (
+		<NodeMarkerMemo
+			node={node}
+			isSelected={isSelected}
+			isNeighbor={isNeighbor}
+			isDimmed={isDimmed}
+			onClick={onClick}
+		/>
+	);
+}
+
+const NodeMarkerMemo = React.memo(NodeMarker2);
+
+function NodeMarker2({ node, isSelected, isNeighbor, isDimmed, onClick }) {
+	const { lat, lng, devices } = node;
 	const title = node.name || String(node.id);
 	const icon = getIcon(node);
-	const zIndex = getZ(node);
-	const opacity = dimmed ? 0.5 : 1;
+	let zIndex = getZ(node);
+	const opacity = isDimmed ? 0.25 : 1;
+	const sectorOpacity = isNeighbor ? 0.5 : isDimmed ? 0 : 1;
+	if (node.status !== "active" && !isSelected) return null;
 	return (
 		<React.Fragment>
 			<Marker
@@ -18,14 +41,14 @@ export default function NodeMarker(props) {
 				icon={icon}
 				options={{ opacity }}
 				zIndex={zIndex}
-				visible={visible}
 				onClick={onClick}
 			/>
-			{
-				// 	node.devices.map((device, index) => (
-				// 	<Sector key={device.id} device={device} />
-				// ))
-			}
+			{devices.map((device) => (
+				<Sector key={device.id} device={device} opacity={sectorOpacity} />
+			))}
+			{isSelected && (
+				<Tooltip lat={lat} lng={lng} label={node.name || node.id} />
+			)}
 		</React.Fragment>
 	);
 }
@@ -41,7 +64,7 @@ function getIcon(node) {
 		};
 
 	// Hub
-	if (notes && notes.includes("hub"))
+	if (notes && notes.toLowerCase().includes("hub"))
 		return {
 			url: "/img/map/hub.svg",
 			anchor: { x: 9, y: 9 },
@@ -64,8 +87,7 @@ function getZ(node) {
 	const { name, notes, devices } = node;
 
 	if (name && name.includes("Supernode")) return 4;
-	if (notes && notes.includes("hub")) return 3;
-	if (devices.filter((device) => device.type.name === "Omni").length)
-		return 2;
+	if (notes && notes.toLowerCase().includes("hub")) return 3;
+	if (devices.filter((device) => device.type.name === "Omni").length) return 2;
 	return 1;
 }
