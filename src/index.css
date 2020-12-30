@@ -153,6 +153,9 @@
 	.purple {
 		color: rgb(94, 92, 230);
 	}
+	.hover-near-black:hover {
+		color: #eee;
+	}
 	.b--light-gray {
 		border-color: #222;
 	}
