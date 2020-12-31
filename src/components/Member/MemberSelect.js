@@ -44,6 +44,8 @@ export default function MemberSelect(props) {
             filterOption={excludeExistingNodeMembers}
             getOptionLabel={o => `${o.name} – ${o.email}`}
             getOptionValue={o => o.id}
+            className="react-select"
+            classNamePrefix="react-select"
           />
         </div>
       </div>
