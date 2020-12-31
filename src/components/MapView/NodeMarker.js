@@ -1,23 +1,55 @@
-import React from "react";
-import { Marker } from "react-google-maps";
+import React, { useContext } from "react";
+import { Marker } from "@react-google-maps/api";
 
-export default function NodeMarker(props) {
-	const { node, visible, onClick } = props;
-	const { lat, lng } = node;
-	const title = node.name || String(node.id);
-	const icon = getIcon(node);
-	const zIndex = getZ(node);
-	const opacity = 1;
+import Sector from "./Sector";
+import Tooltip from "./Tooltip";
+import { MapContext } from ".";
+
+export default function NodeMarker({ node, onClick }) {
+	const { selectedNode, connectedNodes } = useContext(MapContext);
+	const neighbors = connectedNodes[node.id];
+	const isSelected = selectedNode === node.id;
+	const isNeighbor =
+		neighbors && neighbors.filter((n) => n.id === selectedNode).length;
+	const isDimmed = selectedNode && !isSelected && !isNeighbor;
 	return (
-		<Marker
-			defaultPosition={{ lat, lng }}
-			defaultTitle={title}
-			icon={icon}
-			options={{ opacity }}
-			zIndex={zIndex}
-			visible={visible}
+		<NodeMarkerMemo
+			node={node}
+			isSelected={isSelected}
+			isNeighbor={isNeighbor}
+			isDimmed={isDimmed}
 			onClick={onClick}
 		/>
+	);
+}
+
+const NodeMarkerMemo = React.memo(NodeMarker2);
+
+function NodeMarker2({ node, isSelected, isNeighbor, isDimmed, onClick }) {
+	const { lat, lng, devices } = node;
+	const title = node.name || String(node.id);
+	const icon = getIcon(node);
+	let zIndex = getZ(node);
+	const opacity = isDimmed ? 0.25 : 1;
+	const sectorOpacity = isNeighbor ? 0.5 : isDimmed ? 0 : 1;
+	if (node.status !== "active" && !isSelected) return null;
+	return (
+		<React.Fragment>
+			<Marker
+				position={{ lat, lng }}
+				title={title}
+				icon={icon}
+				options={{ opacity }}
+				zIndex={zIndex}
+				onClick={onClick}
+			/>
+			{devices.map((device) => (
+				<Sector key={device.id} device={device} opacity={sectorOpacity} />
+			))}
+			{isSelected && (
+				<Tooltip lat={lat} lng={lng} label={node.name || node.id} />
+			)}
+		</React.Fragment>
 	);
 }
 
@@ -28,26 +60,26 @@ function getIcon(node) {
 	if (name && name.includes("Supernode"))
 		return {
 			url: "/img/map/supernode.svg",
-			anchor: { x: 9, y: 9 }
+			anchor: { x: 9, y: 9 },
 		};
 
 	// Hub
-	if (notes && notes.includes("hub"))
+	if (notes && notes.toLowerCase().includes("hub"))
 		return {
 			url: "/img/map/hub.svg",
-			anchor: { x: 9, y: 9 }
+			anchor: { x: 9, y: 9 },
 		};
 
 	// Omni
-	if (devices.filter(device => device.type.name === "Omni").length)
+	if (devices.filter((device) => device.type.name === "Omni").length)
 		return {
 			url: "/img/map/omni.svg",
-			anchor: { x: 6, y: 6 }
+			anchor: { x: 6, y: 6 },
 		};
 
 	return {
 		url: "/img/map/active.svg",
-		anchor: { x: 6, y: 6 }
+		anchor: { x: 6, y: 6 },
 	};
 }
 
@@ -55,7 +87,7 @@ function getZ(node) {
 	const { name, notes, devices } = node;
 
 	if (name && name.includes("Supernode")) return 4;
-	if (notes && notes.includes("hub")) return 3;
-	if (devices.filter(device => device.type.name === "Omni").length) return 2;
+	if (notes && notes.toLowerCase().includes("hub")) return 3;
+	if (devices.filter((device) => device.type.name === "Omni").length) return 2;
 	return 1;
 }

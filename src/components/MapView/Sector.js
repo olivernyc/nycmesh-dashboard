@@ -1,25 +1,26 @@
 import React from "react";
-import { Polygon } from "react-google-maps";
-// import { sectorColors } from "../../utils";
+import { Polygon } from "@react-google-maps/api";
 
-const MAX_OPACITY = 0.4;
-const INTERVAL_PER_MILE = 10;
+const INTERVAL_PER_MILE = 20;
 
-export default function Sector(props) {
-	const { device } = props;
+export default React.memo(Sector);
+
+function Sector(props) {
+	const { device, opacity = 1 } = props;
+	// if (dimmed) return null;
 
 	const { lat, lng, azimuth } = device;
 	const { range, width } = device.type;
 
 	const intervalCount = Math.ceil(INTERVAL_PER_MILE * range);
-	const fillOpacity = MAX_OPACITY / intervalCount;
-	const fillColor = "rgba(88,86,214,0.2)";
+	const fillOpacity = (opacity * (range < 1 ? 0.04 : 0.05)) / intervalCount;
+	const fillColor = range < 1 ? "rgb(90,200,250)" : "rgb(0,122,255)";
 
 	const interval = range / intervalCount;
 	const radiusIndices = [...Array(intervalCount).keys()];
 
-	return radiusIndices.map(index => {
-		const circleRadius = interval * index;
+	return radiusIndices.map((index) => {
+		const circleRadius = interval * (index + 1);
 		const path = getPath(lat, lng, circleRadius, azimuth, width);
 		return (
 			<Polygon
@@ -30,9 +31,10 @@ export default function Sector(props) {
 					strokeOpacity: 0,
 					strokeWidth: 0,
 					fillColor,
-					fillOpacity,
+					fillOpacity:
+						fillOpacity / ((index + 1) / radiusIndices.length),
 					clickable: false,
-					zIndex: 1
+					zIndex: 1,
 				}}
 			/>
 		);

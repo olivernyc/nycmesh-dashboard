@@ -1,19 +1,20 @@
 import React, { useState, useEffect } from "react";
-import Octicon, { Settings } from "@primer/octicons-react";
+import Octicon, { FilterIcon } from "@primer/octicons-react";
 import LazyLoad from "react-lazyload";
-import { format, isEqual, isAfter } from "date-fns";
-import { useAuth0 } from "./Auth0";
-import Button from "./Button";
-import { fetchResource } from "../api";
+import { format, isEqual, isAfter, parseISO } from "date-fns";
+import { useAuth0 } from "@auth0/auth0-react";
+
+import Button2 from "../Button2";
+import { fetchResource } from "../../api";
 
 export default function NodeMap(props) {
 	const [nodes, setNodes] = useState([]);
 	const [links, setLinks] = useState([]);
 	const [requests, setRequests] = useState([]);
-	const { isAuthenticated, getTokenSilently } = useAuth0();
+	const { isAuthenticated, getAccessTokenSilently } = useAuth0();
 	useEffect(() => {
 		async function fetchData() {
-			const token = await getTokenSilently();
+			const token = await getAccessTokenSilently();
 			// TODO: Fetch in parallel or make api endpoint for feed
 			const nodesRes = await fetchResource("nodes", token);
 			const linksRes = await fetchResource("links", token);
@@ -24,32 +25,32 @@ export default function NodeMap(props) {
 		}
 		if (!isAuthenticated) return;
 		fetchData();
-	}, [isAuthenticated, getTokenSilently]);
+	}, [isAuthenticated, getAccessTokenSilently]);
 
 	const feed = [];
 	feed.push(
-		...links.map(link => ({
+		...links.map((link) => ({
 			type: "link",
-			date: link.create_date,
-			item: link
+			date: parseISO(link.create_date),
+			item: link,
 		}))
 	);
 
 	feed.push(
-		...nodes.map(node => ({
+		...nodes.map((node) => ({
 			type: "node",
-			date: node.create_date,
-			item: node
+			date: parseISO(node.create_date),
+			item: node,
 		}))
 	);
 
 	feed.push(
 		...requests
-			.filter(request => request.panoramas && request.panoramas.length)
-			.map(request => ({
+			.filter((request) => request.panoramas && request.panoramas.length)
+			.map((request) => ({
 				type: "panorama",
-				date: request.panoramas[0].date,
-				item: request
+				date: parseISO(request.panoramas[0].date),
+				item: request,
 			}))
 	);
 
@@ -62,14 +63,14 @@ export default function NodeMap(props) {
 			<div className="flex items-center justify-between ph4-ns ph3">
 				<h1 className="mv0 f5 fw5 ttc pv3">Feed</h1>
 				<div>
-					<Button
+					<Button2
 						title="Filters"
-						icon={<Octicon icon={Settings} />}
+						icon={<Octicon icon={FilterIcon} />}
 					/>
 				</div>
 			</div>
 			<div className="w-100">
-				{feed.map(item => {
+				{feed.map((item) => {
 					const itemClassName =
 						"pv3 ph4-ns ph3 bb b--light-gray f6 w-100";
 					switch (item.type) {
@@ -77,7 +78,13 @@ export default function NodeMap(props) {
 							return (
 								<div className={itemClassName}>
 									<div className="flex items-start w-100 mw6">
-										<span className="mr3">🎉</span>
+										<span
+											className="mr3"
+											role="img"
+											aria-label="party emoji"
+										>
+											🎉
+										</span>
 										<div>
 											<span className="fw5 mr2">
 												{item.item.building}
@@ -85,7 +92,7 @@ export default function NodeMap(props) {
 											<time className="mid-gray">
 												{format(
 													item.date,
-													"MMM D, YYYY"
+													"MMM d, yyyy"
 												)}
 											</time>
 											<p className="mb0 mt2 m">
@@ -101,7 +108,13 @@ export default function NodeMap(props) {
 							return (
 								<div className={itemClassName}>
 									<div className="flex items-start w-100 mw6">
-										<span className="mr3">🔗</span>
+										<span
+											className="mr3"
+											role="img"
+											aria-label="chain link emoji"
+										>
+											🔗
+										</span>
 										<div>
 											<span className="fw5 mr2">
 												{item.item.nodes[1].name ||
@@ -110,7 +123,7 @@ export default function NodeMap(props) {
 											<time className="mid-gray">
 												{format(
 													item.date,
-													"MMM D, YYYY"
+													"MMM d, yyyy"
 												)}
 											</time>
 											<p className="mb0 mt2 m">
@@ -126,15 +139,21 @@ export default function NodeMap(props) {
 							return (
 								<div className={itemClassName}>
 									<div className="flex items-start w-100 mw6">
-										<span className="mr3">🌇</span>
+										<span
+											className="mr3"
+											role="img"
+											aria-label="city sunrise emoji"
+										>
+											🌇
+										</span>
 										<div className="w-100">
 											<span className="fw5 mr2">
-												{item.item.address}
+												{item.item.building.address}
 											</span>
 											<time className="mid-gray">
 												{format(
 													item.date,
-													"MMM D, YYYY"
+													"MMM d, yyyy"
 												)}
 											</time>
 											<p className="mv2">
@@ -146,7 +165,7 @@ export default function NodeMap(props) {
 													<div
 														className="h-100 w-100 cover bg-center"
 														style={{
-															backgroundImage: `url('${item.item.panoramas[0].url}')`
+															backgroundImage: `url('${item.item.panoramas[0].url}')`,
 														}}
 													/>
 												</LazyLoad>
@@ -154,7 +173,7 @@ export default function NodeMap(props) {
 											<div className="flex flex-wrap man1">
 												{item.item.panoramas
 													.slice(1, 3)
-													.map(p => (
+													.map((p) => (
 														<div
 															key={p.id}
 															className="w-50 pa1"
@@ -166,7 +185,7 @@ export default function NodeMap(props) {
 																	<div
 																		className="h4 w-100 cover bg-center"
 																		style={{
-																			backgroundImage: `url('${p.url}')`
+																			backgroundImage: `url('${p.url}')`,
 																		}}
 																	/>
 																</LazyLoad>

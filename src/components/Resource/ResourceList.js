@@ -2,15 +2,15 @@ import React, { useState, useEffect } from "react";
 import BaseTable, { AutoResizer } from "react-base-table";
 import "react-base-table/styles.css";
 import { Link } from "react-router-dom";
-import Octicon, { Settings } from "@primer/octicons-react";
-import Button from "./Button";
+import Octicon, { FilterIcon } from "@primer/octicons-react";
+import { useAuth0 } from "@auth0/auth0-react";
 
-import { useAuth0 } from "./Auth0";
+import Button from "../Button2";
 
 export default function ResourceList(props) {
 	const { resourceName, columns } = props;
 	const [data, setData] = useState([]);
-	const { isAuthenticated, getTokenSilently } = useAuth0();
+	const { isAuthenticated, getAccessTokenSilently } = useAuth0();
 
 	useEffect(() => {
 		async function fetchData() {
@@ -18,11 +18,11 @@ export default function ResourceList(props) {
 			setData(data);
 			async function fetchResource(resource) {
 				const path = `${process.env.REACT_APP_API_ROOT}/${resource}`;
-				const token = await getTokenSilently();
+				const token = await getAccessTokenSilently();
 				const options = {
 					headers: {
-						Authorization: `Bearer ${token}`
-					}
+						Authorization: `Bearer ${token}`,
+					},
 				};
 				try {
 					const res = await fetch(path, options);
@@ -36,17 +36,14 @@ export default function ResourceList(props) {
 		}
 		if (!isAuthenticated) return;
 		fetchData();
-	}, [isAuthenticated, getTokenSilently, resourceName]);
+	}, [isAuthenticated, getAccessTokenSilently, resourceName]);
 
 	return (
 		<div className="w-100">
 			<div className="flex items-center justify-between ph4-ns ph3">
 				<h1 className="mv0 f5 fw5 ttc pv3">{resourceName}</h1>
 				<div>
-					<Button
-						title="Filters"
-						icon={<Octicon icon={Settings} />}
-					/>
+					<Button title="Filters" icon={<Octicon icon={FilterIcon} />} />
 				</div>
 			</div>
 			<div style={{ height: "calc(100vh - 50px)" }}>
@@ -67,7 +64,7 @@ export default function ResourceList(props) {
 								flexGrow: column.width ? 0 : 1,
 								className: "f6 fw4 dark-gray pointer",
 								headerClassName: "ttu f7 fw5 near-black",
-								cellRenderer: column.cellRenderer
+								cellRenderer: column.cellRenderer,
 							}))}
 							headerRenderer={({ rowData, cells }) => (
 								<div className="ph3-ns flex w-100 h-100 bg-white f6">
@@ -76,8 +73,8 @@ export default function ResourceList(props) {
 							)}
 							rowRenderer={({ rowData, cells }) => (
 								<Link
-									to={`/${resourceName}/${rowData.id}`}
-									className="w-100 h-100 flex link ph3-ns"
+									to={`/map/${resourceName}/${rowData.id}`}
+									className="w-100 h-100 flex link ph3-ns bg-white"
 								>
 									{cells}
 								</Link>

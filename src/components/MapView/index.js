@@ -1,45 +1,117 @@
-import React, { useState, useEffect } from "react";
-import { withScriptjs, withGoogleMap, GoogleMap } from "react-google-maps";
-import Octicon, { Settings } from "@primer/octicons-react";
-import { useAuth0 } from "../Auth0";
+import React, { useState, useEffect, useCallback } from "react";
+import { useAuth0 } from "@auth0/auth0-react";
 
-import MapComponent from "./MapComponent";
-import Button from "../Button";
 import { fetchResource } from "../../api";
+import MapComponent from "./MapComponent";
+import Node from "../Node/Node";
+import Request from "../Request/Request";
+import Member from "../Member/Member";
 
-export default function NodeMap(props) {
-	const [nodes, setNodes] = useState([]);
-	const [links, setLinks] = useState([]);
-	const { isAuthenticated, getTokenSilently } = useAuth0();
-	useEffect(() => {
-		async function fetchNodes() {
-			const token = await getTokenSilently();
-			const nodesRes = await fetchResource("nodes", token);
-			setNodes(nodesRes);
-		}
-		async function fetchLinks() {
-			const token = await getTokenSilently();
-			const linksRes = await fetchResource("links", token);
-			setLinks(linksRes);
-		}
-		if (!isAuthenticated) return;
-		fetchNodes();
-		fetchLinks();
-	}, [isAuthenticated, getTokenSilently]);
-	return (
-		<div className="h-100 w-100 flex flex-column">
-			<div>
-				<div className="flex items-center justify-between ph4-ns ph3">
-					<h1 className="mv0 f5 fw5 ttc pv3">Map</h1>
-					<div>
-						<Button
-							title="Filters"
-							icon={<Octicon icon={Settings} />}
-						/>
-					</div>
-				</div>
-			</div>
-			<MapComponent nodes={nodes} links={links} />
+export default React.memo(NodeMap);
+
+export const MapContext = React.createContext();
+
+function NodeMap({ history, match }) {
+	const mapData = useMapData();
+	const [map, setMap] = useState(null);
+
+	const handleNodeClick = useCallback(
+		(node) => {
+			history.push(`/map/nodes/${node.id}`);
+			map.panTo({ lat: node.lat, lng: node.lng });
+		},
+		[map, history]
+	);
+
+	const handleRequestClick = useCallback(
+		(request) => {
+			history.push(`/map/requests/${request.id}`);
+			map.panTo({ lat: request.building.lat, lng: request.building.lng });
+		},
+		[map, history]
+	);
+
+	const handleMapClick = useCallback(
+		(node) => {
+			history.push("/map");
+		},
+		[history]
+	);
+
+	const handleLoad = useCallback((map) => {
+		setMap(map);
+	}, []);
+
+	const { nodeId, requestId, memberId } = match.params;
+	const sidebar = (nodeId || requestId || memberId) && (
+		<div className="w-100 h-100 z-5 bg-white overflow-y-scroll-l map-sidebar">
+			{nodeId && <Node id={nodeId} />}
+			{requestId && <Request id={requestId} />}
+			{memberId && <Member id={memberId} />}
 		</div>
 	);
+
+	return (
+		<div className="h-100 w-100 overflow-hidden flex flex-row-l flex-column-l flex-column-reverse bg-white">
+			{sidebar}
+			<MapContext.Provider
+				value={{
+					selectedNode: parseInt(nodeId),
+					selectedRequest: parseInt(requestId),
+					connectedNodes: mapData.connectedNodes,
+				}}
+			>
+				<MapComponent
+					nodes={mapData.nodes}
+					links={mapData.links}
+					requests={mapData.requests}
+					onNodeClick={handleNodeClick}
+					onRequestClick={handleRequestClick}
+					onClick={handleMapClick}
+					onLoad={handleLoad}
+				/>
+			</MapContext.Provider>
+		</div>
+	);
+}
+
+function useMapData() {
+	const [mapData, setMapData] = useState({
+		nodes: [],
+		requests: [],
+		links: [],
+		connectedNodes: {},
+	});
+	const { isAuthenticated, getAccessTokenSilently } = useAuth0();
+	useEffect(() => {
+		if (!isAuthenticated) return;
+		try {
+			fetchAll();
+		} catch (error) {
+			alert(error);
+		}
+		async function fetchAll() {
+			const token = await getAccessTokenSilently();
+			const [nodesRes, requestsRes, linksRes] = await Promise.all([
+				fetchResource("nodes", token),
+				fetchResource("requests", token),
+				fetchResource("links", token),
+			]);
+			const connectedNodes = {};
+			linksRes.forEach((link) => {
+				const [node1, node2] = link.nodes;
+				connectedNodes[node1.id] = connectedNodes[node1.id] || [];
+				connectedNodes[node2.id] = connectedNodes[node2.id] || [];
+				connectedNodes[node1.id].push(node2);
+				connectedNodes[node2.id].push(node1);
+			});
+			setMapData({
+				nodes: nodesRes,
+				requests: requestsRes,
+				links: linksRes,
+				connectedNodes,
+			});
+		}
+	}, [isAuthenticated, getAccessTokenSilently]);
+	return mapData;
 }

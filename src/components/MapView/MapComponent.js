@@ -1,113 +1,75 @@
-import React, { useState, useEffect } from "react";
-import { withScriptjs, withGoogleMap, GoogleMap } from "react-google-maps";
-import Octicon, { Settings } from "@primer/octicons-react";
-import { useAuth0 } from "../Auth0";
+import React from "react";
+import { GoogleMap, LoadScript } from "@react-google-maps/api";
 
-import Button from "../Button";
-import NodeMarker from "./NodeMarker";
-import LinkLine from "./LinkLine";
-import Sector from "./Sector";
-import { fetchResource } from "../../api";
+import NodeLayer from "./NodeLayer";
+import RequestLayer from "./RequestLayer";
+import LinkLayer from "./LinkLayer";
+import { styles, darkStyles } from "./styles";
 
-const DEFAULT_ZOOM = 11;
+const DEFAULT_ZOOM = 12;
 const DEFAULT_CENTER = { lat: 40.69, lng: -73.9595798 };
-const MAP_STYLES = [
-	{
-		elementType: "labels.icon",
-		stylers: [
-			{
-				visibility: "off"
-			}
-		]
-	},
-	{
-		featureType: "road",
-		elementType: "labels.icon",
-		stylers: [
-			{
-				visibility: "off"
-			}
-		]
-	},
-	{
-		featureType: "road.highway",
-		stylers: [
-			{
-				visibility: "off"
-			}
-		]
-	},
-	{
-		featureType: "transit",
-		stylers: [
-			{
-				visibility: "off"
-			}
-		]
-	}
-];
+
+// TODO: Add event listener to handle darkmode change
+const darkMode =
+	window.matchMedia &&
+	window.matchMedia("(prefers-color-scheme: dark)").matches;
+
+if (darkMode) {
+	styles.push(...darkStyles);
+}
 
 const options = {
-	styles: MAP_STYLES,
 	fullscreenControl: false,
 	streetViewControl: false,
 	mapTypeControl: false,
 	zoomControlOptions: {
-		position: "9"
+		position: 9,
 	},
 	mapTypeControlOptions: {
-		position: "3"
+		position: 7,
 	},
-	backgroundColor: "#fff",
+	backgroundColor: "transparent",
 	gestureHandling: "greedy",
-	clickableIcons: false
+	clickableIcons: false,
+	styles,
 };
 
-const GoogleMapComponent = withScriptjs(
-	withGoogleMap(props => (
-		<GoogleMap ref={props.mapRef} {...props}>
-			{props.children}
-		</GoogleMap>
-	))
-);
-
-export default function MapComponent(props) {
-	const { nodes, links } = props;
+function MapComponent({
+	nodes,
+	links,
+	requests,
+	onLoad,
+	onClick,
+	onNodeClick,
+	onRequestClick,
+}) {
 	if (!nodes || !links) throw new Error("Missing nodes or links");
+
 	return (
-		<div className="h-100 w-100 flex flex-column">
-			<GoogleMapComponent
-				defaultZoom={DEFAULT_ZOOM}
-				defaultCenter={DEFAULT_CENTER}
-				defaultOptions={options}
-				loadingElement={<div className="flex" style={{ flex: 1 }} />}
-				containerElement={<div className="flex" style={{ flex: 1 }} />}
-				mapElement={<div className="g-map flex" style={{ flex: 1 }} />}
-				googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyBNClp7oJsw-eleEoR3-PQKV23tpeW-FpE"
+		<div
+			className="h-100-l w-100 flex flex-column"
+			style={{ height: "calc(100vh - 51px)" }}
+		>
+			<LoadScript
+				id="script-loader"
+				googleMapsApiKey="AIzaSyBNClp7oJsw-eleEoR3-PQKV23tpeW-FpE"
+				loadingElement={<div />}
 			>
-				<NodeLayer nodes={nodes} />
-				<LinkLayer links={links} />
-				<SectorLayer nodes={nodes} />
-			</GoogleMapComponent>
+				<GoogleMap
+					zoom={DEFAULT_ZOOM}
+					center={DEFAULT_CENTER}
+					options={options}
+					mapContainerClassName="flex h-100 w-100 bg-white"
+					onLoad={onLoad}
+					onClick={onClick}
+				>
+					<NodeLayer nodes={nodes} onClick={onNodeClick} />
+					<RequestLayer requests={requests} onClick={onRequestClick} />
+					<LinkLayer links={links} />
+				</GoogleMap>
+			</LoadScript>
 		</div>
 	);
 }
 
-function NodeLayer(props) {
-	const { nodes } = props;
-	return nodes.map(node => <NodeMarker key={node.id} node={node} />);
-}
-
-function LinkLayer(props) {
-	const { links } = props;
-	return links.map(link => <LinkLine key={link.id} link={link} />);
-}
-
-function SectorLayer(props) {
-	const { nodes } = props;
-	return nodes.map(node =>
-		node.devices.map((device, index) => (
-			<Sector key={device.id} device={device} />
-		))
-	);
-}
+export default React.memo(MapComponent);

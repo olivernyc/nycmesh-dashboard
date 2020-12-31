@@ -1,16 +1,15 @@
 import React from "react";
 
-export default function Button(props) {
-	const { icon, title } = props;
+export default function Button({ type, primary, label, icon, onClick }) {
 	return (
-		<div
-			className="bg-near-white ph2 pv1 br2 button-shadow fw5 flex items-center"
-			style={{
-				boxShadow: "#ccc 0px 1px 0px 0px"
-			}}
+		<button
+			className={`ph2 pv1 ba b--black-20 br2 fw5 pointer ${
+				primary ? "bg-purple white" : "bg-white dark-gray"
+			}`}
+			onClick={onClick}
+			type={type || "button"}
 		>
-			{icon}
-			<span className={icon ? "ml2" : ""}>{title}</span>
-		</div>
+			{icon} <span className={icon ? "ml2" : ""}>{label}</span>
+		</button>
 	);
 }
