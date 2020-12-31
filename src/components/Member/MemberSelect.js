@@ -30,7 +30,7 @@ export default function MemberSelect(props) {
       title="Add a member"
       buttonLabel="Add member"
       buttonEnabled={ !!selectedId }
-      onDone={() => {
+      onSubmit={() => {
         props.onSubmit(selectedId)
       }}
       onCancel={props.onCancel}
