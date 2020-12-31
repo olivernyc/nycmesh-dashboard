@@ -5,6 +5,7 @@ import Button from "./Button";
 export default function Modal({
 	title,
 	buttonLabel = "Done",
+	buttonEnabled = true,
 	children,
 	onDone,
 	onCancel,
@@ -27,6 +28,7 @@ export default function Modal({
 							label={buttonLabel}
 							type="submit"
 							onClick={onDone}
+							disabled={!buttonEnabled}
 						/>
 					</div>
 				</div>

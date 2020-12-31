@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function Button({ type, primary, label, icon, onClick }) {
+export default function Button({ type, primary, label, icon, onClick, disabled }) {
 	return (
 		<button
 			className={`ph2 pv1 ba b--black-20 br2 fw5 pointer ${
@@ -8,6 +8,7 @@ export default function Button({ type, primary, label, icon, onClick }) {
 			}`}
 			onClick={onClick}
 			type={type || "button"}
+			disabled={disabled}
 		>
 			{icon} <span className={icon ? "ml2" : ""}>{label}</span>
 		</button>

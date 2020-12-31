@@ -56,6 +56,20 @@ export async function search(query, token) {
 	return res.json();
 }
 
+export async function searchMembers(query, token) {
+	const path = `${process.env.REACT_APP_API_ROOT}/members/search?s=${query}`;
+
+	const options = {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	};
+
+	const res = await fetch(path, options);
+	if (res.status !== 200) throw Error(res.error);
+	return res.json();
+}
+
 export async function addMember(node, memberId, token) {
 	const path = `${process.env.REACT_APP_API_ROOT}/nodes/${node.id}/memberships`;
 
