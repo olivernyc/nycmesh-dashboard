@@ -170,6 +170,7 @@ export default function Node({ id }) {
 						setEditing(false);
 					}}
 					onCancel={() => setEditing(false)}
+					existingMembers={node.members}
 				/>
 			)}
 		</div>
