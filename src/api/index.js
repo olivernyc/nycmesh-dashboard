@@ -1,3 +1,10 @@
+export class RequestError extends Error {
+	constructor(message, response) {
+		super(message);
+		this.response = response;
+	}
+}
+
 export async function fetchResource(resource, token) {
 	const path = `${process.env.REACT_APP_API_ROOT}/${resource}`;
 	const options = {
@@ -6,7 +13,7 @@ export async function fetchResource(resource, token) {
 		},
 	};
 	const res = await fetch(path, options);
-	if (res.status !== 200) throw Error(res.error);
+	if (res.status !== 200) throw new RequestError(res.status, res.error);
 	return res.json();
 }
 
@@ -26,7 +33,7 @@ export async function updateResource(
 		body: JSON.stringify(resourcePatch),
 	};
 	const res = await fetch(path, options);
-	if (res.status !== 200) throw Error(res.error);
+	if (res.status !== 200) throw new RequestError(res.error, res);
 	return res.json();
 }
 
@@ -40,7 +47,7 @@ export async function destroyResource(resourceType, resourceId, token) {
 	};
 
 	const res = await fetch(path, options);
-	if (res.status !== 200) throw Error(res.error);
+	if (res.status !== 200) throw new RequestError(res.error, res);
 	return await res.json();
 }
 
@@ -52,7 +59,7 @@ export async function search(query, token) {
 		},
 	};
 	const res = await fetch(path, options);
-	if (res.status !== 200) throw Error(res.error);
+	if (res.status !== 200) throw new RequestError(res.error, res);
 	return res.json();
 }
 
@@ -66,7 +73,7 @@ export async function searchMembers(query, token) {
 	};
 
 	const res = await fetch(path, options);
-	if (res.status !== 200) throw Error(res.error);
+	if (res.status !== 200) throw new RequestError(res.error, res);
 	return res.json();
 }
 
@@ -83,6 +90,6 @@ export async function addMember(node, memberId, token) {
 	};
 
 	const res = await fetch(path, options);
-	if (res.status !== 200) throw Error(res.error);
+	if (res.status !== 200) throw new RequestError(res.error, res);
 	return await res.json();
 }

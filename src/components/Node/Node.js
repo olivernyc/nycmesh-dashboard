@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 
-import { fetchResource, updateResource, destroyResource, addMember } from "../../api";
+import { fetchResource, updateResource, destroyResource, addMember, RequestError } from "../../api";
 
 import ResourceEdit from "../Resource/ResourceEdit";
 import ResourceSection from "../Resource/ResourceSection";
@@ -43,7 +43,16 @@ export default function Node({ id }) {
 
 	async function removeMember(member) {
 		const token = await getAccessTokenSilently();
-		await destroyResource("memberships", member.membership_id, token);
+
+		try {
+			await destroyResource("memberships", member.membership_id, token);
+		} catch (e) {
+			// If we get a 404, we assume that the member was deleted in
+			// another window, and we remove them from the node locally.
+			if (!(e instanceof RequestError) || e.response.status !== 404) {
+				throw e;
+			}
+		}
 
 		setNode({
 			...node,
