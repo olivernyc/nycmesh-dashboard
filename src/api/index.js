@@ -77,7 +77,7 @@ export async function searchMembers(query, token) {
 	return res.json();
 }
 
-export async function addMember(node, memberId, token) {
+export async function createMembership(node, memberId, token) {
 	const path = `${process.env.REACT_APP_API_ROOT}/nodes/${node.id}/memberships`;
 
 	const options = {

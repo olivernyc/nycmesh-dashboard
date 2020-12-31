@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 
-import { fetchResource, updateResource, destroyResource, addMember, RequestError } from "../../api";
+import { fetchResource, updateResource, destroyResource, createMembership, RequestError } from "../../api";
 
 import ResourceEdit from "../Resource/ResourceEdit";
 import ResourceSection from "../Resource/ResourceSection";
@@ -40,6 +40,26 @@ export default function Node({ id }) {
 		if (!isAuthenticated) return;
 		fetchData();
 	}, [isAuthenticated, getAccessTokenSilently, id]);
+
+	async function addMember(memberId) {
+		const token = await getAccessTokenSilently();
+
+		let newNode
+		try {
+			newNode = await createMembership(node, memberId, token);
+		} catch (e) {
+			// If we're adding a member who's already been added in
+			// another window, just reload the node.
+			if (e instanceof RequestError && e.response.status === 422) {
+				newNode = await fetchResource(`nodes/${node.id}`, token);
+			} else {
+				throw e;
+			}
+		}
+
+		setNode(newNode);
+		setEditing(false);
+	}
 
 	async function removeMember(member) {
 		const token = await getAccessTokenSilently();
@@ -172,12 +192,7 @@ export default function Node({ id }) {
 			)}
 			{editing === "members" && (
 				<MemberSelect
-					onSubmit={async (memberId) => {
-						const token = await getAccessTokenSilently();
-						const newNode = await addMember(node, memberId, token);
-						setNode(newNode);
-						setEditing(false);
-					}}
+					onSubmit={addMember}
 					onCancel={() => setEditing(false)}
 					existingMembers={node.members}
 				/>
