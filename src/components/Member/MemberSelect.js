@@ -19,6 +19,10 @@ export default function MemberSelect(props) {
     return searchMembers(query, token);
   }
 
+  // Passed to filterOption. Returns true if the member
+  // should show up in results list. Filters out any members
+  // returned by the search endpoint who are already attached
+  // to this node.
   function excludeExistingNodeMembers(option) {
     const existingIds = _.map(props.existingMembers, 'id');
 
@@ -29,7 +33,7 @@ export default function MemberSelect(props) {
     <Modal
       title="Add a member"
       buttonLabel="Add member"
-      buttonEnabled={ !!selectedId }
+      buttonDisabled={!selectedId}
       onSubmit={() => {
         props.onSubmit(selectedId)
       }}
