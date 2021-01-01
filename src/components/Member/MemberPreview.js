@@ -5,9 +5,7 @@ export default function MemberPreview(props) {
 	const { member, onDelete } = props;
 	if (!member) return <div>Invalid member</div>;
 
-	function handleDelete(e) {
-		e.preventDefault();
-
+	function handleDelete() {
 		if (window.confirm(`Are you sure you want to remove ${member.name} from this node?`) && onDelete) {
 			onDelete(member)
 		}
@@ -25,9 +23,9 @@ export default function MemberPreview(props) {
 			</div>
 
 			<div className="show-on-hover--content mr2">
-				<a href="" onClick={handleDelete}>
+				<button className="button-reset input-reset pa0 ma0 bn bg-transparent pointer" onClick={handleDelete}>
 					<TrashcanIcon className="gray" />
-				</a>
+				</button>
 			</div>
 		</div>
 	);
