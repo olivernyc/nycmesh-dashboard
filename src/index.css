@@ -125,20 +125,6 @@
 	max-width: 24rem;
 }
 
-<<<<<<< HEAD
-.spin {
-	animation: spin 2s infinite linear;
-}
-
-@keyframes spin {
-	0% {
-		transform: rotate(0deg);
-	}
-	100% {
-		transform: rotate(359deg);
-	}
-}
-
 @media (prefers-color-scheme: dark) {
 	html {
 		background-color: #090909;
