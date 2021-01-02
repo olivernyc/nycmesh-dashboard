@@ -44,7 +44,7 @@ function NodeMap({ history, match }) {
 
 	const { nodeId, requestId, memberId } = match.params;
 	const sidebar = (nodeId || requestId || memberId) && (
-		<div className="w-100 h-100 z-5 bg-white overflow-y-scroll-l map-sidebar">
+		<div className="w-100 h-100 bg-white overflow-y-scroll-l map-sidebar">
 			{nodeId && <Node id={nodeId} />}
 			{requestId && <Request id={requestId} />}
 			{memberId && <Member id={memberId} />}

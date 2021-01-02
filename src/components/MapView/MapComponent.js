@@ -46,10 +46,7 @@ function MapComponent({
 	if (!nodes || !links) throw new Error("Missing nodes or links");
 
 	return (
-		<div
-			className="h-100-l w-100 flex flex-column"
-			style={{ height: "calc(100vh - 51px)" }}
-		>
+		<div className="h-100-l vh-75 w-100 flex flex-column">
 			<LoadScript
 				id="script-loader"
 				googleMapsApiKey="AIzaSyBNClp7oJsw-eleEoR3-PQKV23tpeW-FpE"
