@@ -1,6 +1,7 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
-export default function Field({ name, value }) {
+export default function Field({ name, value, url }) {
   let formattedValue;
   if (typeof value === "boolean") {
     formattedValue = value ? "Yes" : "No";
@@ -12,7 +13,13 @@ export default function Field({ name, value }) {
       <div className="w4 mb1" style={{ minWidth: "8rem" }}>
         <span className="mid-gray ttc">{name}</span>
       </div>
-      <span className="dark-gray">{formattedValue}</span>
+      {url ? (
+        <Link to={url} className="link purple fw5">
+          {formattedValue}
+        </Link>
+      ) : (
+        <span className="dark-gray">{formattedValue}</span>
+      )}
     </div>
   );
 }
