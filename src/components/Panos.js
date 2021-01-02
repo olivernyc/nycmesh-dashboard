@@ -4,13 +4,16 @@ import { XIcon } from "@primer/octicons-react";
 export default function Panos({ panos }) {
 	const [selected, setSelected] = useState(null);
 
-	const upHandler = (event) => {
-		event.stopPropagation();
-		if (!panos) return;
-		if (event.key === "Escape") {
-			setSelected(null);
-		}
-	};
+	const upHandler = useCallback(
+		(event) => {
+			event.stopPropagation();
+			if (!panos) return;
+			if (event.key === "Escape") {
+				setSelected(null);
+			}
+		},
+		[panos]
+	);
 
 	const downHandler = useCallback(
 		(event) => {
@@ -24,22 +27,18 @@ export default function Panos({ panos }) {
 				);
 			}
 		},
-		[selected, panos]
+		[panos]
 	);
 
 	useEffect(() => {
-		if (selected !== null) {
-			window.addEventListener("keyup", upHandler, true);
-			window.addEventListener("keydown", downHandler, true);
-		} else {
-			window.removeEventListener("keyup", upHandler, true);
-			window.removeEventListener("keydown", downHandler, true);
-		}
+		if (selected == null) return;
+		window.addEventListener("keyup", upHandler, true);
+		window.addEventListener("keydown", downHandler, true);
 		return () => {
 			window.removeEventListener("keyup", upHandler, true);
 			window.removeEventListener("keydown", downHandler, true);
 		};
-	}, [selected]);
+	}, [selected, downHandler, upHandler]);
 
 	if (!panos)
 		return (
