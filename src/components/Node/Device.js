@@ -22,6 +22,13 @@ function sector(device) {
 	const rotate = device.azimuth - device.type.width / 2;
 	const skew = device.type.width - 90;
 
+	if (!device.type.width)
+		return (
+			<div className="h2 w2 ml1 mr2 flex items-center justify-center mr2">
+				<div className="h05 w05 br-pill bg-blue o-40" />
+			</div>
+		);
+
 	if (device.type.width === 360)
 		return (
 			<div className="h2 w2 ml1 mr2 flex items-center justify-center mr2">

@@ -5,7 +5,6 @@ import {
 	OrganizationIcon,
 	SmileyIcon,
 	TelescopeIcon,
-	PulseIcon,
 	GlobeIcon,
 } from "@primer/octicons-react";
 
@@ -82,12 +81,6 @@ export default function Nav(props) {
 					</div>
 
 					<ul className="list pa0 db-ns dn mt3">
-						<Item
-							id="feed"
-							name="Feed"
-							icon={<PulseIcon />}
-							selected={currentResource === "feed"}
-						/>
 						<Item
 							id="map"
 							name="Map"

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Octicon, { FilterIcon } from "@primer/octicons-react";
+import { FilterIcon } from "@primer/octicons-react";
 import LazyLoad from "react-lazyload";
 import { format, isEqual, isAfter, parseISO } from "date-fns";
 import { useAuth0 } from "@auth0/auth0-react";
@@ -63,42 +63,27 @@ export default function NodeMap(props) {
 			<div className="flex items-center justify-between ph4-ns ph3">
 				<h1 className="mv0 f5 fw5 ttc pv3">Feed</h1>
 				<div>
-					<Button2
-						title="Filters"
-						icon={<Octicon icon={FilterIcon} />}
-					/>
+					<Button2 title="Filters" icon={<FilterIcon />} />
 				</div>
 			</div>
 			<div className="w-100">
 				{feed.map((item) => {
-					const itemClassName =
-						"pv3 ph4-ns ph3 bb b--light-gray f6 w-100";
+					const itemClassName = "pv3 ph4-ns ph3 bb b--light-gray f6 w-100";
 					switch (item.type) {
 						case "node":
 							return (
 								<div className={itemClassName}>
 									<div className="flex items-start w-100 mw6">
-										<span
-											className="mr3"
-											role="img"
-											aria-label="party emoji"
-										>
+										<span className="mr3" role="img" aria-label="party emoji">
 											🎉
 										</span>
 										<div>
-											<span className="fw5 mr2">
-												{item.item.building}
-											</span>
+											<span className="fw5 mr2">{item.item.building}</span>
 											<time className="mid-gray">
-												{format(
-													item.date,
-													"MMM d, yyyy"
-												)}
+												{format(item.date, "MMM d, yyyy")}
 											</time>
 											<p className="mb0 mt2 m">
-												{item.item.name ||
-													`Node ${item.item.id}`}{" "}
-												installed
+												{item.item.name || `Node ${item.item.id}`} installed
 											</p>
 										</div>
 									</div>
@@ -121,10 +106,7 @@ export default function NodeMap(props) {
 													`Node ${item.item.nodes[1].id}`}
 											</span>
 											<time className="mid-gray">
-												{format(
-													item.date,
-													"MMM d, yyyy"
-												)}
+												{format(item.date, "MMM d, yyyy")}
 											</time>
 											<p className="mb0 mt2 m">
 												Connected to{" "}
@@ -151,14 +133,10 @@ export default function NodeMap(props) {
 												{item.item.building.address}
 											</span>
 											<time className="mid-gray">
-												{format(
-													item.date,
-													"MMM d, yyyy"
-												)}
+												{format(item.date, "MMM d, yyyy")}
 											</time>
 											<p className="mv2">
-												{item.item.member.name}{" "}
-												submitted panoramas
+												{item.item.member.name} submitted panoramas
 											</p>
 											<div className="h4 w-100 mb2 bg-near-white">
 												<LazyLoad height={128}>
@@ -171,27 +149,20 @@ export default function NodeMap(props) {
 												</LazyLoad>
 											</div>
 											<div className="flex flex-wrap man1">
-												{item.item.panoramas
-													.slice(1, 3)
-													.map((p) => (
-														<div
-															key={p.id}
-															className="w-50 pa1"
-														>
-															<div className="w-100 bg-near-white">
-																<LazyLoad
-																	height={128}
-																>
-																	<div
-																		className="h4 w-100 cover bg-center"
-																		style={{
-																			backgroundImage: `url('${p.url}')`,
-																		}}
-																	/>
-																</LazyLoad>
-															</div>
+												{item.item.panoramas.slice(1, 3).map((p) => (
+													<div key={p.id} className="w-50 pa1">
+														<div className="w-100 bg-near-white">
+															<LazyLoad height={128}>
+																<div
+																	className="h4 w-100 cover bg-center"
+																	style={{
+																		backgroundImage: `url('${p.url}')`,
+																	}}
+																/>
+															</LazyLoad>
 														</div>
-													))}
+													</div>
+												))}
 											</div>
 										</div>
 									</div>

@@ -121,6 +121,11 @@
 	}
 }
 
+/*Remove blue border around map when returning from another tab*/
+div[aria-label="Map"] ~ div {
+	border: none !important;
+}
+
 .mw5-5 {
 	max-width: 24rem;
 }
@@ -139,6 +144,9 @@
 	}
 	.bg-near-white {
 		background-color: #111;
+	}
+	.bg-light-gray {
+		background-color: #222;
 	}
 	.bg-purple {
 		background-color: rgb(94, 92, 230);
