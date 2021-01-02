@@ -26,6 +26,7 @@ export default function Request(props) {
 			if (!id) return;
 			try {
 				setLoading(true);
+				setError(false);
 				const token = await getAccessTokenSilently();
 				const resource = await fetchResource(`requests/${id}`, token);
 				setRequest(resource);
@@ -76,18 +77,18 @@ export default function Request(props) {
 				<Field name="apartment" value={request.apartment} />
 				<Field name="notes" value={request.notes} />
 			</Section>
-			<Section title="Building">
-				<BuildingPreview building={request.building} />
-			</Section>
-			<Section title="Member">
-				<MemberPreview member={request.member} />
-			</Section>
 			<Section
 				title="Panoramas"
 				editLabel="Add"
 				onEdit={() => setEditing("panoramas")}
 			>
 				<Panos panos={request.panoramas} />
+			</Section>
+			<Section title="Building">
+				<BuildingPreview building={request.building} />
+			</Section>
+			<Section title="Member">
+				<MemberPreview member={request.member} />
 			</Section>
 			{editing === "request" && (
 				<ResourceEdit
