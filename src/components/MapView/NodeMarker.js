@@ -26,12 +26,11 @@ export default function NodeMarker({ node, onClick }) {
 const NodeMarkerMemo = React.memo(NodeMarker2);
 
 function NodeMarker2({ node, isSelected, isNeighbor, isDimmed, onClick }) {
-	const { lat, lng, devices } = node;
+	const { lat, lng } = node;
 	const title = node.name || String(node.id);
 	const icon = getIcon(node);
 	let zIndex = getZ(node);
 	const opacity = isDimmed ? 0.25 : 1;
-	const sectorOpacity = isNeighbor ? 0.5 : isDimmed ? 0 : 1;
 	if (node.status !== "active" && !isSelected) return null;
 	return (
 		<React.Fragment>
@@ -43,14 +42,31 @@ function NodeMarker2({ node, isSelected, isNeighbor, isDimmed, onClick }) {
 				zIndex={zIndex}
 				onClick={onClick}
 			/>
-			{devices.map((device) => (
-				<Sector key={device.id} device={device} opacity={sectorOpacity} />
-			))}
+			<SectorsMemo
+				node={node}
+				isSelected={isSelected}
+				isNeighbor={isNeighbor}
+				isDimmed={isDimmed}
+			/>
 			{isSelected && (
 				<Tooltip lat={lat} lng={lng} label={node.name || node.id} />
 			)}
 		</React.Fragment>
 	);
+}
+
+const SectorsMemo = React.memo(Sectors2);
+
+function Sectors2({ node, isSelected, isNeighbor, isDimmed }) {
+	const opacityMultiplier = isSelected ? 2 : isNeighbor ? 0 : isDimmed ? 0 : 1;
+	return node.devices.map((device) => (
+		<Sector
+			key={device.id}
+			device={device}
+			opacityMultiplier={opacityMultiplier}
+			isSelected={isSelected}
+		/>
+	));
 }
 
 function getIcon(node) {
