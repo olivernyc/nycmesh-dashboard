@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
+import DocumentTitle from "react-document-title";
 
 import { fetchResource } from "../../api";
 import MapComponent from "./MapComponent";
 import Node from "../Node/Node";
 import Request from "../Request/Request";
 import Member from "../Member/Member";
+import Building from "../Building/Building";
 
 export default React.memo(NodeMap);
 
@@ -14,21 +16,80 @@ export const MapContext = React.createContext();
 function NodeMap({ history, match }) {
 	const mapData = useMapData();
 	const [map, setMap] = useState(null);
+	const [isFirstLoad, setIsFirstLoad] = useState(true);
+
+	const handleLoad = useCallback((map) => {
+		setMap(map);
+	}, []);
+
+	const { nodeId, requestId, memberId, buildingId } = match.params;
+
+	// Pan to selected item
+	useEffect(() => {
+		if (!map || !mapData.nodesById || !mapData.requestsById) return;
+		if (nodeId) {
+			const node = mapData.nodesById[nodeId];
+			if (!node) return;
+			map.panTo({ lat: node.lat, lng: node.lng });
+		} else if (requestId) {
+			const request = mapData.requestsById[requestId];
+			if (!request) return;
+			map.panTo({ lat: request.lat, lng: request.lng });
+		}
+	}, [nodeId, requestId, memberId, mapData, map]);
+
+	// Fit bounds to node + connected nodes on first load
+	useEffect(() => {
+		if (!isFirstLoad || !map || !mapData.nodesById || !mapData.connectedNodes)
+			return;
+		setIsFirstLoad(false);
+		if (!nodeId) return;
+		const node = mapData.nodesById[nodeId];
+		if (!node) return;
+
+		const newBounds = {
+			east: -999,
+			north: -999,
+			south: 999,
+			west: 999,
+		};
+
+		const allNodes = [node, ...mapData.connectedNodes[nodeId]];
+		allNodes.forEach(({ lat, lng }) => {
+			newBounds.west = Math.min(lng, newBounds.west);
+			newBounds.east = Math.max(lng, newBounds.east);
+			newBounds.south = Math.min(lat, newBounds.south);
+			newBounds.north = Math.max(lat, newBounds.north);
+		});
+
+		map.fitBounds(newBounds);
+	}, [mapData, map, nodeId, isFirstLoad]);
+
+	// Dismiss sidebar on escape
+	useEffect(() => {
+		const upHandler = ({ key }) => {
+			if (key === "Escape") {
+				history.push("/map");
+			}
+		};
+		window.addEventListener("keyup", upHandler);
+		return () => {
+			window.removeEventListener("keyup", upHandler);
+		};
+	}, [history]);
 
 	const handleNodeClick = useCallback(
 		(node) => {
 			history.push(`/map/nodes/${node.id}`);
-			map.panTo({ lat: node.lat, lng: node.lng });
 		},
-		[map, history]
+		[history]
 	);
 
 	const handleRequestClick = useCallback(
 		(request) => {
 			history.push(`/map/requests/${request.id}`);
-			map.panTo({ lat: request.building.lat, lng: request.building.lng });
 		},
-		[map, history]
+		[history]
 	);
 
 	const handleMapClick = useCallback(
@@ -38,40 +99,40 @@ function NodeMap({ history, match }) {
 		[history]
 	);
 
-	const handleLoad = useCallback((map) => {
-		setMap(map);
-	}, []);
-
-	const { nodeId, requestId, memberId } = match.params;
-	const sidebar = (nodeId || requestId || memberId) && (
-		<div className="w-100 h-100 z-5 bg-white overflow-y-scroll-l map-sidebar">
+	const sidebar = (nodeId || requestId || memberId || buildingId) && (
+		<div className="z-2 w-100 h-100 bg-white overflow-y-scroll-l map-sidebar">
 			{nodeId && <Node id={nodeId} />}
 			{requestId && <Request id={requestId} />}
 			{memberId && <Member id={memberId} />}
+			{buildingId && <Building id={buildingId} />}
 		</div>
 	);
 
 	return (
-		<div className="h-100 w-100 overflow-hidden flex flex-row-l flex-column-l flex-column-reverse bg-white">
-			{sidebar}
-			<MapContext.Provider
-				value={{
-					selectedNode: parseInt(nodeId),
-					selectedRequest: parseInt(requestId),
-					connectedNodes: mapData.connectedNodes,
-				}}
-			>
-				<MapComponent
-					nodes={mapData.nodes}
-					links={mapData.links}
-					requests={mapData.requests}
-					onNodeClick={handleNodeClick}
-					onRequestClick={handleRequestClick}
-					onClick={handleMapClick}
-					onLoad={handleLoad}
-				/>
-			</MapContext.Provider>
-		</div>
+		<DocumentTitle title="Map - NYC Mesh">
+			<div className="h-100 w-100 overflow-hidden flex flex-row-l flex-column-l flex-column-reverse bg-white">
+				{sidebar}
+				<MapContext.Provider
+					value={{
+						selectedNode: parseInt(nodeId),
+						selectedRequest: parseInt(requestId),
+						connectedNodes: mapData.connectedNodes,
+						nodesById: mapData.nodesById,
+						requestsById: mapData.requestsById,
+					}}
+				>
+					<MapComponent
+						nodes={mapData.nodes}
+						links={mapData.links}
+						requests={mapData.requests}
+						onLoad={handleLoad}
+						onNodeClick={handleNodeClick}
+						onRequestClick={handleRequestClick}
+						onClick={handleMapClick}
+					/>
+				</MapContext.Provider>
+			</div>
+		</DocumentTitle>
 	);
 }
 
@@ -80,35 +141,41 @@ function useMapData() {
 		nodes: [],
 		requests: [],
 		links: [],
-		connectedNodes: {},
+		nodesById: null,
+		requestsById: null,
+		connectedNodes: null,
 	});
 	const { isAuthenticated, getAccessTokenSilently } = useAuth0();
 	useEffect(() => {
 		if (!isAuthenticated) return;
 		try {
-			fetchAll();
+			fetchMap();
 		} catch (error) {
 			alert(error);
 		}
-		async function fetchAll() {
+		async function fetchMap() {
 			const token = await getAccessTokenSilently();
-			const [nodesRes, requestsRes, linksRes] = await Promise.all([
-				fetchResource("nodes", token),
-				fetchResource("requests", token),
-				fetchResource("links", token),
-			]);
+			const mapData = await fetchResource("map", token);
+			const nodesById = {};
+			const requestsById = {};
 			const connectedNodes = {};
-			linksRes.forEach((link) => {
-				const [node1, node2] = link.nodes;
-				connectedNodes[node1.id] = connectedNodes[node1.id] || [];
-				connectedNodes[node2.id] = connectedNodes[node2.id] || [];
-				connectedNodes[node1.id].push(node2);
-				connectedNodes[node2.id].push(node1);
+			mapData.nodes.forEach((node) => {
+				nodesById[node.id] = node;
+			});
+			mapData.requests.forEach((request) => {
+				requestsById[request.id] = request;
+			});
+			mapData.links.forEach((link) => {
+				const [nodeId1, nodeId2] = link.devices.map((d) => d.node_id);
+				connectedNodes[nodeId1] = connectedNodes[nodeId1] || [];
+				connectedNodes[nodeId2] = connectedNodes[nodeId2] || [];
+				connectedNodes[nodeId1].push(nodesById[nodeId2]);
+				connectedNodes[nodeId2].push(nodesById[nodeId1]);
 			});
 			setMapData({
-				nodes: nodesRes,
-				requests: requestsRes,
-				links: linksRes,
+				...mapData,
+				nodesById,
+				requestsById,
 				connectedNodes,
 			});
 		}
