@@ -40,30 +40,42 @@ function NodeMap({ history, match }) {
 
 	// Fit bounds to node + connected nodes on first load
 	useEffect(() => {
-		if (!isFirstLoad || !map || !mapData.nodesById || !mapData.connectedNodes)
-			return;
+		const { nodesById, requestsById, connectedNodes } = mapData;
+		if (!map || !nodesById || !requestsById || !connectedNodes) return;
+
+		if (!isFirstLoad) return;
 		setIsFirstLoad(false);
-		if (!nodeId) return;
-		const node = mapData.nodesById[nodeId];
-		if (!node) return;
 
-		const newBounds = {
-			east: -999,
-			north: -999,
-			south: 999,
-			west: 999,
-		};
+		if (!nodeId && !requestId) return;
 
-		const allNodes = [node, ...mapData.connectedNodes[nodeId]];
-		allNodes.forEach(({ lat, lng }) => {
-			newBounds.west = Math.min(lng, newBounds.west);
-			newBounds.east = Math.max(lng, newBounds.east);
-			newBounds.south = Math.min(lat, newBounds.south);
-			newBounds.north = Math.max(lat, newBounds.north);
-		});
-
-		map.fitBounds(newBounds);
-	}, [mapData, map, nodeId, isFirstLoad]);
+		if (nodeId) {
+			const newBounds = {
+				east: -999,
+				north: -999,
+				south: 999,
+				west: 999,
+			};
+			const node = nodesById[nodeId];
+			if (!node) return;
+			const neighbors = connectedNodes[nodeId];
+			if (!neighbors) {
+				map.setZoom(14);
+				return;
+			}
+			[node, ...neighbors].forEach(({ lat, lng }) => {
+				newBounds.west = Math.min(lng, newBounds.west);
+				newBounds.east = Math.max(lng, newBounds.east);
+				newBounds.south = Math.min(lat, newBounds.south);
+				newBounds.north = Math.max(lat, newBounds.north);
+			});
+			map.fitBounds(newBounds);
+		} else if (requestId) {
+			const request = requestsById[requestId];
+			if (!request) return;
+			map.setZoom(14);
+			return;
+		}
+	}, [mapData, map, nodeId, requestId, isFirstLoad]);
 
 	// Dismiss sidebar on escape
 	useEffect(() => {
