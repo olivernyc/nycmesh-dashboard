@@ -8,6 +8,7 @@ import Node from "../Node/Node";
 import Request from "../Request/Request";
 import Member from "../Member/Member";
 import Building from "../Building/Building";
+import Device from "../Device/Device";
 
 export default React.memo(NodeMap);
 
@@ -22,7 +23,7 @@ function NodeMap({ history, match }) {
 		setMap(map);
 	}, []);
 
-	const { nodeId, requestId, memberId, buildingId } = match.params;
+	const { nodeId, requestId, memberId, buildingId, deviceId } = match.params;
 
 	// Pan to selected item
 	useEffect(() => {
@@ -111,12 +112,17 @@ function NodeMap({ history, match }) {
 		[history]
 	);
 
-	const sidebar = (nodeId || requestId || memberId || buildingId) && (
-		<div className="z-2 w-100 h-100 bg-white overflow-y-scroll-l map-sidebar">
+	const sidebar = (nodeId ||
+		requestId ||
+		memberId ||
+		buildingId ||
+		deviceId) && (
+		<div className="w-100 h-100 bg-white overflow-y-scroll-l map-sidebar">
 			{nodeId && <Node id={nodeId} />}
 			{requestId && <Request id={requestId} />}
 			{memberId && <Member id={memberId} />}
 			{buildingId && <Building id={buildingId} />}
+			{deviceId && <Device id={deviceId} />}
 		</div>
 	);
 
