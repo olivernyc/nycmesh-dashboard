@@ -42,7 +42,6 @@ function MapComponent({
 	const { isLoaded, loadError } = useJsApiLoader({
 		googleMapsApiKey: "AIzaSyBNClp7oJsw-eleEoR3-PQKV23tpeW-FpE",
 		loadingElement: <div className="flex h-100 w-100 bg-white" />,
-		preventGoogleFontsLoading: true,
 	});
 
 	if (loadError) {

@@ -5,8 +5,9 @@ import Button from "./Button";
 export default function Modal({
 	title,
 	buttonLabel = "Done",
+	buttonDisabled = false,
 	children,
-	onDone,
+	onSubmit,
 	onCancel,
 }) {
 	return (
@@ -26,7 +27,8 @@ export default function Modal({
 							primary
 							label={buttonLabel}
 							type="submit"
-							onClick={onDone}
+							onClick={onSubmit}
+							disabled={buttonDisabled}
 						/>
 					</div>
 				</div>
