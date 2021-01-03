@@ -4,10 +4,7 @@ export default function Button(props) {
 	const { icon, title, type = "button" } = props;
 	return (
 		<button
-			className="bg-near-white ph2 pv1 br2 button-shadow fw5 flex items-center pointer bn"
-			style={{
-				boxShadow: "#ccc 0px 2px 0px 0px",
-			}}
+			className="bg-white black ph2 pv1 br2 fw5 flex items-center pointer bn button-shadow"
 			onClick={props.onClick}
 			type={type}
 		>

@@ -69,7 +69,7 @@ export default function SearchBar({ history }) {
 				getItemValue={(item) => {
 					return String(item.item.id);
 				}}
-				inputProps={{ placeholder: "Search...", tabIndex: 0 }}
+				inputProps={{ placeholder: "Search..." }}
 				wrapperStyle={{ width: "100%" }}
 				renderInput={(props) => {
 					return (

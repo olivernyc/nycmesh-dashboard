@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import DocumentTitle from "react-document-title";
+import { Link } from "react-router-dom";
 
 import { fetchResource, updateResource } from "../../api";
 
 import ResourceEdit from "../Resource/ResourceEdit";
 import ResourceSection from "../Resource/ResourceSection";
 import MemberPreview from "../Member/MemberPreview";
+import DevicePreview from "../Device/DevicePreview";
+import PanoramaPreview from "../Panorama/PanoramaPreview";
+import PanoramaAdd from "../Panorama/PanoramaAdd";
 import Status from "../Status";
-import Panos from "../Panos";
 import Field from "../Field";
-
-import Device from "./Device";
 
 export default function Node({ id }) {
 	const [node, setNode] = useState();
@@ -104,9 +105,12 @@ export default function Node({ id }) {
 				<ResourceSection
 					title="Panoramas"
 					editLabel="Add"
-					onEdit={() => setEditing(true)}
+					onEdit={async () => {
+						await setEditing(); // hack to rerun PanoramaAdd effect
+						setEditing("panoramas");
+					}}
 				>
-					<Panos panos={node.panoramas} />
+					<PanoramaPreview panoramas={node.panoramas} />
 				</ResourceSection>
 				<ResourceSection
 					title="Members"
@@ -123,7 +127,13 @@ export default function Node({ id }) {
 					onEdit={() => setEditing(true)}
 				>
 					{node.devices.map((device) => (
-						<Device key={device.id} device={device} />
+						<Link
+							key={device.id}
+							to={`/map/devices/${device.id}`}
+							className="link"
+						>
+							<DevicePreview device={device} />
+						</Link>
 					))}
 				</ResourceSection>
 				{editing === "node" && (
@@ -147,6 +157,23 @@ export default function Node({ id }) {
 							setEditing(false);
 						}}
 						onCancel={() => setEditing(false)}
+					/>
+				)}
+				{editing === "panoramas" && (
+					<PanoramaAdd
+						id={node.id}
+						type="node"
+						onUploaded={(newImages) => {
+							setNode({
+								...node,
+								panoramas: [...newImages, ...node.panoramas],
+							});
+							setEditing();
+						}}
+						onError={(error) => {
+							alert(error.message);
+							setEditing();
+						}}
 					/>
 				)}
 			</div>

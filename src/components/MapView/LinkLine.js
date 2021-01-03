@@ -23,6 +23,10 @@ const LinkLineMemo = React.memo(LinkLine2);
 function LinkLine2({ link, selected, dimmed, nodesById }) {
 	const [device1, device2] = link.devices;
 	const [node1, node2] = link.devices.map((d) => nodesById[d.node_id]);
+	if (!device1 || !device2 || !node1 || !node2) {
+		console.error("Link missing node or device", link);
+		return null;
+	}
 	const path = [
 		{ lat: device1.lat, lng: device1.lng },
 		{ lat: device2.lat, lng: device2.lng },

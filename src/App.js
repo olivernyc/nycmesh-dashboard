@@ -38,6 +38,7 @@ function App() {
               "/map/requests/:requestId",
               "/map/members/:memberId",
               "/map/buildings/:buildingId",
+              "/map/devices/:deviceId",
             ]}
             component={MapView}
           />
