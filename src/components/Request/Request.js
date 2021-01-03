@@ -8,7 +8,8 @@ import MemberPreview from "../Member/MemberPreview";
 import BuildingPreview from "../Building/BuildingPreview";
 import Field from "../Field";
 import Status from "../Status";
-import Panos from "../Panos";
+import PanoramaPreview from "../Panorama/PanoramaPreview";
+import PanoramaAdd from "../Panorama/PanoramaAdd";
 
 export default function Request(props) {
 	const [request, setRequest] = useState();
@@ -19,13 +20,12 @@ export default function Request(props) {
 
 	const { id } = props;
 
-	// alert(id);
-
 	useEffect(() => {
 		async function fetchData() {
 			if (!id) return;
 			try {
 				setLoading(true);
+				setError(false);
 				const token = await getAccessTokenSilently();
 				const resource = await fetchResource(`requests/${id}`, token);
 				setRequest(resource);
@@ -76,18 +76,21 @@ export default function Request(props) {
 				<Field name="apartment" value={request.apartment} />
 				<Field name="notes" value={request.notes} />
 			</Section>
+			<Section
+				title="Panoramas"
+				editLabel="Add"
+				onEdit={async () => {
+					await setEditing();
+					setEditing("panoramas");
+				}}
+			>
+				<PanoramaPreview panoramas={request.panoramas} />
+			</Section>
 			<Section title="Building">
 				<BuildingPreview building={request.building} />
 			</Section>
 			<Section title="Member">
 				<MemberPreview member={request.member} />
-			</Section>
-			<Section
-				title="Panoramas"
-				editLabel="Add"
-				onEdit={() => setEditing("panoramas")}
-			>
-				<Panos panos={request.panoramas} />
 			</Section>
 			{editing === "request" && (
 				<ResourceEdit
@@ -119,6 +122,23 @@ export default function Request(props) {
 						// setEditing(false);
 					}}
 					onCancel={() => setEditing(false)}
+				/>
+			)}
+			{editing === "panoramas" && (
+				<PanoramaAdd
+					id={request.id}
+					type="request"
+					onUploaded={(newImages) => {
+						setRequest({
+							...request,
+							panoramas: [...newImages, ...request.panoramas],
+						});
+						setEditing();
+					}}
+					onError={(error) => {
+						alert(error.message);
+						setEditing();
+					}}
 				/>
 			)}
 		</div>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Autocomplete from "react-autocomplete";
 import { useAuth0 } from "@auth0/auth0-react";
-import Octicon, { SearchIcon } from "@primer/octicons-react";
+import { SearchIcon } from "@primer/octicons-react";
 import { Link } from "react-router-dom";
 
 import { search } from "../../api";
@@ -78,7 +78,7 @@ export default function SearchBar({ history }) {
 								<div className="loading-ring absolute pl3" />
 							) : (
 								<div className="cursor-text absolute ml3">
-									<Octicon icon={SearchIcon} size="small" />
+									<SearchIcon size="small" />
 								</div>
 							)}
 							<input

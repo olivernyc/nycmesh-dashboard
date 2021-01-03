@@ -11,6 +11,7 @@
     "react": "^17.0.1",
     "react-autocomplete": "^1.8.1",
     "react-base-table": "^1.7.1",
+    "react-document-title": "^2.0.3",
     "react-dom": "^17.0.1",
     "react-lazyload": "^3.1.0",
     "react-router-dom": "^5.0.1",

@@ -37,6 +37,8 @@ function App() {
               "/map/nodes/:nodeId",
               "/map/requests/:requestId",
               "/map/members/:memberId",
+              "/map/buildings/:buildingId",
+              "/map/devices/:deviceId",
             ]}
             component={MapView}
           />

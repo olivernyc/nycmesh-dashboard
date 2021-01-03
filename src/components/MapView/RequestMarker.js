@@ -11,6 +11,7 @@ const icon = {
 function RequestMarker({ request, onClick }) {
 	const { selectedNode, selectedRequest } = useContext(MapContext);
 	const selected = selectedRequest === request.id;
+	if (request.status === "closed" && !selected) return null;
 	const dimmed =
 		(selectedRequest && selectedRequest !== request.id) ||
 		(selectedNode && selectedRequest !== request.id);
@@ -27,13 +28,11 @@ function RequestMarker({ request, onClick }) {
 const RequestMarkerMemo = React.memo(RequestMarker2);
 
 function RequestMarker2({ request, selected, dimmed, onClick }) {
-	const { id, building } = request;
-	const { lat, lng } = building;
+	const { id, lat, lng } = request;
 	const title = String(id);
 	const zIndex = 0;
-	const opacity = selected ? 1 : dimmed ? 0.25 : 0.5;
+	const opacity = selected ? 1 : dimmed ? 0.2 : 0.4;
 	if (lat === "NaN" || lng === "NaN") return null;
-	if (request.status === "closed" && !selected) return null;
 	return (
 		<React.Fragment>
 			<Marker

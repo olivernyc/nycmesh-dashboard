@@ -2,10 +2,10 @@ import React from "react";
 
 import Status from "../Status";
 
-export default function Device(props) {
+export default function DevicePreview(props) {
 	const { device } = props;
 	return (
-		<div className="pv2 flex bb b--light-gray">
+		<div className="pv2 flex bb b--light-gray black">
 			{sector(device)}
 			<div>
 				<div className="mb1 flex items-center">
@@ -21,6 +21,13 @@ export default function Device(props) {
 function sector(device) {
 	const rotate = device.azimuth - device.type.width / 2;
 	const skew = device.type.width - 90;
+
+	if (!device.type.width)
+		return (
+			<div className="h2 w2 ml1 mr2 flex items-center justify-center mr2">
+				<div className="h05 w05 br-pill bg-blue o-40" />
+			</div>
+		);
 
 	if (device.type.width === 360)
 		return (

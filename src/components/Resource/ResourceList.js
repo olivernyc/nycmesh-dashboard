@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import BaseTable, { AutoResizer } from "react-base-table";
-import "react-base-table/styles.css";
 import { Link } from "react-router-dom";
-import Octicon, { FilterIcon } from "@primer/octicons-react";
+import { FilterIcon } from "@primer/octicons-react";
 import { useAuth0 } from "@auth0/auth0-react";
 
 import Button from "../Button2";
@@ -43,7 +42,7 @@ export default function ResourceList(props) {
 			<div className="flex items-center justify-between ph4-ns ph3">
 				<h1 className="mv0 f5 fw5 ttc pv3">{resourceName}</h1>
 				<div>
-					<Button title="Filters" icon={<Octicon icon={FilterIcon} />} />
+					<Button title="Filters" icon={<FilterIcon />} />
 				</div>
 			</div>
 			<div style={{ height: "calc(100vh - 50px)" }}>

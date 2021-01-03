@@ -8,7 +8,7 @@ const getPixelPositionOffset = (width, height) => ({
 
 export default function Tooltip({ lat, lng, label }) {
 	const handleRef = (ref) =>
-		ref && window.google.maps.OverlayView.preventMapHitsFrom(ref);
+		window.google.maps.OverlayView.preventMapHitsFrom(ref);
 
 	return (
 		<OverlayView
@@ -16,11 +16,15 @@ export default function Tooltip({ lat, lng, label }) {
 			mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
 			getPixelPositionOffset={getPixelPositionOffset}
 		>
-			<div ref={handleRef} className="flex flex-column items-center">
-				<div className="flex items-center bg-white br1 overflow-hidden shadow pv05 ph1">
+			<div className="flex flex-column items-center">
+				<div
+					className="flex items-center bg-white br1 overflow-hidden shadow pv05 ph1"
+					ref={handleRef}
+				>
 					<span className="f6 nowrap helvetica db">{label}</span>
 				</div>
 				<svg
+					ref={handleRef}
 					viewBox="0 5 12 12"
 					version="1.1"
 					width="12"
