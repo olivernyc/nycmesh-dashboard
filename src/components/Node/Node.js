@@ -3,13 +3,18 @@ import { useAuth0 } from "@auth0/auth0-react";
 import DocumentTitle from "react-document-title";
 import { Link } from "react-router-dom";
 
-import { fetchResource, updateResource, destroyResource, createMembership, RequestError } from "../../api";
+import {
+	fetchResource,
+	updateResource,
+	destroyResource,
+	createMembership,
+	RequestError,
+} from "../../api";
 
 import ResourceEdit from "../Resource/ResourceEdit";
 import ResourceSection from "../Resource/ResourceSection";
 import MemberPreview from "../Member/MemberPreview";
 import MemberSelect from "../Member/MemberSelect";
-import BuildingPreview from "../Building/BuildingPreview";
 import DevicePreview from "../Device/DevicePreview";
 import PanoramaPreview from "../Panorama/PanoramaPreview";
 import PanoramaAdd from "../Panorama/PanoramaAdd";
@@ -45,7 +50,7 @@ export default function Node({ id }) {
 	async function addMember(memberId) {
 		const token = await getAccessTokenSilently();
 
-		let newNode
+		let newNode;
 		try {
 			newNode = await createMembership(node, memberId, token);
 		} catch (e) {
@@ -77,7 +82,7 @@ export default function Node({ id }) {
 
 		setNode({
 			...node,
-			members: node.members.filter(m => m.id !== member.id)
+			members: node.members.filter((m) => m.id !== member.id),
 		});
 	}
 
@@ -153,18 +158,18 @@ export default function Node({ id }) {
 					<PanoramaPreview panoramas={node.panoramas} />
 				</ResourceSection>
 				<ResourceSection
-          title="Members"
-          editLabel="Add"
-          onEdit={() => setEditing("members")}
-        >
-          {node.members.map((member) => (
-            <MemberPreview
-              key={member.id}
-              member={member}
-              onDelete={removeMember}
-            />
-          ))}
-        </ResourceSection>
+					title="Members"
+					editLabel="Add"
+					onEdit={() => setEditing("members")}
+				>
+					{node.members.map((member) => (
+						<MemberPreview
+							key={member.id}
+							member={member}
+							onDelete={removeMember}
+						/>
+					))}
+				</ResourceSection>
 				<ResourceSection
 					title="Devices"
 					editLabel="Add"
@@ -220,13 +225,13 @@ export default function Node({ id }) {
 						}}
 					/>
 				)}
-        {editing === "members" && (
-          <MemberSelect
-            onSubmit={addMember}
-            onCancel={() => setEditing(false)}
-            existingMembers={node.members}
-          />
-        )}
+				{editing === "members" && (
+					<MemberSelect
+						onSubmit={addMember}
+						onCancel={() => setEditing(false)}
+						existingMembers={node.members}
+					/>
+				)}
 			</div>
 		</DocumentTitle>
 	);
