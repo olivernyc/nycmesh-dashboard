@@ -2,10 +2,10 @@ import React from "react";
 
 import Status from "../Status";
 
-export default function Device(props) {
+export default function DevicePreview(props) {
 	const { device } = props;
 	return (
-		<div className="pv2 flex bb b--light-gray">
+		<div className="pv2 flex bb b--light-gray black">
 			{sector(device)}
 			<div>
 				<div className="mb1 flex items-center">
