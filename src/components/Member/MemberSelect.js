@@ -8,10 +8,10 @@ import { searchMembers } from "../../api";
 
 export default function MemberSelect(props) {
   const [selectedId, setSelectedId] = useState(null);
-  const { isAuthenticated, getAccessTokenSilently } = useAuth0();
+  const { getAccessTokenSilently } = useAuth0();
 
   function handleChange(member) {
-    setSelectedId(member.id)
+    setSelectedId(member.id);
   }
 
   async function loadOptions(query) {
@@ -24,7 +24,7 @@ export default function MemberSelect(props) {
   // returned by the search endpoint who are already attached
   // to this node.
   function excludeExistingNodeMembers(option) {
-    const existingIds = _.map(props.existingMembers, 'id');
+    const existingIds = _.map(props.existingMembers, "id");
 
     return !_.include(existingIds, option.data.id);
   }
@@ -35,19 +35,21 @@ export default function MemberSelect(props) {
       buttonLabel="Add member"
       buttonDisabled={!selectedId}
       onSubmit={() => {
-        props.onSubmit(selectedId)
+        props.onSubmit(selectedId);
       }}
       onCancel={props.onCancel}
     >
       <div className="flex flex-column">
-        <label htmlFor="member" className="mb2">Member</label>
+        <label htmlFor="member" className="mb2">
+          Member
+        </label>
         <div>
           <AsyncSelect
             onChange={handleChange}
             loadOptions={loadOptions}
             filterOption={excludeExistingNodeMembers}
-            getOptionLabel={o => `${o.name} – ${o.email}`}
-            getOptionValue={o => o.id}
+            getOptionLabel={(o) => `${o.name} – ${o.email}`}
+            getOptionValue={(o) => o.id}
             className="react-select"
             classNamePrefix="react-select"
           />
