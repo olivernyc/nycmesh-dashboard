@@ -2,12 +2,11 @@ import React, { useState, useEffect } from "react";
 import DocumentTitle from "react-document-title";
 import { useAuth0 } from "@auth0/auth0-react";
 
-import { fetchResource, updateResource } from "../../api";
+import { fetchResource } from "../../api";
 import Status from "../Status";
 
 export default function Device({ id }) {
   const [device, setDevice] = useState();
-  const [editing, setEditing] = useState();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState();
   const { isAuthenticated, getAccessTokenSilently } = useAuth0();

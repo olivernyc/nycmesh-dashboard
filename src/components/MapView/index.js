@@ -85,9 +85,9 @@ function NodeMap({ history, match }) {
 				history.push("/map");
 			}
 		};
-		window.addEventListener("keyup", upHandler);
+		window.addEventListener("keypress", upHandler, false);
 		return () => {
-			window.removeEventListener("keyup", upHandler);
+			window.removeEventListener("keypress", upHandler, false);
 		};
 	}, [history]);
 
