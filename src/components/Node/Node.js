@@ -34,7 +34,7 @@ export default function Node({ id }) {
 			try {
 				setLoading(true);
 				setError();
-				const token = await getAccessTokenSilently();
+				const token = isAuthenticated ? await getAccessTokenSilently() : null;
 				const resource = await fetchResource(`nodes/${id}`, token);
 				setNode(resource);
 				setLoading(false);
@@ -43,7 +43,6 @@ export default function Node({ id }) {
 				setLoading(false);
 			}
 		}
-		if (!isAuthenticated) return;
 		fetchData();
 	}, [isAuthenticated, getAccessTokenSilently, id]);
 
@@ -134,14 +133,22 @@ export default function Node({ id }) {
 					<span className="mid-gray f5 mr2">Node {node.id}</span>
 					<Status status={node.status} />
 				</div>
-				<ResourceSection title="Details" onEdit={() => setEditing("node")}>
+				<ResourceSection
+					title="Details"
+					disableEdit={!isAuthenticated}
+					onEdit={() => setEditing("node")}
+				>
 					{node.name && <Field name="name" value={node.name} />}
-					<Field
-						name="building"
-						value={node.building.address}
-						url={`/map/buildings/${node.building.id}`}
-					/>
-					<Field name="installed" value={localizedInstallDate} />
+					{isAuthenticated && (
+						<Field
+							name="building"
+							value={node.building.address}
+							url={`/map/buildings/${node.building.id}`}
+						/>
+					)}
+					{isAuthenticated && (
+						<Field name="installed" value={localizedInstallDate} />
+					)}
 					{node.abandon_date && (
 						<Field name="deactivated" value={localizedAbandonDate} />
 					)}
@@ -150,6 +157,7 @@ export default function Node({ id }) {
 				<ResourceSection
 					title="Panoramas"
 					editLabel="Add"
+					disableEdit={!isAuthenticated}
 					onEdit={async () => {
 						await setEditing(); // hack to rerun PanoramaAdd effect
 						setEditing("panoramas");
@@ -157,22 +165,31 @@ export default function Node({ id }) {
 				>
 					<PanoramaPreview panoramas={node.panoramas} />
 				</ResourceSection>
-				<ResourceSection
-					title="Members"
-					editLabel="Add"
-					onEdit={() => setEditing("members")}
-				>
-					{node.members.map((member) => (
-						<MemberPreview
-							key={member.id}
-							member={member}
-							onDelete={removeMember}
-						/>
-					))}
-				</ResourceSection>
+				{isAuthenticated && (
+					<ResourceSection
+						title="Members"
+						editLabel="Add"
+						onEdit={() => setEditing("members")}
+					>
+						{!node.members || !node.members.length ? (
+							<div className="pv3">
+								<span className="light-silver">No members</span>
+							</div>
+						) : (
+							node.members.map((member) => (
+								<MemberPreview
+									key={member.id}
+									member={member}
+									onDelete={removeMember}
+								/>
+							))
+						)}
+					</ResourceSection>
+				)}
 				<ResourceSection
 					title="Devices"
 					editLabel="Add"
+					disableEdit={!isAuthenticated}
 					onEdit={() => setEditing(true)}
 				>
 					{node.devices.map((device) => (

@@ -63,7 +63,7 @@ function getColor(node1, node2) {
 	if (isSupernode(node1) && isHub(node2)) return "rgb(0,122,255)";
 	if (isHub(node1) && isSupernode(node2)) return "rgb(0,122,255)";
 	if (isHub(node1) && isHub(node2)) return "rgb(0,122,255)";
-	if (isBackbone(node1) && isBackbone(node2)) return "rgb(90,200,250)";
+	if (isBackbone(node1) && isBackbone(node2)) return "rgb(100,210,255)";
 	return "rgb(255,45,85)";
 }
 

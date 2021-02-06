@@ -1,24 +1,27 @@
-import React, { useContext } from "react";
+import React, { useContext, useCallback } from "react";
 import { Marker } from "@react-google-maps/api";
 
 import Sector from "./Sector";
 import Tooltip from "./Tooltip";
 import { MapContext } from ".";
 
-export default function NodeMarker({ node, onClick }) {
+export default React.memo(NodeMarker);
+
+function NodeMarker({ node, onClick }) {
 	const { selectedNode, connectedNodes } = useContext(MapContext);
 	const neighbors = connectedNodes[node.id];
 	const isSelected = selectedNode === node.id;
 	const isNeighbor =
 		neighbors && neighbors.filter((n) => n.id === selectedNode).length;
 	const isDimmed = selectedNode && !isSelected && !isNeighbor;
+	const onClickMemo = useCallback(() => onClick(node), [node]);
 	return (
 		<NodeMarkerMemo
 			node={node}
 			isSelected={isSelected}
 			isNeighbor={isNeighbor}
 			isDimmed={isDimmed}
-			onClick={onClick}
+			onClick={onClickMemo}
 		/>
 	);
 }

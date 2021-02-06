@@ -7,9 +7,6 @@ const getPixelPositionOffset = (width, height) => ({
 });
 
 export default function Tooltip({ lat, lng, label }) {
-	const handleRef = (ref) =>
-		window.google.maps.OverlayView.preventMapHitsFrom(ref);
-
 	return (
 		<OverlayView
 			position={{ lat, lng }}
@@ -24,7 +21,6 @@ export default function Tooltip({ lat, lng, label }) {
 					<span className="f6 nowrap helvetica db">{label}</span>
 				</div>
 				<svg
-					ref={handleRef}
 					viewBox="0 5 12 12"
 					version="1.1"
 					width="12"
@@ -38,4 +34,9 @@ export default function Tooltip({ lat, lng, label }) {
 			</div>
 		</OverlayView>
 	);
+}
+
+function handleRef(ref) {
+	if (!ref) return;
+	window.google.maps.OverlayView.preventMapHitsFrom(ref);
 }

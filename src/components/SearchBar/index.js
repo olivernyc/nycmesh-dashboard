@@ -17,7 +17,10 @@ export default function SearchBar({ history }) {
 	useEffect(() => {
 		async function fetchResults() {
 			setLoading((l) => l + 1);
-			const token = await getAccessTokenSilently();
+			let token;
+			if (isAuthenticated) {
+				token = await getAccessTokenSilently();
+			}
 			const results = await search(query, token);
 			setResultsMap((r) => ({
 				...r,
@@ -26,7 +29,6 @@ export default function SearchBar({ history }) {
 			setLoading((l) => l - 1);
 		}
 		if (!query) return;
-		if (!isAuthenticated) return;
 		fetchResults();
 	}, [query, isAuthenticated, getAccessTokenSilently]);
 
@@ -140,7 +142,7 @@ export default function SearchBar({ history }) {
 					}
 					if (item.type === "request") {
 						const { building, member } = item.item;
-						title = building.address;
+						title = building.address || building.id;
 						subtitle = member.name;
 						icon = "🌆";
 					}

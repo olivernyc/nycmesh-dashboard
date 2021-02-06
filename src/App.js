@@ -1,11 +1,11 @@
 import React from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import { withAuthenticationRequired } from "@auth0/auth0-react";
+import { createBrowserHistory } from "history";
 
 import Nav from "./components/Nav";
 import SearchBar from "./components/SearchBar";
 import Search from "./components/Search";
-import Feed from "./components/Feed";
 import MapView from "./components/MapView";
 import Nodes from "./components/Node/Nodes";
 import Node from "./components/Node/Node";
@@ -16,19 +16,23 @@ import Request from "./components/Request/Request";
 import Members from "./components/Member/Members";
 import Member from "./components/Member/Member";
 
+const history = createBrowserHistory();
+
+const onRedirectCallback = (appState) => {
+  history.replace(appState?.returnTo || window.location.pathname);
+};
+
 function App() {
   return (
-    <Router>
+    <Router history={history}>
       <div
         className="sans-serif w-100 flex-l flex-row justify-between-ns"
         style={{ height: "100vh" }}
       >
         <Route component={Nav} />
-        <div className="mw5 w-100" />
         <div className="w-100 flex flex-column">
           <Route component={SearchBar} />
           <Route path="/search" component={Search} />
-          <Route path="/feed" component={Feed} />
           <Route
             exact
             path={[

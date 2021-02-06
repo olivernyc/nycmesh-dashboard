@@ -27,10 +27,10 @@ export default function Panos({ panoramas }) {
     };
 
     window.addEventListener("keyup", upHandler, true);
-    window.addEventListener("keydown", downHandler, true);
+    window.addEventListener("keydown", downHandler, false);
     return () => {
       window.removeEventListener("keyup", upHandler, true);
-      window.removeEventListener("keydown", downHandler, true);
+      window.removeEventListener("keydown", downHandler, false);
     };
   }, [panoramas, selected]);
 

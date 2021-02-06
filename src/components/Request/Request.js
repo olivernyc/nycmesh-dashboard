@@ -10,6 +10,7 @@ import Field from "../Field";
 import Status from "../Status";
 import PanoramaPreview from "../Panorama/PanoramaPreview";
 import PanoramaAdd from "../Panorama/PanoramaAdd";
+import LineOfSight from "../LineOfSight/LineOfSight";
 
 export default function Request(props) {
 	const [request, setRequest] = useState();
@@ -60,6 +61,13 @@ export default function Request(props) {
 		day: "numeric",
 	});
 
+	const earthURL = `https://earth.google.com/web/search/${request.building.address
+		.split(" ")
+		.map(encodeURIComponent)
+		.join("+")}/@${request.building.lat},${request.building.lng},${
+		request.building.height / 3.32 || 100
+	}a,300d,35y,0h,45t,0r`;
+
 	return (
 		<div className="w-100 pa3 f6">
 			<div className="flex flex-wrap items-center">
@@ -91,6 +99,9 @@ export default function Request(props) {
 			</Section>
 			<Section title="Member">
 				<MemberPreview member={request.member} />
+			</Section>
+			<Section title="Line of Sight">
+				<LineOfSight building={request.building} />
 			</Section>
 			{editing === "request" && (
 				<ResourceEdit

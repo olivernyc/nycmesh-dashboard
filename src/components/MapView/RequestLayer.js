@@ -5,9 +5,9 @@ import RequestMarker from "./RequestMarker";
 function RequestLayer({ requests, selectedRequest, selectedNode, onClick }) {
   return requests.map((request) => (
     <RequestMarker
-      key={request.id}
+      key={"request-" + request.id}
       request={request}
-      onClick={() => onClick(request)}
+      onClick={onClick}
     />
   ));
 }

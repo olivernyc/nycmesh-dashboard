@@ -1,6 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useAuth0 } from "@auth0/auth0-react";
 import {
+	ToolsIcon,
 	BroadcastIcon,
 	OrganizationIcon,
 	SmileyIcon,
@@ -10,12 +12,17 @@ import {
 
 const tabs = [
 	{ id: "nodes", name: "Nodes", icon: <BroadcastIcon /> },
+	{ id: "requests", name: "Requests", icon: <TelescopeIcon /> },
+	{
+		id: "appointments",
+		name: "Appointments",
+		icon: <ToolsIcon />,
+	},
 	{
 		id: "buildings",
 		name: "Buildings",
 		icon: <OrganizationIcon />,
 	},
-	{ id: "requests", name: "Requests", icon: <TelescopeIcon /> },
 	{
 		id: "members",
 		name: "Members",
@@ -24,10 +31,13 @@ const tabs = [
 ];
 
 export default function Nav(props) {
+	const { isAuthenticated } = useAuth0();
+	// if (!isAuthenticated) return null;
 	const pathComponents = props.location.pathname.split("/");
 	const currentResource = pathComponents.length ? pathComponents[1] : "/";
 	return (
-		<div>
+		<React.Fragment>
+			<div className="mw5 w-100" />
 			<div className="fixed-l bg-near-white w-100 mw5-l h-100-l db-l dn">
 				<div className="flex flex-column w-100 h-100-ns mw5-ns bg-near-white pa3 br b--light-gray f6">
 					<div>
@@ -101,7 +111,7 @@ export default function Nav(props) {
 					</ul>
 				</div>
 			</div>
-		</div>
+		</React.Fragment>
 	);
 }
 
