@@ -1,6 +1,5 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { useAuth0 } from "@auth0/auth0-react";
 import {
 	ToolsIcon,
 	BroadcastIcon,
@@ -31,8 +30,6 @@ const tabs = [
 ];
 
 export default function Nav(props) {
-	const { isAuthenticated } = useAuth0();
-	// if (!isAuthenticated) return null;
 	const pathComponents = props.location.pathname.split("/");
 	const currentResource = pathComponents.length ? pathComponents[1] : "/";
 	return (

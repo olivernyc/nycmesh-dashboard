@@ -1,7 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import { withAuthenticationRequired } from "@auth0/auth0-react";
-import { createBrowserHistory } from "history";
 
 import Nav from "./components/Nav";
 import SearchBar from "./components/SearchBar";
@@ -16,15 +15,9 @@ import Request from "./components/Request/Request";
 import Members from "./components/Member/Members";
 import Member from "./components/Member/Member";
 
-const history = createBrowserHistory();
-
-const onRedirectCallback = (appState) => {
-  history.replace(appState?.returnTo || window.location.pathname);
-};
-
 function App() {
   return (
-    <Router history={history}>
+    <Router>
       <div
         className="sans-serif w-100 flex-l flex-row justify-between-ns"
         style={{ height: "100vh" }}

@@ -14,7 +14,7 @@ function NodeMarker({ node, onClick }) {
 	const isNeighbor =
 		neighbors && neighbors.filter((n) => n.id === selectedNode).length;
 	const isDimmed = selectedNode && !isSelected && !isNeighbor;
-	const onClickMemo = useCallback(() => onClick(node), [node]);
+	const onClickMemo = useCallback(() => onClick(node), [node, onClick]);
 	return (
 		<NodeMarkerMemo
 			node={node}

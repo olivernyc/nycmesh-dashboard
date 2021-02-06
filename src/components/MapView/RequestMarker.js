@@ -19,7 +19,7 @@ function RequestMarker({ request, onClick }) {
 	const dimmed =
 		(selectedRequest && selectedRequest !== request.id) ||
 		(selectedNode && selectedRequest !== request.id);
-	const onClickMemo = useCallback(() => onClick(request), [request]);
+	const onClickMemo = useCallback(() => onClick(request), [request, onClick]);
 
 	if (request.status === "closed" && !selected) return null;
 

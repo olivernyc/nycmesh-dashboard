@@ -4,7 +4,6 @@ import { fetchResource } from "../../api";
 
 export default function LineOfSight({ building }) {
   const [los, setLos] = useState();
-  const [editing, setEditing] = useState();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState();
 
