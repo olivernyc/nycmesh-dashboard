@@ -10,6 +10,7 @@ import Field from "../Field";
 import Status from "../Status";
 import PanoramaPreview from "../Panorama/PanoramaPreview";
 import PanoramaAdd from "../Panorama/PanoramaAdd";
+import LineOfSight from "../LineOfSight/LineOfSight";
 
 export default function Request(props) {
 	const [request, setRequest] = useState();
@@ -91,6 +92,9 @@ export default function Request(props) {
 			</Section>
 			<Section title="Member">
 				<MemberPreview member={request.member} />
+			</Section>
+			<Section title="Line of Sight">
+				<LineOfSight building={request.building} />
 			</Section>
 			{editing === "request" && (
 				<ResourceEdit

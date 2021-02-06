@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { useAuth0 } from "@auth0/auth0-react";
 import DocumentTitle from "react-document-title";
+import { useAuth0 } from "@auth0/auth0-react";
 
 import { fetchResource } from "../../api";
+
 import MapComponent from "./MapComponent";
 import Node from "../Node/Node";
 import Request from "../Request/Request";
@@ -18,6 +19,7 @@ function NodeMap({ history, match }) {
 	const mapData = useMapData();
 	const [map, setMap] = useState(null);
 	const [isFirstLoad, setIsFirstLoad] = useState(true);
+	const { isAuthenticated } = useAuth0();
 
 	const handleLoad = useCallback((map) => {
 		setMap(map);
@@ -60,7 +62,7 @@ function NodeMap({ history, match }) {
 			if (!node) return;
 			const neighbors = connectedNodes[nodeId];
 			if (!neighbors) {
-				map.setZoom(14);
+				map.setZoom(15);
 				return;
 			}
 			[node, ...neighbors].forEach(({ lat, lng }) => {
@@ -73,7 +75,7 @@ function NodeMap({ history, match }) {
 		} else if (requestId) {
 			const request = requestsById[requestId];
 			if (!request) return;
-			map.setZoom(14);
+			map.setZoom(15);
 			return;
 		}
 	}, [mapData, map, nodeId, requestId, isFirstLoad]);
@@ -85,9 +87,9 @@ function NodeMap({ history, match }) {
 				history.push("/map");
 			}
 		};
-		window.addEventListener("keypress", upHandler, false);
+		window.addEventListener("keyup", upHandler, false);
 		return () => {
-			window.removeEventListener("keypress", upHandler, false);
+			window.removeEventListener("keyup", upHandler, false);
 		};
 	}, [history]);
 
@@ -113,9 +115,9 @@ function NodeMap({ history, match }) {
 	);
 
 	const sidebar = (nodeId ||
-		requestId ||
-		memberId ||
-		buildingId ||
+		(requestId && isAuthenticated) ||
+		(memberId && isAuthenticated) ||
+		(buildingId && isAuthenticated) ||
 		deviceId) && (
 		<div className="w-100 h-100 bg-white overflow-y-scroll-l map-sidebar">
 			{nodeId && <Node id={nodeId} />}
@@ -143,6 +145,7 @@ function NodeMap({ history, match }) {
 						nodes={mapData.nodes}
 						links={mapData.links}
 						requests={mapData.requests}
+						appointments={mapData.appointments}
 						onLoad={handleLoad}
 						onNodeClick={handleNodeClick}
 						onRequestClick={handleRequestClick}
@@ -159,20 +162,26 @@ function useMapData() {
 		nodes: [],
 		requests: [],
 		links: [],
+		appointments: [],
 		nodesById: null,
 		requestsById: null,
 		connectedNodes: null,
 	});
-	const { isAuthenticated, getAccessTokenSilently } = useAuth0();
+	const { isLoading, isAuthenticated, getAccessTokenSilently } = useAuth0();
+
+	// Set connected nodes, requests / nodes by id upon initial load
 	useEffect(() => {
-		if (!isAuthenticated) return;
+		if (isLoading) return;
 		try {
 			fetchMap();
 		} catch (error) {
 			alert(error);
 		}
 		async function fetchMap() {
-			const token = await getAccessTokenSilently();
+			let token;
+			if (isAuthenticated) {
+				token = await getAccessTokenSilently();
+			}
 			const mapData = await fetchResource("map", token);
 			const nodesById = {};
 			const requestsById = {};
@@ -197,6 +206,7 @@ function useMapData() {
 				connectedNodes,
 			});
 		}
-	}, [isAuthenticated, getAccessTokenSilently]);
+	}, [isLoading, isAuthenticated, getAccessTokenSilently]);
+
 	return mapData;
 }

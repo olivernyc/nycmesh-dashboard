@@ -5,7 +5,6 @@ import { withAuthenticationRequired } from "@auth0/auth0-react";
 import Nav from "./components/Nav";
 import SearchBar from "./components/SearchBar";
 import Search from "./components/Search";
-import Feed from "./components/Feed";
 import MapView from "./components/MapView";
 import Nodes from "./components/Node/Nodes";
 import Node from "./components/Node/Node";
@@ -24,11 +23,9 @@ function App() {
         style={{ height: "100vh" }}
       >
         <Route component={Nav} />
-        <div className="mw5 w-100" />
         <div className="w-100 flex flex-column">
           <Route component={SearchBar} />
           <Route path="/search" component={Search} />
-          <Route path="/feed" component={Feed} />
           <Route
             exact
             path={[
