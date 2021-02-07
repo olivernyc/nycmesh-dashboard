@@ -5,7 +5,7 @@ import { MapContext } from ".";
 
 const icon = {
   url: "/img/map/appointment.svg",
-  anchor: { x: 8, y: 8 },
+  anchor: { x: 9, y: 9 },
 };
 
 function AppointmentMarker({ appointment, onClick }) {

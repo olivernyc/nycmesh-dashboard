@@ -70,6 +70,9 @@ export default function Building({ id }) {
           {building.address && (
             <Field name="address" value={building.address} />
           )}
+          <Field name="BIN" value={building.bin} />
+          <Field name="lat" value={building.lat} />
+          <Field name="lng" value={building.lng} />
           <Field name="notes" value={building.notes} />
         </ResourceSection>
 
@@ -122,6 +125,9 @@ export default function Building({ id }) {
             fields={[
               { key: "name", type: "text" },
               { key: "address", type: "text" },
+              { key: "bin", label: "BIN", type: "number" },
+              { key: "lat", type: "number" },
+              { key: "lng", type: "number" },
               { key: "notes", type: "textarea" },
             ]}
             onSubmit={async (patch) => {

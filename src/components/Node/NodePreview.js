@@ -4,8 +4,21 @@ import { BroadcastIcon } from "@primer/octicons-react";
 
 import Status from "../Status";
 
-export default function NodePreview({ node }) {
+export default function NodePreview({ node, device }) {
   let iconBg = node.status === "active" ? "bg-green" : "bg-silver";
+
+  let subtitle;
+  if (node.distance) {
+    subtitle = `${parseFloat(node.distance / 1000).toFixed(1)}km`;
+  }
+
+  if (device) {
+    subtitle += ` • ${device.type.name}`;
+  }
+
+  // if (node.devices) {
+  //   subtitle = node.devices.map((device) => device.type.name).join(", ");
+  // }
 
   return (
     <Link to={`/map/nodes/${node.id}`} className="link">
@@ -22,7 +35,7 @@ export default function NodePreview({ node }) {
               <Status status={node.status} />
             </div>
             <div className="mt1">
-              <span className="mid-gray">{node.location}</span>
+              <span className="mid-gray">{subtitle}</span>
             </div>
           </div>
         </div>

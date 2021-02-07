@@ -9,6 +9,7 @@ import {
 	destroyResource,
 	createMembership,
 	createDevice,
+	createLink,
 	RequestError,
 } from "../../api";
 
@@ -21,6 +22,8 @@ import DevicePreview from "../Device/DevicePreview";
 import DeviceAdd from "../Device/DeviceAdd";
 import PanoramaPreview from "../Panorama/PanoramaPreview";
 import PanoramaAdd from "../Panorama/PanoramaAdd";
+import LineOfSight from "../LineOfSight/LineOfSight";
+import LinkAdd from "../Link/LinkAdd";
 import Status from "../Status";
 import Field from "../Field";
 
@@ -90,8 +93,15 @@ export default function Node({ id }) {
 
 	async function addDevice(device) {
 		const token = await getAccessTokenSilently();
-
 		await createDevice(device, token);
+		const resource = await fetchResource(`nodes/${id}`, token);
+		setNode(resource);
+		setEditing(false);
+	}
+
+	async function addLink(link) {
+		const token = await getAccessTokenSilently();
+		await createLink(link, token);
 		const resource = await fetchResource(`nodes/${id}`, token);
 		setNode(resource);
 		setEditing(false);
@@ -227,6 +237,11 @@ export default function Node({ id }) {
 						<NodePreview key={node.id} node={node} />
 					))}
 				</ResourceSection>
+
+				<ResourceSection title="Line of Sight" editLabel="Add" disableEdit>
+					<LineOfSight building={node.building} />
+				</ResourceSection>
+
 				{editing === "node" && (
 					<ResourceEdit
 						resourceType="node"
@@ -277,6 +292,13 @@ export default function Node({ id }) {
 				{editing === "devices" && (
 					<DeviceAdd
 						onSubmit={addDevice}
+						onCancel={() => setEditing(false)}
+						node={node}
+					/>
+				)}
+				{editing === "links" && (
+					<LinkAdd
+						onSubmit={addLink}
 						onCancel={() => setEditing(false)}
 						node={node}
 					/>

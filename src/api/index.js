@@ -124,3 +124,20 @@ export async function createMembership(node, memberId, token) {
 	if (res.status !== 200) throw new RequestError(res.error, res);
 	return await res.json();
 }
+
+export async function createLink(link, token) {
+	const path = `${process.env.REACT_APP_API_ROOT}/links`;
+
+	const options = {
+		method: "POST",
+		headers: {
+			Authorization: `Bearer ${token}`,
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify(link),
+	};
+
+	const res = await fetch(path, options);
+	if (res.status !== 200) throw new RequestError(res.error, res);
+	return await res.json();
+}

@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 
 import { fetchResource } from "../../api";
 
+import NodePreview from "../Node/NodePreview";
+
 export default function LineOfSight({ building }) {
   const [los, setLos] = useState();
   const [loading, setLoading] = useState(true);
@@ -68,31 +70,11 @@ export default function LineOfSight({ building }) {
       const nonUnknown = node.devices.filter((d) => d.type.name !== "Unknown");
       const device = nonUnknown[0] || node.devices[0] || { type: {} };
       return (
-        <NodeRow
+        <NodePreview
           key={`${node.id}-${device.type.name}-${device.type.id}`}
           node={node}
           device={device}
         />
       );
     });
-}
-
-function NodeRow({ node, device }) {
-  return (
-    <li className="bb b--light-gray pv2 pointer flex items-start justify-between">
-      <div className="flex items-center mr4">
-        <div className="f6">
-          <div className="flex fw5 items-center">
-            <span className="black">{node.name || `${node.id}`}</span>
-          </div>
-          <div className="mt1">
-            <span className="mid-gray db nowrap">
-              {`${parseFloat(node.distance / 1000).toFixed(1)}km`} •{" "}
-              {device.ssid || device.type.name}
-            </span>
-          </div>
-        </div>
-      </div>
-    </li>
-  );
 }
