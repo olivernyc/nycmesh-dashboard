@@ -7,7 +7,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import Button from "../Button2";
 
 export default function ResourceList(props) {
-	const { resourceName, title, columns } = props;
+	const { resourceName, columns } = props;
 	const [data, setData] = useState([]);
 	const { isAuthenticated, getAccessTokenSilently } = useAuth0();
 

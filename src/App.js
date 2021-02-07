@@ -7,13 +7,9 @@ import SearchBar from "./components/SearchBar";
 import Search from "./components/Search";
 import MapView from "./components/MapView";
 import Nodes from "./components/Node/Nodes";
-import Node from "./components/Node/Node";
 import Buildings from "./components/Building/Buildings";
-import Building from "./components/Building/Building";
 import Requests from "./components/Request/Requests";
-import Request from "./components/Request/Request";
 import Members from "./components/Member/Members";
-import Member from "./components/Member/Member";
 import Appointments from "./components/Appointment/Appointments";
 
 function App() {

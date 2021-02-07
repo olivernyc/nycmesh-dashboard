@@ -2,19 +2,16 @@ import React, { useState, useEffect } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import DocumentTitle from "react-document-title";
 
-import { fetchResource, updateResource } from "../../api";
+import { fetchResource } from "../../api";
 
-import ResourceEdit from "../Resource/ResourceEdit";
 import ResourceSection from "../Resource/ResourceSection";
 import MemberPreview from "../Member/MemberPreview";
 import NodePreview from "../Node/NodePreview";
 import RequestPreview from "../Request/RequestPreview";
-import PanoramaPreview from "../Panorama/PanoramaPreview";
 import Field from "../Field";
 
 export default function Appointment({ id }) {
   const [appointment, setAppointment] = useState();
-  const [editing, setEditing] = useState();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState();
   const { isAuthenticated, getAccessTokenSilently } = useAuth0();
@@ -74,19 +71,11 @@ export default function Appointment({ id }) {
             {appointment.building.address}
           </span>
         </div>
-        <ResourceSection
-          title="Details"
-          disableEdit={!isAuthenticated}
-          onEdit={() => setEditing("building")}
-        >
+        <ResourceSection title="Details" disableEdit={true}>
           <Field name="date" value={localizedDate} />
           <Field name="notes" value={appointment.notes} />
         </ResourceSection>
-        <ResourceSection
-          title="Node"
-          editLabel="Add"
-          onEdit={() => setEditing("nodes")}
-        >
+        <ResourceSection title="Node" editLabel="Add" disableEdit={true}>
           {!appointment.node ? (
             <div className="pv3">
               <span className="light-silver">No node</span>

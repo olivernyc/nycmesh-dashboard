@@ -112,7 +112,7 @@ function NodeMap({ history, match }) {
 			if (!appointment) return;
 			map.setZoom(15);
 		}
-	}, [mapData, map, nodeId, requestId, isFirstLoad]);
+	}, [mapData, map, nodeId, requestId, appointmentId, isFirstLoad]);
 
 	// Dismiss sidebar on escape
 	useEffect(() => {
