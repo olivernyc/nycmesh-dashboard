@@ -19,6 +19,7 @@ function MapComponent({
 	onClick,
 	onNodeClick,
 	onRequestClick,
+	onAppointmentClick,
 }) {
 	if (!nodes || !links) throw new Error("Missing nodes or links");
 
@@ -51,7 +52,7 @@ function MapComponent({
 
 	if (!isLoaded) return null;
 	return (
-		<div className="h-100-l vh-75 w-100 flex flex-column relative">
+		<div className="h-100-l vh-50 w-100 flex flex-column relative">
 			<GoogleMap
 				zoom={DEFAULT_ZOOM}
 				center={DEFAULT_CENTER}
@@ -62,7 +63,10 @@ function MapComponent({
 			>
 				<NodeLayer nodes={nodes} onClick={onNodeClick} />
 				<RequestLayer requests={requests} onClick={onRequestClick} />
-				<AppointmentLayer appointments={appointments} />
+				<AppointmentLayer
+					appointments={appointments}
+					onClick={onAppointmentClick}
+				/>
 				<LinkLayer links={links} />
 			</GoogleMap>
 		</div>

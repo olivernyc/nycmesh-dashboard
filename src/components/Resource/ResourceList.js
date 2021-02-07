@@ -58,7 +58,7 @@ export default function ResourceList(props) {
 							columns={columns.map((column, index) => ({
 								key: column.name,
 								dataKey: column.name,
-								title: column.name.replace("_", " "),
+								title: column.title || column.name.replace("_", " "),
 								width: column.width || 200,
 								flexGrow: column.width ? 0 : 1,
 								className: "f6 fw4 dark-gray pointer",

@@ -7,13 +7,10 @@ import SearchBar from "./components/SearchBar";
 import Search from "./components/Search";
 import MapView from "./components/MapView";
 import Nodes from "./components/Node/Nodes";
-import Node from "./components/Node/Node";
 import Buildings from "./components/Building/Buildings";
-import Building from "./components/Building/Building";
 import Requests from "./components/Request/Requests";
-import Request from "./components/Request/Request";
 import Members from "./components/Member/Members";
-import Member from "./components/Member/Member";
+import Appointments from "./components/Appointment/Appointments";
 
 function App() {
   return (
@@ -36,20 +33,15 @@ function App() {
               "/map/members/:memberId",
               "/map/buildings/:buildingId",
               "/map/devices/:deviceId",
+              "/map/appointments/:appointmentId",
             ]}
             component={MapView}
           />
           <Route exact path="/nodes" component={Nodes} />
-          <Route exact path="/nodes/:id" component={Node} />
-
           <Route exact path="/buildings" component={Buildings} />
-          <Route exact path="/buildings/:id" component={Building} />
-
           <Route exact path="/requests" component={Requests} />
-          <Route exact path="/requests/:id" component={Request} />
-
           <Route exact path="/members" component={Members} />
-          <Route exact path="/members/:id" component={Member} />
+          <Route exact path="/appointments" component={Appointments} />
         </div>
       </div>
     </Router>

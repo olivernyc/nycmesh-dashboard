@@ -10,6 +10,7 @@ import Request from "../Request/Request";
 import Member from "../Member/Member";
 import Building from "../Building/Building";
 import Device from "../Device/Device";
+import Appointment from "../Appointment/Appointment";
 
 export default React.memo(NodeMap);
 
@@ -25,11 +26,24 @@ function NodeMap({ history, match }) {
 		setMap(map);
 	}, []);
 
-	const { nodeId, requestId, memberId, buildingId, deviceId } = match.params;
+	const {
+		nodeId,
+		requestId,
+		memberId,
+		buildingId,
+		deviceId,
+		appointmentId,
+	} = match.params;
 
 	// Pan to selected item
 	useEffect(() => {
-		if (!map || !mapData.nodesById || !mapData.requestsById) return;
+		if (
+			!map ||
+			!mapData.nodesById ||
+			!mapData.requestsById ||
+			!mapData.appointmentsById
+		)
+			return;
 		if (nodeId) {
 			const node = mapData.nodesById[nodeId];
 			if (!node) return;
@@ -38,18 +52,34 @@ function NodeMap({ history, match }) {
 			const request = mapData.requestsById[requestId];
 			if (!request) return;
 			map.panTo({ lat: request.lat, lng: request.lng });
+		} else if (appointmentId) {
+			const appointment = mapData.appointmentsById[appointmentId];
+			if (!appointment) return;
+			map.panTo({ lat: appointment.lat, lng: appointment.lng });
 		}
-	}, [nodeId, requestId, memberId, mapData, map]);
+	}, [nodeId, requestId, memberId, appointmentId, mapData, map]);
 
 	// Fit bounds to node + connected nodes on first load
 	useEffect(() => {
-		const { nodesById, requestsById, connectedNodes } = mapData;
-		if (!map || !nodesById || !requestsById || !connectedNodes) return;
+		const {
+			nodesById,
+			requestsById,
+			appointmentsById,
+			connectedNodes,
+		} = mapData;
+		if (
+			!map ||
+			!nodesById ||
+			!requestsById ||
+			!appointmentsById ||
+			!connectedNodes
+		)
+			return;
 
 		if (!isFirstLoad) return;
 		setIsFirstLoad(false);
 
-		if (!nodeId && !requestId) return;
+		if (!nodeId && !requestId && !appointmentId) return;
 
 		if (nodeId) {
 			const newBounds = {
@@ -77,8 +107,12 @@ function NodeMap({ history, match }) {
 			if (!request) return;
 			map.setZoom(15);
 			return;
+		} else if (appointmentId) {
+			const appointment = appointmentsById[appointmentId];
+			if (!appointment) return;
+			map.setZoom(15);
 		}
-	}, [mapData, map, nodeId, requestId, isFirstLoad]);
+	}, [mapData, map, nodeId, requestId, appointmentId, isFirstLoad]);
 
 	// Dismiss sidebar on escape
 	useEffect(() => {
@@ -107,6 +141,13 @@ function NodeMap({ history, match }) {
 		[history]
 	);
 
+	const handleAppointmentClick = useCallback(
+		(appointment) => {
+			history.push(`/map/appointments/${appointment.id}`);
+		},
+		[history]
+	);
+
 	const handleMapClick = useCallback(
 		(node) => {
 			history.push("/map");
@@ -118,6 +159,7 @@ function NodeMap({ history, match }) {
 		(requestId && isAuthenticated) ||
 		(memberId && isAuthenticated) ||
 		(buildingId && isAuthenticated) ||
+		(appointmentId && isAuthenticated) ||
 		deviceId) && (
 		<div className="w-100 h-100 bg-white overflow-y-scroll-l map-sidebar">
 			{nodeId && <Node id={nodeId} />}
@@ -125,6 +167,7 @@ function NodeMap({ history, match }) {
 			{memberId && <Member id={memberId} />}
 			{buildingId && <Building id={buildingId} />}
 			{deviceId && <Device id={deviceId} />}
+			{appointmentId && <Appointment id={appointmentId} />}
 		</div>
 	);
 
@@ -136,6 +179,7 @@ function NodeMap({ history, match }) {
 					value={{
 						selectedNode: parseInt(nodeId),
 						selectedRequest: parseInt(requestId),
+						selectedAppointment: parseInt(appointmentId),
 						connectedNodes: mapData.connectedNodes,
 						nodesById: mapData.nodesById,
 						requestsById: mapData.requestsById,
@@ -149,6 +193,7 @@ function NodeMap({ history, match }) {
 						onLoad={handleLoad}
 						onNodeClick={handleNodeClick}
 						onRequestClick={handleRequestClick}
+						onAppointmentClick={handleAppointmentClick}
 						onClick={handleMapClick}
 					/>
 				</MapContext.Provider>
@@ -185,12 +230,16 @@ function useMapData() {
 			const mapData = await fetchResource("map", token);
 			const nodesById = {};
 			const requestsById = {};
+			const appointmentsById = {};
 			const connectedNodes = {};
 			mapData.nodes.forEach((node) => {
 				nodesById[node.id] = node;
 			});
 			mapData.requests.forEach((request) => {
 				requestsById[request.id] = request;
+			});
+			mapData.appointments.forEach((appointment) => {
+				appointmentsById[appointment.id] = appointment;
 			});
 			mapData.links.forEach((link) => {
 				const [nodeId1, nodeId2] = link.devices.map((d) => d.node_id);
@@ -203,6 +252,7 @@ function useMapData() {
 				...mapData,
 				nodesById,
 				requestsById,
+				appointmentsById,
 				connectedNodes,
 			});
 		}
