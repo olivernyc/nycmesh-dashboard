@@ -7,7 +7,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import Button from "../Button2";
 
 export default function ResourceList(props) {
-	const { resourceName, columns } = props;
+	const { resourceName, title, columns } = props;
 	const [data, setData] = useState([]);
 	const { isAuthenticated, getAccessTokenSilently } = useAuth0();
 
@@ -58,7 +58,7 @@ export default function ResourceList(props) {
 							columns={columns.map((column, index) => ({
 								key: column.name,
 								dataKey: column.name,
-								title: column.name.replace("_", " "),
+								title: column.title || column.name.replace("_", " "),
 								width: column.width || 200,
 								flexGrow: column.width ? 0 : 1,
 								className: "f6 fw4 dark-gray pointer",

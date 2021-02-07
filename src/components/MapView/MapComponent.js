@@ -19,6 +19,7 @@ function MapComponent({
 	onClick,
 	onNodeClick,
 	onRequestClick,
+	onAppointmentClick,
 }) {
 	if (!nodes || !links) throw new Error("Missing nodes or links");
 
@@ -62,7 +63,10 @@ function MapComponent({
 			>
 				<NodeLayer nodes={nodes} onClick={onNodeClick} />
 				<RequestLayer requests={requests} onClick={onRequestClick} />
-				<AppointmentLayer appointments={appointments} />
+				<AppointmentLayer
+					appointments={appointments}
+					onClick={onAppointmentClick}
+				/>
 				<LinkLayer links={links} />
 			</GoogleMap>
 		</div>

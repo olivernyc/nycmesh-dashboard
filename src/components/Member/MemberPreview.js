@@ -35,14 +35,16 @@ export default function MemberPreview({ member, onDelete }) {
 					</div>
 				</div>
 
-				<div className="show-on-hover--content mr2">
-					<button
-						className="button-reset input-reset pa0 ma0 bn bg-transparent pointer"
-						onClick={handleDelete}
-					>
-						<TrashcanIcon className="gray" />
-					</button>
-				</div>
+				{onDelete && (
+					<div className="show-on-hover--content mr2">
+						<button
+							className="button-reset input-reset pa0 ma0 bn bg-transparent pointer"
+							onClick={handleDelete}
+						>
+							<TrashcanIcon className="gray" />
+						</button>
+					</div>
+				)}
 			</div>
 		</Link>
 	);

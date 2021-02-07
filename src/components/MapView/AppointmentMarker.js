@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useCallback } from "react";
 import { Marker } from "@react-google-maps/api";
 import Tooltip from "./Tooltip";
 import { MapContext } from ".";
@@ -13,14 +13,18 @@ function AppointmentMarker({ appointment, onClick }) {
     MapContext
   );
   const selected = selectedAppointment === appointment.id;
-  if (appointment.status === "closed" && !selected) return null;
   const dimmed = selectedNode || selectedRequest;
+  const onClickMemo = useCallback(() => onClick(appointment), [
+    appointment,
+    onClick,
+  ]);
+  if (appointment.status === "closed" && !selected) return null;
   return (
     <AppointmentMarkerMemo
       appointment={appointment}
       selected={selected}
       dimmed={dimmed}
-      onClick={onClick}
+      onClick={onClickMemo}
     />
   );
 }
@@ -43,7 +47,7 @@ function AppointmentMarker2({ appointment, selected, dimmed, onClick }) {
         zIndex={zIndex}
         onClick={onClick}
       />
-      {selected && <Tooltip lat={lat} lng={lng} label={appointment.id} />}
+      {selected && <Tooltip lat={lat} lng={lng} label={appointment.type} />}
     </React.Fragment>
   );
 }

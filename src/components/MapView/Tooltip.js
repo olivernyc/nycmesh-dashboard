@@ -18,7 +18,7 @@ export default function Tooltip({ lat, lng, label }) {
 					className="flex items-center bg-white br1 overflow-hidden shadow pv05 ph1"
 					ref={handleRef}
 				>
-					<span className="f6 nowrap helvetica db">{label}</span>
+					<span className="f6 nowrap helvetica ttc db">{label}</span>
 				</div>
 				<svg
 					viewBox="0 5 12 12"
