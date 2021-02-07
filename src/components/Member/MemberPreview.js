@@ -1,32 +1,49 @@
 import React from "react";
-import { TrashcanIcon } from "@primer/octicons-react";
+import { Link } from "react-router-dom";
 
-export default function MemberPreview(props) {
-	const { member, onDelete } = props;
+import { SmileyIcon, TrashcanIcon } from "@primer/octicons-react";
+
+export default function MemberPreview({ member, onDelete }) {
 	if (!member) return <div>Invalid member</div>;
 
-	function handleDelete() {
-		if (window.confirm(`Are you sure you want to remove ${member.name} from this node?`) && onDelete) {
-			onDelete(member)
+	function handleDelete(event) {
+		event.preventDefault();
+		if (
+			window.confirm(
+				`Are you sure you want to remove ${member.name} from this node?`
+			) &&
+			onDelete
+		) {
+			onDelete(member);
 		}
 	}
 
 	return (
-		<div className="pv2 bb b--light-gray flex justify-between items-center show-on-hover">
-			<div>
-				<div className="mb1">
-					<span className="fw5">{member.name}</span>
+		<Link to={`/map/members/${member.id}`} className="link">
+			<div className="pv2 bb b--light-gray flex justify-between items-center show-on-hover">
+				<div className="flex items-center">
+					<div className="bg-silver h2 w2 br2 ml1 mr2 flex items-center justify-center white">
+						<SmileyIcon />
+					</div>
+					<div>
+						<div className="mb1">
+							<span className="fw5 black">{member.name}</span>
+						</div>
+						<div className="mid-gray">
+							<span>{member.email}</span>
+						</div>
+					</div>
 				</div>
-				<div className="mid-gray">
-					<span>{member.email}</span>
-				</div>
-			</div>
 
-			<div className="show-on-hover--content mr2">
-				<button className="button-reset input-reset pa0 ma0 bn bg-transparent pointer" onClick={handleDelete}>
-					<TrashcanIcon className="gray" />
-				</button>
+				<div className="show-on-hover--content mr2">
+					<button
+						className="button-reset input-reset pa0 ma0 bn bg-transparent pointer"
+						onClick={handleDelete}
+					>
+						<TrashcanIcon className="gray" />
+					</button>
+				</div>
 			</div>
-		</div>
+		</Link>
 	);
 }

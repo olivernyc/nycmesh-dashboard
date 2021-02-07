@@ -77,6 +77,12 @@ export default function Request(props) {
 				<Field name="apartment" value={request.apartment} />
 				<Field name="notes" value={request.notes} />
 			</Section>
+			<Section title="Building">
+				<BuildingPreview building={request.building} />
+			</Section>
+			<Section title="Member">
+				<MemberPreview member={request.member} />
+			</Section>
 			<Section
 				title="Panoramas"
 				editLabel="Add"
@@ -86,12 +92,6 @@ export default function Request(props) {
 				}}
 			>
 				<PanoramaPreview panoramas={request.panoramas} />
-			</Section>
-			<Section title="Building">
-				<BuildingPreview building={request.building} />
-			</Section>
-			<Section title="Member">
-				<MemberPreview member={request.member} />
 			</Section>
 			<Section title="Line of Sight">
 				<LineOfSight building={request.building} />
