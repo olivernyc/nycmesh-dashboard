@@ -21,6 +21,7 @@ import DevicePreview from "../Device/DevicePreview";
 import DeviceAdd from "../Device/DeviceAdd";
 import PanoramaPreview from "../Panorama/PanoramaPreview";
 import PanoramaAdd from "../Panorama/PanoramaAdd";
+import LineOfSight from "../LineOfSight/LineOfSight";
 import Status from "../Status";
 import Field from "../Field";
 
@@ -227,6 +228,11 @@ export default function Node({ id }) {
 						<NodePreview key={node.id} node={node} />
 					))}
 				</ResourceSection>
+
+				<ResourceSection title="Line of Sight" editLabel="Add" disableEdit>
+					<LineOfSight building={node.building} />
+				</ResourceSection>
+
 				{editing === "node" && (
 					<ResourceEdit
 						resourceType="node"

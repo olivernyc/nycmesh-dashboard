@@ -32,37 +32,30 @@ export default function ResourceEdit(props) {
 					if (field.type === "text")
 						return (
 							<Input
-								label={field.key}
+								label={field.label || field.key}
 								value={newResource[field.key]}
-								onChange={(newValue) =>
-									updateValue(field.key, newValue)
-								}
-							/>
-						);
-					if (field.type === "textarea")
-						return (
-							<Input
-								label={field.key}
-								type="textarea"
-								value={newResource[field.key]}
-								onChange={(newValue) =>
-									updateValue(field.key, newValue)
-								}
+								onChange={(newValue) => updateValue(field.key, newValue)}
 							/>
 						);
 					if (field.type === "select")
 						return (
 							<Input
-								label={field.key}
+								label={field.label || field.key}
 								type="select"
 								options={field.options}
 								value={newResource[field.key]}
-								onChange={(newValue) =>
-									updateValue(field.key, newValue)
-								}
+								onChange={(newValue) => updateValue(field.key, newValue)}
 							/>
 						);
-					return null;
+
+					return (
+						<Input
+							label={field.label || field.key}
+							type={field.type}
+							value={newResource[field.key]}
+							onChange={(newValue) => updateValue(field.key, newValue)}
+						/>
+					);
 				})}
 			</form>
 		</Modal>
