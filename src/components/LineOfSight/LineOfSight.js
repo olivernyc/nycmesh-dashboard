@@ -78,23 +78,3 @@ export default function LineOfSight({ building }) {
       );
     });
 }
-
-function NodeRow({ node, device }) {
-  return (
-    <li className="bb b--light-gray pv2 pointer flex items-start justify-between">
-      <div className="flex items-center mr4">
-        <div className="f6">
-          <div className="flex fw5 items-center">
-            <span className="black">{node.name || `${node.id}`}</span>
-          </div>
-          <div className="mt1">
-            <span className="mid-gray db nowrap">
-              {`${parseFloat(node.distance / 1000).toFixed(1)}km`} •{" "}
-              {device.ssid || device.type.name}
-            </span>
-          </div>
-        </div>
-      </div>
-    </li>
-  );
-}
