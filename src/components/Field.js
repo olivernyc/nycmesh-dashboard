@@ -8,6 +8,7 @@ export default function Field({ name, value, url }) {
   } else {
     formattedValue = value || `No ${name}`;
   }
+  const color = value ? "dark-gray" : "light-silver";
   return (
     <div className="mv3">
       <div className="w4 mb1" style={{ minWidth: "8rem" }}>
@@ -18,7 +19,7 @@ export default function Field({ name, value, url }) {
           {formattedValue}
         </Link>
       ) : (
-        <span className="dark-gray">{formattedValue}</span>
+        <span className={color}>{formattedValue}</span>
       )}
     </div>
   );
