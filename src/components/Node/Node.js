@@ -8,6 +8,7 @@ import {
 	updateResource,
 	destroyResource,
 	createMembership,
+	createDevice,
 	RequestError,
 } from "../../api";
 
@@ -15,7 +16,9 @@ import ResourceEdit from "../Resource/ResourceEdit";
 import ResourceSection from "../Resource/ResourceSection";
 import MemberPreview from "../Member/MemberPreview";
 import MemberSelect from "../Member/MemberSelect";
+import NodePreview from "../Node/NodePreview";
 import DevicePreview from "../Device/DevicePreview";
+import DeviceAdd from "../Device/DeviceAdd";
 import PanoramaPreview from "../Panorama/PanoramaPreview";
 import PanoramaAdd from "../Panorama/PanoramaAdd";
 import Status from "../Status";
@@ -83,6 +86,15 @@ export default function Node({ id }) {
 			...node,
 			members: node.members.filter((m) => m.id !== member.id),
 		});
+	}
+
+	async function addDevice(device) {
+		const token = await getAccessTokenSilently();
+
+		await createDevice(device, token);
+		const resource = await fetchResource(`nodes/${id}`, token);
+		setNode(resource);
+		setEditing(false);
 	}
 
 	if (!id) return null;
@@ -190,7 +202,7 @@ export default function Node({ id }) {
 					title="Devices"
 					editLabel="Add"
 					disableEdit={!isAuthenticated}
-					onEdit={() => setEditing(true)}
+					onEdit={() => setEditing("devices")}
 				>
 					{node.devices.map((device) => (
 						<Link
@@ -200,6 +212,19 @@ export default function Node({ id }) {
 						>
 							<DevicePreview device={device} />
 						</Link>
+					))}
+				</ResourceSection>
+				<ResourceSection
+					title="Links"
+					editLabel="Add"
+					disableEdit={!isAuthenticated}
+					onEdit={async () => {
+						await setEditing(); // hack to rerun PanoramaAdd effect
+						setEditing("links");
+					}}
+				>
+					{node.connected_nodes.map((node) => (
+						<NodePreview key={node.id} node={node} />
 					))}
 				</ResourceSection>
 				{editing === "node" && (
@@ -247,6 +272,13 @@ export default function Node({ id }) {
 						onSubmit={addMember}
 						onCancel={() => setEditing(false)}
 						existingMembers={node.members}
+					/>
+				)}
+				{editing === "devices" && (
+					<DeviceAdd
+						onSubmit={addDevice}
+						onCancel={() => setEditing(false)}
+						node={node}
 					/>
 				)}
 			</div>

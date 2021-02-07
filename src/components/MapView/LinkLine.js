@@ -18,8 +18,6 @@ export default function LinkLine({ link }) {
 	);
 }
 
-const LinkLineMemo = React.memo(LinkLine2);
-
 function LinkLine2({ link, selected, dimmed, nodesById }) {
 	const [device1, device2] = link.devices;
 	const [node1, node2] = link.devices.map((d) => nodesById[d.node_id]);
@@ -50,6 +48,8 @@ function LinkLine2({ link, selected, dimmed, nodesById }) {
 	};
 	return <Polyline path={path} options={options} />;
 }
+
+const LinkLineMemo = React.memo(LinkLine2);
 
 const isSupernode = (node) => node.name && node.name.includes("Supernode");
 const isHub = (node) => node.notes && node.notes.toLowerCase().includes("hub");

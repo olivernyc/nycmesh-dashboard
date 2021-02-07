@@ -38,9 +38,10 @@ const RequestMarkerMemo = React.memo(RequestMarker2);
 function RequestMarker2({ request, selected, dimmed, onClick }) {
 	const { id, lat, lng } = request;
 	const title = String(id);
-	const zIndex = 0;
-	const opacity = selected ? 1 : dimmed ? 0.2 : request.has_panoramas ? 1 : 0.4;
-	const icon = request.has_panoramas ? panoIcon : regularIcon;
+	const panoAndRoof = request.has_panoramas && request.roof_access;
+	const zIndex = panoAndRoof ? 1 : 0;
+	const opacity = selected ? 1 : dimmed ? 0.2 : panoAndRoof ? 1 : 0.4;
+	const icon = panoAndRoof ? panoIcon : regularIcon;
 	if (lat === "NaN" || lng === "NaN") return null;
 	return (
 		<React.Fragment>
