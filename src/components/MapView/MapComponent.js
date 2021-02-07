@@ -52,7 +52,7 @@ function MapComponent({
 
 	if (!isLoaded) return null;
 	return (
-		<div className="h-100-l vh-75 w-100 flex flex-column relative">
+		<div className="h-100-l vh-50 w-100 flex flex-column relative">
 			<GoogleMap
 				zoom={DEFAULT_ZOOM}
 				center={DEFAULT_CENTER}
