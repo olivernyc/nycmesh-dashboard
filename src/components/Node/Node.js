@@ -214,15 +214,21 @@ export default function Node({ id }) {
 					disableEdit={!isAuthenticated}
 					onEdit={() => setEditing("devices")}
 				>
-					{node.devices.map((device) => (
-						<Link
-							key={device.id}
-							to={`/map/devices/${device.id}`}
-							className="link"
-						>
-							<DevicePreview device={device} />
-						</Link>
-					))}
+					{!node.devices || !node.devices.length ? (
+						<div className="pv3">
+							<span className="light-silver">No devices</span>
+						</div>
+					) : (
+						node.devices.map((device) => (
+							<Link
+								key={device.id}
+								to={`/map/devices/${device.id}`}
+								className="link"
+							>
+								<DevicePreview device={device} />
+							</Link>
+						))
+					)}
 				</ResourceSection>
 				<ResourceSection
 					title="Links"
@@ -233,9 +239,15 @@ export default function Node({ id }) {
 						setEditing("links");
 					}}
 				>
-					{node.connected_nodes.map((node) => (
-						<NodePreview key={node.id} node={node} />
-					))}
+					{!node.connected_nodes || !node.connected_nodes.length ? (
+						<div className="pv3">
+							<span className="light-silver">No links</span>
+						</div>
+					) : (
+						node.connected_nodes.map((node) => (
+							<NodePreview key={node.id} node={node} />
+						))
+					)}
 				</ResourceSection>
 
 				<ResourceSection title="Line of Sight" editLabel="Add" disableEdit>
