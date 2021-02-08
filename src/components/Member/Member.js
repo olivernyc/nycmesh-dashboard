@@ -52,8 +52,16 @@ export default function Member({ id }) {
 	return (
 		<DocumentTitle title={`${member.name} - NYC Mesh`}>
 			<div className="w-100 pa3 f6">
-				<div className="">
+				<div className="flex items-center">
 					<span className="f3 fw7">{member.name}</span>
+					{member.donor && (
+						<img
+							src="/img/donor.png"
+							className="ml1"
+							title="Donor"
+							alt="heart icon"
+						/>
+					)}
 				</div>
 				<div className="mt2 flex">
 					<span className="mid-gray f5 mr2">{member.email}</span>
