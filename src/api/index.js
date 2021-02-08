@@ -17,6 +17,21 @@ export async function fetchResource(resource, token) {
 	return res.json();
 }
 
+export async function createResource(resourceType, resource, token) {
+	const path = `${process.env.REACT_APP_API_ROOT}/${resourceType}`;
+	const options = {
+		method: "POST",
+		headers: {
+			Authorization: `Bearer ${token}`,
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify(resource),
+	};
+	const res = await fetch(path, options);
+	if (res.status !== 200) throw new RequestError(res.error, res);
+	return res.json();
+}
+
 export async function updateResource(
 	resourceType,
 	resourceId,
