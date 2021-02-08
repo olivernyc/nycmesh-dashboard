@@ -1,10 +1,7 @@
-import React, { useState, useEffect } from "react";
-import { useAuth0 } from "@auth0/auth0-react";
-import AsyncSelect from "react-select/async";
+import React, { useState } from "react";
 
 import Modal from "../Modal";
 import Input from "../Input";
-import { search, fetchResource } from "../../api";
 
 export default function NodeAdd({ building, onSubmit, onCancel }) {
   if (!building) throw new Error("Must specify a building");
@@ -16,8 +13,6 @@ export default function NodeAdd({ building, onSubmit, onCancel }) {
     location: building.address,
     building_id: building.id,
   });
-
-  const { getAccessTokenSilently } = useAuth0();
 
   function handleNameChange(name) {
     setNode((node) => ({ ...node, name }));
@@ -41,10 +36,6 @@ export default function NodeAdd({ building, onSubmit, onCancel }) {
 
   function handleAltChange(alt) {
     setNode((node) => ({ ...node, alt }));
-  }
-
-  function excludeSameNode(option) {
-    return option.value !== node.id;
   }
 
   const validForm =
