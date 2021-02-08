@@ -8,15 +8,8 @@ import { search, fetchResource } from "../../api";
 export default function LinkAdd({ node, onSubmit, onCancel }) {
   if (!node) throw new Error("Must specify a node");
   const [link, setLink] = useState({
-    device_type_id: null,
-    node_id: node.id,
-    name: "",
-    SSID: "",
-    lat: node.lat,
-    lng: node.lng,
-    alt: node.alt,
-    azimuth: null,
-    notes: "",
+    device_a_id: null,
+    device_b_id: null,
   });
   const [nodeB, setNodeB] = useState();
   const [nodeBDevices, setNodeBDevices] = useState([]);
@@ -45,6 +38,10 @@ export default function LinkAdd({ node, onSubmit, onCancel }) {
     const token = await getAccessTokenSilently();
     const { nodes } = await search(query, token);
     return nodes;
+  }
+
+  function excludeSameNode(option) {
+    return option.value !== node.id;
   }
 
   useEffect(() => {
@@ -95,6 +92,7 @@ export default function LinkAdd({ node, onSubmit, onCancel }) {
             <AsyncSelect
               onChange={handleNodeBChange}
               loadOptions={loadNodeBOptions}
+              filterOption={excludeSameNode}
               getOptionLabel={({ id, name }) => name || id}
               getOptionValue={({ id }) => id}
               className="react-select"
