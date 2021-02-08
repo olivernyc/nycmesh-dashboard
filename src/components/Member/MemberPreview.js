@@ -26,8 +26,16 @@ export default function MemberPreview({ member, onDelete }) {
 						<SmileyIcon />
 					</div>
 					<div>
-						<div className="mb1">
+						<div className="mb1 flex items-center">
 							<span className="fw5 black">{member.name}</span>
+							{member.donor && (
+								<img
+									src="/img/donor.png"
+									className="ml1"
+									title="Donor"
+									alt="heart icon"
+								/>
+							)}
 						</div>
 						<div className="mid-gray">
 							<span>{member.email}</span>

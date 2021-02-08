@@ -5,7 +5,12 @@ import { TelescopeIcon } from "@primer/octicons-react";
 import Status from "../Status";
 
 export default function RequestPreview({ request }) {
-  let iconBg = request.status === "open" ? "bg-light-blue" : "bg-silver";
+  let iconBg =
+    request.status === "installed"
+      ? "bg-green"
+      : request.status === "open"
+      ? "bg-light-blue"
+      : "bg-silver";
   const apartmentLabel = isNaN(request.apartment)
     ? request.apartment
     : `Apt ${request.apartment}`;

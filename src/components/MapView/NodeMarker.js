@@ -105,8 +105,8 @@ function getIcon(node) {
 function getZ(node) {
 	const { name, notes, devices } = node;
 
-	if (name && name.includes("Supernode")) return 4;
-	if (notes && notes.toLowerCase().includes("hub")) return 3;
-	if (devices.filter((device) => device.type.name === "Omni").length) return 2;
-	return 1;
+	if (name && name.includes("Supernode")) return 5;
+	if (notes && notes.toLowerCase().includes("hub")) return 4;
+	if (devices.filter((device) => device.type.name === "Omni").length) return 3;
+	return 2;
 }
