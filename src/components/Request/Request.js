@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 
-import { fetchResource } from "../../api";
+import { updateResource, fetchResource } from "../../api";
 
 import ResourceEdit from "../Resource/ResourceEdit";
 import MemberPreview from "../Member/MemberPreview";
@@ -109,21 +109,12 @@ export default function Request(props) {
 						{ key: "apartment", type: "text" },
 						{ key: "notes", type: "textarea" },
 					]}
-					onSubmit={async (nodePatch) => {
-						// const token = await getAccessTokenSilently();
-						// alert("??");
-						// await updateResource(
-						// 	"nodes",
-						// 	node.id,
-						// 	nodePatch,
-						// 	token
-						// );
-						// const resource = await fetchResource(
-						// 	`nodes/${id}`,
-						// 	token
-						// );
-						// setNode(resource);
-						// setEditing(false);
+					onSubmit={async (patch) => {
+						const token = await getAccessTokenSilently();
+						await updateResource("requests", request.id, patch, token);
+						const resource = await fetchResource(`requests/${id}`, token);
+						setRequest(resource);
+						setEditing(false);
 					}}
 					onCancel={() => setEditing(false)}
 				/>
