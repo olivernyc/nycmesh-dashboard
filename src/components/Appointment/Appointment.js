@@ -5,7 +5,7 @@ import DocumentTitle from "react-document-title";
 import { fetchResource } from "../../api";
 
 import ResourceSection from "../Resource/ResourceSection";
-import MemberPreview from "../Member/MemberPreview";
+import BuildingPreview from "../Building/BuildingPreview";
 import NodePreview from "../Node/NodePreview";
 import RequestPreview from "../Request/RequestPreview";
 import Field from "../Field";
@@ -67,33 +67,23 @@ export default function Appointment({ id }) {
           <span className="f3 fw7 ttc">{appointment.type}</span>
         </div>
         <div className="mt2 flex">
-          <span className="mid-gray f5 mr2">
-            {appointment.building.address}
-          </span>
+          <span className="mid-gray f5 mr2">{localizedDate}</span>
         </div>
-        <ResourceSection title="Details" disableEdit={true}>
+
+        <ResourceSection title="Details" disableEdit>
           <Field name="date" value={localizedDate} />
           <Field name="notes" value={appointment.notes} />
         </ResourceSection>
-        <ResourceSection title="Node" editLabel="Add" disableEdit={true}>
-          {!appointment.node ? (
-            <div className="pv3">
-              <span className="light-silver">No node</span>
-            </div>
-          ) : (
-            <NodePreview key={appointment.node.id} request={appointment.node} />
-          )}
-        </ResourceSection>
 
-        <ResourceSection title="Member" disableEdit>
-          {!appointment.member ? (
+        <ResourceSection title="Building" disableEdit>
+          {!appointment.building ? (
             <div className="pv3">
-              <span className="light-silver">No members</span>
+              <span className="light-silver">No building</span>
             </div>
           ) : (
-            <MemberPreview
-              key={appointment.member.id}
-              member={appointment.member}
+            <BuildingPreview
+              key={appointment.building.id}
+              building={appointment.building}
             />
           )}
         </ResourceSection>
@@ -108,6 +98,16 @@ export default function Appointment({ id }) {
               key={appointment.request.id}
               request={appointment.request}
             />
+          )}
+        </ResourceSection>
+
+        <ResourceSection title="Node" disableEdit>
+          {!appointment.node ? (
+            <div className="pv3">
+              <span className="light-silver">No node</span>
+            </div>
+          ) : (
+            <NodePreview key={appointment.node.id} node={appointment.node} />
           )}
         </ResourceSection>
       </div>
