@@ -6,7 +6,6 @@ import { fetchResource } from "../../api";
 
 import ResourceSection from "../Resource/ResourceSection";
 import BuildingPreview from "../Building/BuildingPreview";
-import MemberPreview from "../Member/MemberPreview";
 import NodePreview from "../Node/NodePreview";
 import RequestPreview from "../Request/RequestPreview";
 import Field from "../Field";
