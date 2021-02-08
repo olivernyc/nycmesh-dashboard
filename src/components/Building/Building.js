@@ -2,13 +2,14 @@ import React, { useState, useEffect } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import DocumentTitle from "react-document-title";
 
-import { fetchResource, updateResource } from "../../api";
+import { fetchResource, updateResource, createResource } from "../../api";
 
 import ResourceEdit from "../Resource/ResourceEdit";
 import ResourceSection from "../Resource/ResourceSection";
 import NodePreview from "../Node/NodePreview";
 import RequestPreview from "../Request/RequestPreview";
 import PanoramaPreview from "../Panorama/PanoramaPreview";
+import NodeAdd from "../Node/NodeAdd";
 import Field from "../Field";
 
 export default function Building({ id }) {
@@ -35,6 +36,14 @@ export default function Building({ id }) {
     }
     fetchData();
   }, [isAuthenticated, getAccessTokenSilently, id]);
+
+  async function addNode(node) {
+    const token = await getAccessTokenSilently();
+    await createResource("nodes", node, token);
+    const resource = await fetchResource(`buildings/${id}`, token);
+    setBuilding(resource);
+    setEditing(false);
+  }
 
   if (!id) return null;
 
@@ -138,6 +147,14 @@ export default function Building({ id }) {
               setEditing(false);
             }}
             onCancel={() => setEditing(false)}
+          />
+        )}
+
+        {editing === "nodes" && (
+          <NodeAdd
+            building={building}
+            onCancel={() => setEditing(false)}
+            onSubmit={addNode}
           />
         )}
       </div>
