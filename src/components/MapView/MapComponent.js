@@ -5,23 +5,22 @@ import NodeLayer from "./NodeLayer";
 import RequestLayer from "./RequestLayer";
 import LinkLayer from "./LinkLayer";
 import AppointmentLayer from "./AppointmentLayer";
+import LosLayer from "./LosLayer";
 import { styles, darkStyles } from "./styles";
 
 const DEFAULT_ZOOM = 12;
 const DEFAULT_CENTER = { lat: 40.69, lng: -73.9595798 };
 
 function MapComponent({
+	data,
 	loading,
-	nodes,
-	links,
-	requests,
-	appointments,
 	onLoad,
 	onClick,
 	onNodeClick,
 	onRequestClick,
 	onAppointmentClick,
 }) {
+	const { nodes, links, requests, appointments, los } = data;
 	if (!nodes || !links) throw new Error("Missing nodes or links");
 
 	const colorScheme = useColorScheme();
@@ -76,6 +75,7 @@ function MapComponent({
 						onClick={onAppointmentClick}
 					/>
 					<LinkLayer links={links} />
+					<LosLayer los={los} />
 				</GoogleMap>
 			)}
 		</div>
