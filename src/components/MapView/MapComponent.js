@@ -11,6 +11,7 @@ const DEFAULT_ZOOM = 12;
 const DEFAULT_CENTER = { lat: 40.69, lng: -73.9595798 };
 
 function MapComponent({
+	loading,
 	nodes,
 	links,
 	requests,
@@ -50,25 +51,33 @@ function MapComponent({
 		return <div>Error loading map</div>;
 	}
 
-	if (!isLoaded) return null;
+	const loadingSpinner = (
+		<div className="absolute top-0 left-0 ma2 z-5">
+			<div className="loading-ring"></div>
+		</div>
+	);
+
 	return (
 		<div className="h-100-l vh-50 w-100 flex flex-column relative">
-			<GoogleMap
-				zoom={DEFAULT_ZOOM}
-				center={DEFAULT_CENTER}
-				options={options}
-				mapContainerClassName="flex h-100 w-100 bg-white"
-				onLoad={onLoad}
-				onClick={onClick}
-			>
-				<NodeLayer nodes={nodes} onClick={onNodeClick} />
-				<RequestLayer requests={requests} onClick={onRequestClick} />
-				<AppointmentLayer
-					appointments={appointments}
-					onClick={onAppointmentClick}
-				/>
-				<LinkLayer links={links} />
-			</GoogleMap>
+			{loading && loadingSpinner}
+			{isLoaded && (
+				<GoogleMap
+					zoom={DEFAULT_ZOOM}
+					center={DEFAULT_CENTER}
+					options={options}
+					mapContainerClassName="flex h-100 w-100 bg-white"
+					onLoad={onLoad}
+					onClick={onClick}
+				>
+					<NodeLayer nodes={nodes} onClick={onNodeClick} />
+					<RequestLayer requests={requests} onClick={onRequestClick} />
+					<AppointmentLayer
+						appointments={appointments}
+						onClick={onAppointmentClick}
+					/>
+					<LinkLayer links={links} />
+				</GoogleMap>
+			)}
 		</div>
 	);
 }

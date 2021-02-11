@@ -61,6 +61,8 @@ export default function Request(props) {
 		day: "numeric",
 	});
 
+	const ticketURL = `https://support.nycmesh.net/scp/tickets.php?a=search&query=${request.id}`;
+
 	return (
 		<div className="w-100 pa3 f6">
 			<div className="flex flex-wrap items-center">
@@ -68,6 +70,12 @@ export default function Request(props) {
 				<span className="ml2">
 					<Status status={request.status} />
 				</span>
+			</div>
+
+			<div className="mt3">
+				<a href={ticketURL} target="_" className="link purple">
+					View ticket →
+				</a>
 			</div>
 
 			<Section title="Details" onEdit={() => setEditing("request")}>

@@ -3,6 +3,7 @@ import DocumentTitle from "react-document-title";
 
 import DateCell from "../Resource/DateCell";
 import ResourceList from "../Resource/ResourceList";
+import Status from "../Status";
 
 export default function Requests(props) {
   return (
@@ -11,8 +12,18 @@ export default function Requests(props) {
         resourceName="requests"
         columns={[
           {
+            name: "id",
+            width: 64,
+            cellRenderer: ({ cellData }) => <span>{cellData}</span>,
+          },
+          {
+            name: "status",
+            width: 80,
+            cellRenderer: ({ cellData }) => <Status status={cellData} />,
+          },
+          {
             name: "building",
-            width: 350,
+            width: 512,
             cellRenderer: ({ cellData }) => (
               <span className="fw5 near-black truncate">
                 {cellData.address}
@@ -21,13 +32,13 @@ export default function Requests(props) {
           },
           {
             name: "member",
+            width: 256,
             cellRenderer: ({ cellData }) => <span>{cellData.name}</span>,
           },
           {
             name: "roof_access",
-            width: 120,
             cellRenderer: ({ cellData }) => (
-              <span className="ttc">{cellData}</span>
+              <span className="ttc">{cellData ? "Yes" : "No"}</span>
             ),
           },
           {
