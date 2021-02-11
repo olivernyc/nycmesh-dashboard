@@ -1,7 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
-
 import { SmileyIcon, TrashcanIcon } from "@primer/octicons-react";
+
+import donor from "./donor.png";
 
 export default function MemberPreview({ member, onDelete }) {
 	if (!member) return <div>Invalid member</div>;
@@ -30,7 +31,7 @@ export default function MemberPreview({ member, onDelete }) {
 							<span className="fw5 black">{member.name}</span>
 							{member.donor && (
 								<img
-									src="/img/donor.png"
+									src={donor}
 									className="ml1"
 									title="Donor"
 									alt="heart icon"

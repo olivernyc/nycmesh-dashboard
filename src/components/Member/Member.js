@@ -9,6 +9,7 @@ import ResourceSection from "../Resource/ResourceSection";
 import NodePreview from "../Node/NodePreview";
 import RequestPreview from "../Request/RequestPreview";
 import Field from "../Field";
+import donor from "./donor.png";
 
 export default function Member({ id }) {
 	const [member, setMember] = useState();
@@ -55,12 +56,7 @@ export default function Member({ id }) {
 				<div className="flex items-center">
 					<span className="f3 fw7">{member.name}</span>
 					{member.donor && (
-						<img
-							src="/img/donor.png"
-							className="ml1"
-							title="Donor"
-							alt="heart icon"
-						/>
+						<img src={donor} className="ml1" title="Donor" alt="heart icon" />
 					)}
 				</div>
 				<div className="mt2 flex">
