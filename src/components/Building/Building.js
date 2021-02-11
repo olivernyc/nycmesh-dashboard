@@ -79,9 +79,12 @@ export default function Building({ id }) {
           {building.address && (
             <Field name="address" value={building.address} />
           )}
+          <Field name="height" value={`${building.alt}m`} />
+          <Field
+            name="coordinates"
+            value={`${building.lat}, ${building.lng}`}
+          />
           <Field name="BIN" value={building.bin} />
-          <Field name="lat" value={building.lat} />
-          <Field name="lng" value={building.lng} />
           <Field name="notes" value={building.notes} />
         </ResourceSection>
 
