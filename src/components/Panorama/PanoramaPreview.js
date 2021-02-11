@@ -77,6 +77,7 @@ export default function Panos({ panoramas }) {
             <a
               key={panoramas[selected].url}
               href={panoramas[selected].url}
+              target="_"
               className="cursor-zoom-in"
             >
               <img
