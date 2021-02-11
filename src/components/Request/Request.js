@@ -56,8 +56,16 @@ export default function Request(props) {
 		if (!losResults) return;
 		const { visibleOmnis, visibleSectors } = losResults;
 		const los = [...visibleOmnis, ...visibleSectors].map((node) => ({
-			from: { lat: request.building.lat, lng: request.building.lng },
-			to: { lat: node.lat, lng: node.lng },
+			from: {
+				id: `request-${request.id}`,
+				lat: request.building.lat,
+				lng: request.building.lng,
+			},
+			to: {
+				id: `node-${node.id}-${node.devices[0].id}`,
+				lat: node.lat,
+				lng: node.lng,
+			},
 		}));
 		setLos(los);
 		return () => setLos();
