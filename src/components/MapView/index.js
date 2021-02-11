@@ -17,7 +17,7 @@ export default React.memo(NodeMap);
 export const MapContext = React.createContext({});
 
 function NodeMap({ history, match }) {
-	const [mapData, loading, reloadMap] = useMapData();
+	const [mapData, loading, reloadMap, setLos] = useMapData();
 	const [map, setMap] = useState(null);
 	const [isFirstLoad, setIsFirstLoad] = useState(true);
 	const { isAuthenticated } = useAuth0();
@@ -183,15 +183,13 @@ function NodeMap({ history, match }) {
 						nodesById: mapData.nodesById,
 						requestsById: mapData.requestsById,
 						reloadMap,
+						setLos,
 					}}
 				>
 					{sidebar}
 					<MapComponent
 						loading={loading}
-						nodes={mapData.nodes}
-						links={mapData.links}
-						requests={mapData.requests}
-						appointments={mapData.appointments}
+						data={mapData}
 						onLoad={handleLoad}
 						onNodeClick={handleNodeClick}
 						onRequestClick={handleRequestClick}
@@ -210,6 +208,7 @@ function useMapData() {
 		requests: [],
 		links: [],
 		appointments: [],
+		los: null,
 		nodesById: null,
 		requestsById: null,
 		connectedNodes: null,
@@ -275,5 +274,12 @@ function useMapData() {
 		setStale(true);
 	}
 
-	return [mapData, loading, reloadMap];
+	function setLos(los) {
+		setMapData((mapData) => ({
+			...mapData,
+			los,
+		}));
+	}
+
+	return [mapData, loading, reloadMap, setLos];
 }

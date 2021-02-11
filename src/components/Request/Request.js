@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 
 import { updateResource, fetchResource } from "../../api";
+
+import { MapContext } from "../MapView";
 
 import ResourceEdit from "../Resource/ResourceEdit";
 import MemberPreview from "../Member/MemberPreview";
@@ -14,10 +16,13 @@ import LineOfSight from "../LineOfSight/LineOfSight";
 
 export default function Request(props) {
 	const [request, setRequest] = useState();
+	const [losResults, setLosResults] = useState();
 	const [editing, setEditing] = useState(false);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState();
 	const { isAuthenticated, getAccessTokenSilently } = useAuth0();
+
+	const { setLos } = useContext(MapContext);
 
 	const { id } = props;
 
@@ -39,6 +44,21 @@ export default function Request(props) {
 		if (!isAuthenticated) return;
 		fetchData();
 	}, [isAuthenticated, getAccessTokenSilently, id]);
+
+	const handleLosResults = (results) => {
+		setLosResults(results);
+	};
+
+	useEffect(() => {
+		if (!losResults) return;
+		const { visibleOmnis, visibleSectors } = losResults;
+		const los = [...visibleOmnis, ...visibleSectors].map((node) => ({
+			from: { lat: request.building.lat, lng: request.building.lng },
+			to: { lat: node.lat, lng: node.lng },
+		}));
+		setLos(los);
+		return () => setLos();
+	}, [losResults]);
 
 	if (!id) return null;
 
@@ -102,7 +122,7 @@ export default function Request(props) {
 				<PanoramaPreview panoramas={request.panoramas} />
 			</Section>
 			<Section title="Line of Sight">
-				<LineOfSight building={request.building} />
+				<LineOfSight building={request.building} onResults={handleLosResults} />
 			</Section>
 			{editing === "request" && (
 				<ResourceEdit

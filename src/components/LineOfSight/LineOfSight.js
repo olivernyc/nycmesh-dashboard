@@ -4,7 +4,7 @@ import { fetchResource } from "../../api";
 
 import NodePreview from "../Node/NodePreview";
 
-export default function LineOfSight({ building }) {
+export default function LineOfSight({ building, onResults }) {
   const [los, setLos] = useState();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState();
@@ -17,6 +17,7 @@ export default function LineOfSight({ building }) {
         setError();
         const response = await fetchResource(`los?bin=${building.bin}`);
         setLos(response);
+        onResults(response);
         setLoading(false);
       } catch (error) {
         setError(error);
