@@ -62,6 +62,19 @@ export default function Member({ id }) {
 				<div className="mt2 flex">
 					<span className="mid-gray f5 mr2">{member.email}</span>
 				</div>
+
+				{member.stripe_customer_id && (
+					<div className="mt3">
+						<a
+							href={`https://dashboard.stripe.com/customers/${member.stripe_customer_id}`}
+							target="_"
+							className="link purple"
+						>
+							View in Stripe →
+						</a>
+					</div>
+				)}
+
 				<ResourceSection
 					title="Details"
 					disableEdit={!isAuthenticated}
