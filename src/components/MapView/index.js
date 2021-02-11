@@ -14,10 +14,10 @@ import Appointment from "../Appointment/Appointment";
 
 export default React.memo(NodeMap);
 
-export const MapContext = React.createContext();
+export const MapContext = React.createContext({});
 
 function NodeMap({ history, match }) {
-	const mapData = useMapData();
+	const [mapData, loading, reloadMap] = useMapData();
 	const [map, setMap] = useState(null);
 	const [isFirstLoad, setIsFirstLoad] = useState(true);
 	const { isAuthenticated } = useAuth0();
@@ -174,7 +174,6 @@ function NodeMap({ history, match }) {
 	return (
 		<DocumentTitle title="Map - NYC Mesh">
 			<div className="h-100 w-100 overflow-hidden flex flex-row-l flex-column-l flex-column-reverse bg-white">
-				{sidebar}
 				<MapContext.Provider
 					value={{
 						selectedNode: parseInt(nodeId),
@@ -183,9 +182,12 @@ function NodeMap({ history, match }) {
 						connectedNodes: mapData.connectedNodes,
 						nodesById: mapData.nodesById,
 						requestsById: mapData.requestsById,
+						reloadMap,
 					}}
 				>
+					{sidebar}
 					<MapComponent
+						loading={loading}
 						nodes={mapData.nodes}
 						links={mapData.links}
 						requests={mapData.requests}
@@ -212,17 +214,25 @@ function useMapData() {
 		requestsById: null,
 		connectedNodes: null,
 	});
+	const [loading, setLoading] = useState(false);
+	const [stale, setStale] = useState(true);
+
 	const { isLoading, isAuthenticated, getAccessTokenSilently } = useAuth0();
 
 	// Set connected nodes, requests / nodes by id upon initial load
 	useEffect(() => {
 		if (isLoading) return;
+		// Hack to trigger map reload from child components
+		if (!stale) return;
 		try {
 			fetchMap();
 		} catch (error) {
 			alert(error);
+			setLoading(false);
+			setStale(false);
 		}
 		async function fetchMap() {
+			setLoading(true);
 			let token;
 			if (isAuthenticated) {
 				token = await getAccessTokenSilently();
@@ -255,8 +265,15 @@ function useMapData() {
 				appointmentsById,
 				connectedNodes,
 			});
+			setLoading(false);
+			setStale(false);
 		}
-	}, [isLoading, isAuthenticated, getAccessTokenSilently]);
+	}, [isLoading, isAuthenticated, getAccessTokenSilently, stale]);
 
-	return mapData;
+	function reloadMap() {
+		alert(stale);
+		setStale(true);
+	}
+
+	return [mapData, loading, reloadMap];
 }
