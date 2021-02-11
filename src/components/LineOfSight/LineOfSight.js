@@ -25,6 +25,9 @@ export default function LineOfSight({ building, onResults }) {
       }
     }
     fetchData();
+    return () => {
+      onResults && onResults();
+    };
   }, [building, onResults]);
 
   if (!building) return null;
