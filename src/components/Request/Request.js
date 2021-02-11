@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useCallback } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 
 import { updateResource, fetchResource } from "../../api";
@@ -45,9 +45,12 @@ export default function Request(props) {
 		fetchData();
 	}, [isAuthenticated, getAccessTokenSilently, id]);
 
-	const handleLosResults = (results) => {
-		setLosResults(results);
-	};
+	const handleLosResults = useCallback(
+		(results) => {
+			setLosResults(results);
+		},
+		[setLosResults]
+	);
 
 	useEffect(() => {
 		if (!losResults) return;
@@ -58,7 +61,7 @@ export default function Request(props) {
 		}));
 		setLos(los);
 		return () => setLos();
-	}, [losResults]);
+	}, [losResults, setLos, request]);
 
 	if (!id) return null;
 

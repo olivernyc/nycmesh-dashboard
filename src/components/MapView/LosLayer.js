@@ -1,7 +1,6 @@
-import React, { useContext } from "react";
+import React from "react";
 
 import LosLine from "./LosLine";
-import { MapContext } from ".";
 
 export default function LosLayer({ los }) {
   if (!los) return null;

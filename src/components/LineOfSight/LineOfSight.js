@@ -17,7 +17,7 @@ export default function LineOfSight({ building, onResults }) {
         setError();
         const response = await fetchResource(`los?bin=${building.bin}`);
         setLos(response);
-        onResults(response);
+        onResults && onResults(response);
         setLoading(false);
       } catch (error) {
         setError(error);
@@ -25,7 +25,7 @@ export default function LineOfSight({ building, onResults }) {
       }
     }
     fetchData();
-  }, [building]);
+  }, [building, onResults]);
 
   if (!building) return null;
   if (!building.bin)

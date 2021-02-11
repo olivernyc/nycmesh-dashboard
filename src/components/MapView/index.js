@@ -269,17 +269,19 @@ function useMapData() {
 		}
 	}, [isLoading, isAuthenticated, getAccessTokenSilently, stale]);
 
-	function reloadMap() {
-		alert(stale);
+	const reloadMap = useCallback(() => {
 		setStale(true);
-	}
+	}, [setStale]);
 
-	function setLos(los) {
-		setMapData((mapData) => ({
-			...mapData,
-			los,
-		}));
-	}
+	const setLos = useCallback(
+		(los) => {
+			setMapData((mapData) => ({
+				...mapData,
+				los,
+			}));
+		},
+		[setMapData]
+	);
 
 	return [mapData, loading, reloadMap, setLos];
 }
