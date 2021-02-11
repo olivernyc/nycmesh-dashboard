@@ -11,7 +11,7 @@ export default function Modal({
 	onCancel,
 }) {
 	return (
-		<div className="absolute absolute--fill bg-white-70 z-5">
+		<div className="fixed absolute--fill bg-white-70 z-5">
 			<div
 				className="bg-white mw6 w-100 center shadow br2"
 				style={{ marginTop: "15vh" }}
