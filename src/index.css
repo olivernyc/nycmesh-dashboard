@@ -176,7 +176,18 @@ div[aria-label="Map"] ~ div {
   .tooltip-triangle path {
     fill: #090909;
   }
-  .BaseTable__row--customized {
+
+  .BaseTable {
+    background-color: #090909;
+  }
+  .BaseTable__empty-layer {
+    background-color: #090909;
+  }
+  .BaseTable__table {
+    background-color: #090909;
+  }
+  .BaseTable__row--customized,
+  .BaseTable__header-row {
     border-color: #222;
   }
   .react-select__control {
