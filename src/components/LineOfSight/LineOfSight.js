@@ -51,11 +51,7 @@ export default function LineOfSight({ building, onResults }) {
       </div>
     );
 
-  const losNodes = [
-    ...los.visibleSectors,
-    ...los.visibleOmnis,
-    // ...(showPlanned ? los.visibleRequests.map(nodeFromRequest) : []),
-  ].filter(
+  const losNodes = [...los.visibleSectors, ...los.visibleOmnis].filter(
     (node) =>
       node.devices.filter((device) => device.type.name !== "Unknown").length
   );
