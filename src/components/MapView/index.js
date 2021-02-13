@@ -236,34 +236,35 @@ function useMapData() {
 			if (isAuthenticated) {
 				token = await getAccessTokenSilently();
 			}
-			const mapData = await fetchResource("map", token);
+			const newMapData = await fetchResource("map", token);
 			const nodesById = {};
 			const requestsById = {};
 			const appointmentsById = {};
 			const connectedNodes = {};
-			mapData.nodes.forEach((node) => {
+			newMapData.nodes.forEach((node) => {
 				nodesById[node.id] = node;
 			});
-			mapData.requests.forEach((request) => {
+			newMapData.requests.forEach((request) => {
 				requestsById[request.id] = request;
 			});
-			mapData.appointments.forEach((appointment) => {
+			newMapData.appointments.forEach((appointment) => {
 				appointmentsById[appointment.id] = appointment;
 			});
-			mapData.links.forEach((link) => {
+			newMapData.links.forEach((link) => {
 				const [nodeId1, nodeId2] = link.devices.map((d) => d.node_id);
 				connectedNodes[nodeId1] = connectedNodes[nodeId1] || [];
 				connectedNodes[nodeId2] = connectedNodes[nodeId2] || [];
 				connectedNodes[nodeId1].push(nodesById[nodeId2]);
 				connectedNodes[nodeId2].push(nodesById[nodeId1]);
 			});
-			setMapData({
-				...mapData,
+			setMapData((mapData) => ({
+				...newMapData,
 				nodesById,
 				requestsById,
 				appointmentsById,
 				connectedNodes,
-			});
+				los: mapData.los,
+			}));
 			setLoading(false);
 			setStale(false);
 		}

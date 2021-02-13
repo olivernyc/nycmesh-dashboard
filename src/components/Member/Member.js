@@ -80,9 +80,15 @@ export default function Member({ id }) {
 					disableEdit={!isAuthenticated}
 					onEdit={() => setEditing("member")}
 				>
-					{member.name && <Field name="name" value={member.name} />}
-					{member.email && <Field name="address" value={member.email} />}
-					{member.phone && <Field name="phone" value={member.phone} />}
+					<Field name="name" value={member.name} />
+					<Field name="address" value={member.email} />
+					<Field name="phone" value={member.phone} />
+					<Field
+						name="stripe_customer_id"
+						label="Stripe Customer ID"
+						value={member.stripe_customer_id}
+					/>
+
 					<Field name="notes" value={member.notes} />
 				</ResourceSection>
 				<ResourceSection
@@ -122,6 +128,11 @@ export default function Member({ id }) {
 						fields={[
 							{ key: "name", type: "text" },
 							{ key: "email", type: "text" },
+							{
+								key: "stripe_customer_id",
+								label: "Stripe Customer ID",
+								type: "text",
+							},
 							{ key: "notes", type: "textarea" },
 						]}
 						onSubmit={async (patch) => {
