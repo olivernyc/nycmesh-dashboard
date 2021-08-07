@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import DocumentTitle from "react-document-title";
 import { Link } from "react-router-dom";
@@ -12,8 +12,6 @@ import {
 	createLink,
 	RequestError,
 } from "../../api";
-
-import { MapContext } from "../MapView";
 
 import ResourceEdit from "../Resource/ResourceEdit";
 import ResourceSection from "../Resource/ResourceSection";
@@ -35,7 +33,7 @@ export default function Node({ id }) {
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState();
 	const { isAuthenticated, getAccessTokenSilently } = useAuth0();
-	const { reloadMap } = useContext(MapContext);
+	const reloadMap = () => null;
 
 	useEffect(() => {
 		async function fetchData() {

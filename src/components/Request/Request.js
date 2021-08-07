@@ -1,9 +1,7 @@
-import React, { useState, useEffect, useContext, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 
 import { updateResource, fetchResource } from "../../api";
-
-import { MapContext } from "../MapView";
 
 import ResourceEdit from "../Resource/ResourceEdit";
 import MemberPreview from "../Member/MemberPreview";
@@ -21,8 +19,6 @@ export default function Request(props) {
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState();
 	const { isAuthenticated, getAccessTokenSilently } = useAuth0();
-
-	const { setLos } = useContext(MapContext);
 
 	const { id } = props;
 
@@ -67,9 +63,10 @@ export default function Request(props) {
 				lng: node.lng,
 			},
 		}));
+		const setLos = () => null;
 		setLos(los);
 		return () => setLos();
-	}, [losResults, setLos, request]);
+	}, [losResults, request]);
 
 	if (!id) return null;
 

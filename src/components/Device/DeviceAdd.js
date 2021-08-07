@@ -12,7 +12,7 @@ export default function DeviceAdd({ node, onSubmit, onCancel }) {
     device_type_id: null,
     node_id: node.id,
     name: "",
-    SSID: "",
+    ssid: "",
     lat: node.lat,
     lng: node.lng,
     alt: node.alt,
@@ -28,10 +28,10 @@ export default function DeviceAdd({ node, onSubmit, onCancel }) {
     }));
   }
 
-  function handleSSIDChange(SSID) {
+  function handleSSIDChange(ssid) {
     setDevice((device) => ({
       ...device,
-      SSID,
+      ssid,
     }));
   }
 
@@ -88,7 +88,7 @@ export default function DeviceAdd({ node, onSubmit, onCancel }) {
     device.node_id &&
     device.device_type_id &&
     device.name &&
-    device.SSID &&
+    device.ssid &&
     device.lat &&
     device.lng &&
     device.azimuth &&
@@ -122,7 +122,7 @@ export default function DeviceAdd({ node, onSubmit, onCancel }) {
         </div>
 
         <Input label="name" value={device.name} onChange={handleNameChange} />
-        <Input label="SSID" value={device.SSID} onChange={handleSSIDChange} />
+        <Input label="SSID" value={device.ssid} onChange={handleSSIDChange} />
         <Input
           label="lat"
           type="number"
