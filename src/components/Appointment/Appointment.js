@@ -8,6 +8,7 @@ import ResourceSection from "../Resource/ResourceSection";
 import BuildingPreview from "../Building/BuildingPreview";
 import NodePreview from "../Node/NodePreview";
 import RequestPreview from "../Request/RequestPreview";
+import MemberPreview from "../Member/MemberPreview";
 import Field from "../Field";
 
 export default function Appointment({ id }) {
@@ -70,6 +71,18 @@ export default function Appointment({ id }) {
           <span className="mid-gray f5 mr2">{localizedDate}</span>
         </div>
 
+        {appointment.acuity_id && (
+          <div className="mt3">
+            <a
+              href={`https://support.nycmesh.net/scp/tickets.php?id=${appointment.acuity_id}`}
+              target="_"
+              className="link purple"
+            >
+              View in Acuity →
+            </a>
+          </div>
+        )}
+
         <ResourceSection title="Details" disableEdit>
           <Field name="date" value={localizedDate} />
           <Field name="notes" value={appointment.notes} />
@@ -97,6 +110,19 @@ export default function Appointment({ id }) {
             <RequestPreview
               key={appointment.request.id}
               request={appointment.request}
+            />
+          )}
+        </ResourceSection>
+
+        <ResourceSection title="Member" disableEdit>
+          {!appointment.member ? (
+            <div className="pv3">
+              <span className="light-silver">No member</span>
+            </div>
+          ) : (
+            <MemberPreview
+              key={appointment.member.id}
+              member={appointment.member}
             />
           )}
         </ResourceSection>

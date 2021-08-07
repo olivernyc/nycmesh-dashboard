@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { Auth0Provider } from "@auth0/auth0-react";
 import "react-base-table/styles.css";
+import "mesh-map/dist/index.css";
 import "tachyons";
 
 import App from "./App";

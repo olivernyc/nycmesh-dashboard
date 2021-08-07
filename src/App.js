@@ -33,6 +33,7 @@ function App() {
               "/map/members/:memberId",
               "/map/buildings/:buildingId",
               "/map/devices/:deviceId",
+              "/appointments/:appointmentId",
               "/map/appointments/:appointmentId",
             ]}
             component={MapView}
