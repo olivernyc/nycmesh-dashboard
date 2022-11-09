@@ -15,13 +15,16 @@ export default function Sidebar({
   buildingId,
   deviceId,
   appointmentId,
+  setLos,
 }) {
   const { isAuthenticated } = useAuth0();
 
   return (
     <SidebarContainer>
       {nodeId && <Node id={nodeId} />}
-      {requestId && isAuthenticated && <Request id={requestId} />}
+      {requestId && isAuthenticated && (
+        <Request id={requestId} setLos={setLos} />
+      )}
       {memberId && isAuthenticated && <Member id={memberId} />}
       {buildingId && isAuthenticated && <Building id={buildingId} />}
       {deviceId && <Device id={deviceId} />}

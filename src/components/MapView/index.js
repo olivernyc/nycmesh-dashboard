@@ -6,7 +6,7 @@ import useMapData from "./useMapData";
 import Sidebar from "./Sidebar";
 
 export default function NodeMap({ history, match }) {
-	const [mapData, loading] = useMapData();
+	const [mapData, loading, reloadMap, setLos] = useMapData();
 	const {
 		nodeId,
 		requestId,
@@ -67,6 +67,8 @@ export default function NodeMap({ history, match }) {
 					memberId={parseInt(memberId)}
 					buildingId={parseInt(buildingId)}
 					deviceId={parseInt(deviceId)}
+					reloadMap={reloadMap}
+					setLos={setLos}
 				/>
 				<MeshMap
 					googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY}

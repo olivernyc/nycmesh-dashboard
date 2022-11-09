@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 
 import { fetchResource } from "../../api";
@@ -13,11 +13,16 @@ export default function useMapData() {
   });
 
   const [loading, setLoading] = useState(false);
+  const [stale, setStale] = useState(true);
 
   const { isLoading, isAuthenticated, getAccessTokenSilently } = useAuth0();
 
   useEffect(() => {
     if (isLoading) return;
+
+    // Hack to trigger map reload from child components
+    if (!stale) return;
+
     try {
       fetchMap();
     } catch (error) {
@@ -27,10 +32,7 @@ export default function useMapData() {
 
     async function fetchMap() {
       setLoading(true);
-      let token;
-      if (isAuthenticated) {
-        token = await getAccessTokenSilently();
-      }
+      const token = isAuthenticated ? await getAccessTokenSilently() : null;
       const newMapData = await fetchResource("map", token);
       setMapData((mapData) => ({
         ...newMapData,
@@ -38,7 +40,21 @@ export default function useMapData() {
       }));
       setLoading(false);
     }
-  }, [isLoading, isAuthenticated, getAccessTokenSilently]);
+  }, [isLoading, stale, isAuthenticated, getAccessTokenSilently]);
 
-  return [mapData, loading];
+  const reloadMap = useCallback(() => {
+    setStale(true);
+  }, [setStale]);
+
+  const setLos = useCallback(
+    (los) => {
+      setMapData((mapData) => ({
+        ...mapData,
+        los,
+      }));
+    },
+    [setMapData]
+  );
+
+  return [mapData, loading, reloadMap, setLos];
 }

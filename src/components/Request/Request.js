@@ -48,6 +48,9 @@ export default function Request(props) {
 		[setLosResults]
 	);
 
+	const { setLos } = props;
+
+	// Draw los on map
 	useEffect(() => {
 		if (!losResults) return;
 		const { visibleOmnis, visibleSectors } = losResults;
@@ -63,10 +66,9 @@ export default function Request(props) {
 				lng: node.lng,
 			},
 		}));
-		const setLos = () => null;
 		setLos(los);
 		return () => setLos();
-	}, [losResults, request]);
+	}, [losResults, request, setLos]);
 
 	if (!id) return null;
 

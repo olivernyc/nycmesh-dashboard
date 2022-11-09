@@ -7,11 +7,12 @@ export class RequestError extends Error {
 
 export async function fetchResource(resource, token) {
 	const path = `${process.env.REACT_APP_API_ROOT}/${resource}`;
-	const options = {
-		headers: {
+	const options = {};
+	if (token) {
+		options.headers = {
 			Authorization: `Bearer ${token}`,
-		},
-	};
+		};
+	}
 	const res = await fetch(path, options);
 	if (res.status !== 200) throw new RequestError(res.status, res.error);
 	return res.json();
